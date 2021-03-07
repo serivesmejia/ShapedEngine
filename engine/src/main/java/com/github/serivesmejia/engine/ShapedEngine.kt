@@ -1,6 +1,8 @@
 package com.github.serivesmejia.engine
 
+import com.github.serivesmejia.engine.common.HierarchyShapedComponent
 import com.github.serivesmejia.engine.common.ShapedComponent
+import com.github.serivesmejia.engine.common.ShapedContainer
 import com.github.serivesmejia.engine.common.color
 import com.github.serivesmejia.engine.render.desktop.ShapedWindow
 import org.lwjgl.glfw.GLFW.*
@@ -26,7 +28,7 @@ class ShapedEngine : ShapedComponent {
 
     private fun loop() {
         // Set the clear color
-        glClearColor(40f.color, 127f.color, 0.0f, 1f);
+        glClearColor(40f.color, 127f.color, 82f.color, 1f)
 
         while(!glfwWindowShouldClose(window.ptr)) {
             glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer

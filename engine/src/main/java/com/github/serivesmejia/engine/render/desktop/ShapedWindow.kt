@@ -1,7 +1,9 @@
 package com.github.serivesmejia.engine.render.desktop
 
-import com.github.serivesmejia.engine.common.ShapedComponent
-//import com.github.serivesmejia.engine.common.use
+import com.github.serivesmejia.engine.common.HierarchyShapedComponent
+import com.github.serivesmejia.engine.common.ShapedContainer
+import com.github.serivesmejia.engine.common.extension.cantHaveParentG
+import com.github.serivesmejia.engine.common.extension.cantHaveParentS
 import org.lwjgl.glfw.*
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
@@ -11,7 +13,11 @@ import org.lwjgl.system.MemoryUtil.*
 class ShapedWindow(val title: String = "ShapedEngine",
                    val width: Int = 640,
                    val height: Int = 480,
-                   val vsync: Boolean = true) : ShapedComponent {
+                   val vsync: Boolean = true) : HierarchyShapedComponent<ShapedWindow> {
+
+    override var parent: ShapedContainer<ShapedWindow>?
+        get() = cantHaveParentG()
+        set(value) = cantHaveParentS()
 
     /**
      * Long native pointer of this window
