@@ -6,7 +6,13 @@ package com.github.serivesmejia.engine.common
 @Suppress("UNCHECKED_CAST")
 abstract class ShapedContainer<C : HierarchyShapedComponent<C>> {
 
-    val children get() = internalChildren.clone() as ArrayList<C>
+    /**
+     * Get the children of this container as an ArrayList
+     * Note that the returned ArrayList is a clone of the internal
+     * one, sp any addition or deletion won't affect the container.
+     * Use addChild() or removeChild() to do so.
+     */
+    val children get() = (internalChildren.clone() as ArrayList<C>)
 
     private val internalChildren = ArrayList<C>()
 

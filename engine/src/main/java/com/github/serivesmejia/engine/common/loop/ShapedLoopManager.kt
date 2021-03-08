@@ -2,7 +2,7 @@ package com.github.serivesmejia.engine.common.loop
 
 import com.github.serivesmejia.engine.common.ShapedComponent
 
-open class ShapedLoopManager: ShapedComponent {
+open class ShapedLoopManager : ShapedLoop {
 
     private val loops = ArrayList<ShapedLoop>()
 
@@ -10,7 +10,7 @@ open class ShapedLoopManager: ShapedComponent {
         return this
     }
 
-    fun update(deltaTime: Float) {
+    override fun update(deltaTime: Float) {
         for(loop in loops.toTypedArray()) {
             loop.update(deltaTime)
         }
