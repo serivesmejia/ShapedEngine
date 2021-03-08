@@ -1,50 +1,84 @@
 package com.github.serivesmejia.engine
 
-import com.github.serivesmejia.engine.common.HierarchyShapedComponent
-import com.github.serivesmejia.engine.common.ShapedComponent
-import com.github.serivesmejia.engine.common.ShapedContainer
-import com.github.serivesmejia.engine.common.color
+import com.github.serivesmejia.engine.common.*
+import com.github.serivesmejia.engine.common.loop.ShapedLoop
+import com.github.serivesmejia.engine.render.ShapedRenderLoop
 import com.github.serivesmejia.engine.render.desktop.ShapedWindow
+import com.github.serivesmejia.engine.stage.ShapedStageManager
+import com.github.serivesmejia.engine.util.ElapsedTime
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11.*
 
 class ShapedEngine : ShapedComponent {
 
     lateinit var window: ShapedWindow
+        private set
+    lateinit var stageManager: ShapedStageManager
+        private set
+
+    val loops = ArrayList<ShapedLoop>()
+
+    private val deltaTimer = ElapsedTime()
 
     /**
      * Initializes and runs the engine, blocking.
      * Exits until the glfw window is closed
      */
     override fun create(): ShapedEngine {
+        //not a precisely good idea to have more than one engine...
+        if(Shaped.hasCreatedEngine)
+            throw IllegalStateException("Can't have more than one engine running per JVM")
+
+        //tell globally that we have one engine running
+        Shaped.hasCreatedEngine = true
+        //tell globally on which thread we're running
+        Shaped.engineThread = Thread.currentThread()
+
+        //create the window
         window = ShapedWindow().create().center()
 
+        stageManager = ShapedStageManager()
+
+        //add the render loop to the list of loops to run
+        loops.add(ShapedRenderLoop(window, stageManager))
+
+        //essential line
         GL.createCapabilities()
-        loop()
+        //begin looping now
+        beginEngineLoop()
 
         return this
     }
 
-    private fun loop() {
-        // Set the clear color
-        glClearColor(40f.color, 127f.color, 82f.color, 1f)
+    private fun beginEngineLoop() {
+        //restart the timer before beginning the loop
+        deltaTimer.reset()
 
-        while(!glfwWindowShouldClose(window.ptr)) {
-            glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
+        //loop until window requested to close or thread interrupted
+        while(!glfwWindowShouldClose(window.ptr) && !Thread.currentThread().isInterrupted) {
+            Shaped.deltaTime = deltaTimer.seconds.toFloat() //calculate delta time
+            deltaTimer.reset() //reset back to zero
 
-            glfwSwapBuffers(window.ptr) // swap the color buffers
-
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents()
+            //run all loops
+            for(loop in loops.toTypedArray()) {
+                loop.update(Shaped.deltaTime)
+            }
         }
 
+        //destroy if the loop exits
         destroy()
     }
 
+    /**
+     * Destroys this ShapedEngine
+     */
     override fun destroy(): ShapedEngine {
+        for(loop in loops) {
+            loop.destroy()
+        }
+
         window.destroy()
+        Shaped.end()
         return this
     }
 

@@ -1,19 +1,27 @@
 package com.github.serivesmejia.engine.stage
 
-import com.github.serivesmejia.engine.common.ShapedComponent
+import com.github.serivesmejia.engine.common.loop.ShapedLoop
+import com.github.serivesmejia.engine.stage.common.InitialStage
 
-class ShapedStageManager : ShapedComponent {
+class ShapedStageManager : ShapedLoop {
 
-    lateinit var currentStage: ShapedStage
+    var currentStage: ShapedStage? = null
         private set
 
     override fun create(): ShapedStageManager {
-
+        changeStage(InitialStage())
         return this
     }
 
-    fun update() {
+    override fun update(deltaTime: Float) {
 
+    }
+
+    fun changeStage(stage: ShapedStage) {
+        currentStage?.destroy()
+
+        stage.create()
+        currentStage = stage
     }
 
     override fun destroy(): ShapedStageManager {
