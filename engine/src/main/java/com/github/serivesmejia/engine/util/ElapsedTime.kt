@@ -5,7 +5,13 @@ import java.util.concurrent.TimeUnit
 class ElapsedTime(private val resolution: Resolution = Resolution.SECOND_IN_NANO,
                   private var nsStartTime: Long = nsNow) {
 
-    fun now(unit: TimeUnit): Long {
+    /**
+     * Returns the current time on the clock used by the timer
+     *
+     * @param unit the time unit in which the current time will be returned
+     * @return the current time on the clock used by the timer
+     */
+     fun now(unit: TimeUnit): Long {
         return unit.convert(nsNow, TimeUnit.NANOSECONDS)
     }
 
