@@ -1,6 +1,8 @@
 package com.github.serivesmejia.engine
 
 import com.github.serivesmejia.engine.common.*
+import com.github.serivesmejia.engine.common.event.ShapedEventBus
+import com.github.serivesmejia.engine.common.event.wrapper.GlfwEventWrapper
 import com.github.serivesmejia.engine.common.loop.ShapedLoopManager
 import com.github.serivesmejia.engine.render.ShapedRenderLoop
 import com.github.serivesmejia.engine.render.desktop.ShapedWindow
@@ -39,6 +41,7 @@ class ShapedEngine : ShapedComponent {
         window = ShapedWindow().create().center()
 
         stageManager = ShapedStageManager().create()
+        stageManager.eventBus.wrap(GlfwEventWrapper(window))
 
         //add the render loop to the list of loops to run
         loopManager.addLoop(ShapedRenderLoop(window, stageManager))

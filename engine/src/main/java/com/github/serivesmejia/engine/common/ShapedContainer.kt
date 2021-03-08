@@ -21,7 +21,7 @@ abstract class ShapedContainer<C : HierarchyShapedComponent<C>> {
      * @param child the child to add
      * @throws IllegalArgumentException if the children has already a parent
      */
-    fun addChild(child: C) {
+    open fun addChild(child: C) {
         if(child.parent != null) {
             throw IllegalArgumentException("Child already has a parent")
         }
@@ -35,7 +35,7 @@ abstract class ShapedContainer<C : HierarchyShapedComponent<C>> {
      * @param child the child to remove
      * @throws IllegalArgumentException if the children is not contained here
      */
-    fun removeChild(child: C) {
+    open fun removeChild(child: C) {
         if(child.parent != this) {
             throw IllegalArgumentException("Child doesn't belong here")
         }

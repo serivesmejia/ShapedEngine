@@ -2,8 +2,10 @@ package com.github.serivesmejia.engine.stage.common
 
 import com.github.serivesmejia.engine.common.HierarchyShapedComponent
 import com.github.serivesmejia.engine.common.ShapedContainer
+import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
+import com.github.serivesmejia.engine.common.event.ShapedEventRegistrator
 
 /**
  * Common class for all stage components to implement. including the stage itself.
@@ -16,11 +18,28 @@ import com.github.serivesmejia.engine.stage.`object`.ShapedObject
  * use Kotlin's "is" keyword (similar to Java's instanceof) to perform smart casting.
  *
  */
-abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>> : HierarchyShapedComponent<T>, ShapedContainer<ShapedObject>() {
+abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
+    : ShapedEventRegistrator, HierarchyShapedComponent<T>, ShapedContainer<ShapedObject>() {
 
     override var parent: ShapedContainer<T>? = null
 
     val isStage: Boolean
         get() = this is ShapedStage
+
+    private val eventBuses = ArrayList<ShapedEventBus>()
+
+    override fun addChild(child: ShapedObject) {
+        for(eventBus in eventBuses) {
+            eventBus.register(child)
+        }
+        super.addChild(child)
+    }
+
+    override fun register(eventBus: ShapedEventBus) {
+        for(obj in children) {
+            eventBus.register(obj)
+        }
+        eventBuses.add(eventBus)
+    }
 
 }

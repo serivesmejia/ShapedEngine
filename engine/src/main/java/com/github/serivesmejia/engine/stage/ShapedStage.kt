@@ -1,5 +1,8 @@
 package com.github.serivesmejia.engine.stage
 
+import com.github.serivesmejia.engine.common.event.ShapedEventBus
+import com.github.serivesmejia.engine.common.event.Subscribe
+import com.github.serivesmejia.engine.common.event.general.WindowResizeEvent
 import com.github.serivesmejia.engine.stage.common.ShapedStageComponent
 
 open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponent<ShapedStage>() {
@@ -9,7 +12,7 @@ open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponen
      * User shouldn't manually call this function
      */
     override fun create(): ShapedStage {
-        init() //call open method
+        init() //call open function
         return this
     }
 

@@ -1,6 +1,6 @@
 package com.github.serivesmejia.engine.common.event
 
-import com.github.serivesmejia.engine.common.event.type.ShapedEvent
+import com.github.serivesmejia.engine.common.event.wrapper.ShapedEventWrapper
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
 
@@ -55,21 +55,23 @@ class ShapedEventBus {
         val methods = obj::class.java.declaredMethods
 
         //iterate through all methods of the passed object
-        for(method in methods) {
+        for (method in methods) {
             val annotations = method.annotations
 
             //iterate through all annotations of the current method
             //searching for the "Subscribe" annotation
-            for(annotation in annotations) {
+            for (annotation in annotations) {
                 //found the annotation!
-                if(annotation is Subscribe) {
+                if (annotation is Subscribe) {
                     //smart cast the annotation to Subscribe
                     //and get the event class specified in it
                     val eventClass = annotation.eventClass.java
 
+                    println("found method in $obj, $method, $eventClass")
+
                     //add to the list of abject and method if the
                     //event class has been registered as a key before
-                    if(subscribedMethods.containsKey(eventClass)) {
+                    if (subscribedMethods.containsKey(eventClass)) {
                         subscribedMethods[eventClass]!!.add(Pair(obj, method))
                     } else {
                         //create a new list of methods for this event class type
@@ -80,7 +82,18 @@ class ShapedEventBus {
                 }
             }
         }
+
+        //call the register method if object is a registrator
+        if(obj is ShapedEventRegistrator) {
+            obj.register(this)
+        }
     }
+
+    /**
+     * Wraps this ShapedEventBus around the specified wrapper
+     * Useful for stuff like mapping GLFW events to ShapedEvents
+     */
+    fun wrap(wrapper: ShapedEventWrapper) = wrapper.wrap(this)
 
     /**
      * Clears all the registered subscribers
@@ -93,4 +106,5 @@ class ShapedEventBus {
  * Subscribe a function/method to a specific event
  * @property eventClass the class of the event to subscribe
  */
+@Target(AnnotationTarget.FUNCTION)
 annotation class Subscribe(val eventClass: KClass<out ShapedEvent>)
