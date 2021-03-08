@@ -1,7 +1,7 @@
 package com.github.serivesmejia.engine.common
 
 /**
- * The base class for most of the components of the engine.
+ * The base class for most of the components of the com.github.serivesmejia.engine.
  * Implements a create() and destroy() method which returns "this"
  */
 interface ShapedComponent {

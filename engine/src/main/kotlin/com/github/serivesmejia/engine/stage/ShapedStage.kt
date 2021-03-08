@@ -1,8 +1,5 @@
 package com.github.serivesmejia.engine.stage
 
-import com.github.serivesmejia.engine.common.event.ShapedEventBus
-import com.github.serivesmejia.engine.common.event.Subscribe
-import com.github.serivesmejia.engine.common.event.general.WindowResizeEvent
 import com.github.serivesmejia.engine.stage.common.ShapedStageComponent
 
 open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponent<ShapedStage>() {

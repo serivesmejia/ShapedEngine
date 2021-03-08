@@ -1,10 +1,12 @@
 package com.github.serivesmejia.engine.stage
 
+import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.common.loop.ShapedLoop
+import com.github.serivesmejia.engine.common.modular.ShapedModule
 import com.github.serivesmejia.engine.stage.common.InitialStage
 
-class ShapedStageManager : ShapedLoop {
+class ShapedStageManager : ShapedModule<ShapedEngine> {
 
     var currentStage: ShapedStage? = null
         private set

@@ -1,23 +1,24 @@
-package com.github.serivesmejia.engine.render.desktop
+package com.github.serivesmejia.engine.desktop.render
 
-import com.github.serivesmejia.engine.common.ShapedComponent
-import org.lwjgl.glfw.*
+import com.github.serivesmejia.engine.ShapedEngine
+import com.github.serivesmejia.engine.common.modular.ShapedModule
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryStack.stackPush
-import org.lwjgl.system.MemoryUtil.*
+import org.lwjgl.system.MemoryUtil.NULL
 
 class ShapedWindow(val title: String = "ShapedEngine",
                    val width: Int = 640,
                    val height: Int = 480,
-                   val vsync: Boolean = true) : ShapedComponent {
+                   val vsync: Boolean = true) : ShapedModule<ShapedEngine> {
 
     /**
      * Long native pointer of this window
      */
     var ptr = 0L
         private set
-    
+
     val isVisible: Boolean
         get() = glfwGetWindowAttrib(ptr, GLFW_VISIBLE) == GLFW_TRUE
 
@@ -53,6 +54,8 @@ class ShapedWindow(val title: String = "ShapedEngine",
 
         return this
     }
+
+    override fun update(deltaTime: Float) {}
 
     /**
      * Shows this window

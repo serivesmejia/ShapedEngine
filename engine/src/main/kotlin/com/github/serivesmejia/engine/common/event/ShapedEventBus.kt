@@ -67,8 +67,6 @@ class ShapedEventBus {
                     //and get the event class specified in it
                     val eventClass = annotation.eventClass.java
 
-                    println("found method in $obj, $method, $eventClass")
-
                     //add to the list of abject and method if the
                     //event class has been registered as a key before
                     if (subscribedMethods.containsKey(eventClass)) {

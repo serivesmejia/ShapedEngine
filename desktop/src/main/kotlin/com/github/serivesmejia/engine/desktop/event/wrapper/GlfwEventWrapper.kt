@@ -1,8 +1,9 @@
-package com.github.serivesmejia.engine.common.event.wrapper
+package com.github.serivesmejia.engine.desktop.event.wrapper
 
 import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.common.event.general.*
-import com.github.serivesmejia.engine.render.desktop.ShapedWindow
+import com.github.serivesmejia.engine.common.event.wrapper.ShapedEventWrapper
+import com.github.serivesmejia.engine.desktop.render.ShapedWindow
 import org.lwjgl.glfw.GLFW.*
 
 /**
