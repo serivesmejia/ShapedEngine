@@ -1,7 +1,7 @@
 package com.github.serivesmejia.engine
 
 import com.github.serivesmejia.engine.common.*
-import com.github.serivesmejia.engine.common.loop.ShapedLoop
+import com.github.serivesmejia.engine.common.loop.ShapedLoopManager
 import com.github.serivesmejia.engine.render.ShapedRenderLoop
 import com.github.serivesmejia.engine.render.desktop.ShapedWindow
 import com.github.serivesmejia.engine.stage.ShapedStageManager
@@ -13,10 +13,11 @@ class ShapedEngine : ShapedComponent {
 
     lateinit var window: ShapedWindow
         private set
+
     lateinit var stageManager: ShapedStageManager
         private set
 
-    val loops = ArrayList<ShapedLoop>()
+    val loopManager = ShapedLoopManager()
 
     private val deltaTimer = ElapsedTime()
 
@@ -37,10 +38,10 @@ class ShapedEngine : ShapedComponent {
         //create the window
         window = ShapedWindow().create().center()
 
-        stageManager = ShapedStageManager()
+        stageManager = ShapedStageManager().create()
 
         //add the render loop to the list of loops to run
-        loops.add(ShapedRenderLoop(window, stageManager))
+        loopManager.addLoop(ShapedRenderLoop(window, stageManager))
 
         //essential line
         GL.createCapabilities()
@@ -60,9 +61,7 @@ class ShapedEngine : ShapedComponent {
             deltaTimer.reset() //reset back to zero
 
             //run all loops
-            for(loop in loops.toTypedArray()) {
-                loop.update(Shaped.deltaTime)
-            }
+            loopManager.update(Shaped.deltaTime)
         }
 
         //destroy if the loop exits
@@ -73,10 +72,7 @@ class ShapedEngine : ShapedComponent {
      * Destroys this ShapedEngine
      */
     override fun destroy(): ShapedEngine {
-        for(loop in loops) {
-            loop.destroy()
-        }
-
+        loopManager.destroy()
         window.destroy()
         Shaped.end()
         return this

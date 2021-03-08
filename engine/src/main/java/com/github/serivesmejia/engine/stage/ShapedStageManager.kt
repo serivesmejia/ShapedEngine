@@ -14,7 +14,7 @@ class ShapedStageManager : ShapedLoop {
     }
 
     override fun update(deltaTime: Float) {
-
+        currentStage?.internalUpdate(deltaTime)
     }
 
     fun changeStage(stage: ShapedStage) {
@@ -25,7 +25,7 @@ class ShapedStageManager : ShapedLoop {
     }
 
     override fun destroy(): ShapedStageManager {
-
+        currentStage?.destroy()
         return this
     }
 

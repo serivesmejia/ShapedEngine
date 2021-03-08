@@ -4,22 +4,18 @@ package com.github.serivesmejia.engine.common
  * Abstract class for any sort of component that can hold ShapedComponent children
  */
 @Suppress("UNCHECKED_CAST")
-abstract class ShapedContainer<T : HierarchyShapedComponent<T>> {
+abstract class ShapedContainer<C : HierarchyShapedComponent<C>> {
 
-    /**
-     * Typed array of the current children of this container
-     */
-    val children: Array<T>
-        get() = internalChildren.toArray() as Array<T>
+    val children get() = internalChildren.clone() as ArrayList<C>
 
-    private val internalChildren = ArrayList<T>()
+    private val internalChildren = ArrayList<C>()
 
     /**
      * Adds a child to this container
      * @param child the child to add
      * @throws IllegalArgumentException if the children has already a parent
      */
-    fun addChild(child: T) {
+    fun addChild(child: C) {
         if(child.parent != null) {
             throw IllegalArgumentException("Child already has a parent")
         }
@@ -33,7 +29,7 @@ abstract class ShapedContainer<T : HierarchyShapedComponent<T>> {
      * @param child the child to remove
      * @throws IllegalArgumentException if the children is not contained here
      */
-    fun removeChild(child: T) {
+    fun removeChild(child: C) {
         if(child.parent != this) {
             throw IllegalArgumentException("Child doesn't belong here")
         }

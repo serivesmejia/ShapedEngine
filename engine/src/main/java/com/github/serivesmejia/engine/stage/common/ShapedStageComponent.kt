@@ -17,8 +17,10 @@ import com.github.serivesmejia.engine.stage.`object`.ShapedObject
  *
  */
 abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>> : HierarchyShapedComponent<T>, ShapedContainer<ShapedObject>() {
+
     override var parent: ShapedContainer<T>? = null
 
     val isStage: Boolean
         get() = this is ShapedStage
+
 }

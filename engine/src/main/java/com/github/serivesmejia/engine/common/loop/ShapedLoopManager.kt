@@ -1,13 +1,24 @@
 package com.github.serivesmejia.engine.common.loop
 
-open class ShapedLoopManager {
+import com.github.serivesmejia.engine.common.ShapedComponent
+
+open class ShapedLoopManager: ShapedComponent {
 
     private val loops = ArrayList<ShapedLoop>()
+
+    override fun create(): ShapedLoopManager {
+        return this
+    }
 
     fun update(deltaTime: Float) {
         for(loop in loops.toTypedArray()) {
             loop.update(deltaTime)
         }
+    }
+
+    override fun destroy(): ShapedLoopManager {
+        for(loop in loops.toTypedArray()) { loop.destroy() }
+        return this
     }
 
     fun addLoop(loop: ShapedLoop) {
