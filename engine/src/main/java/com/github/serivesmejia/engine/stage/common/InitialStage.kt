@@ -1,4 +1,11 @@
 package com.github.serivesmejia.engine.stage.common
 
-class InitialStage : ShapedStage() {
+import com.github.serivesmejia.engine.stage.ShapedStage
+
+class InitialStage : ShapedStage("Stage-Initial") {
+
+    override fun update(deltaTime: Float) {
+
+    }
+
 }

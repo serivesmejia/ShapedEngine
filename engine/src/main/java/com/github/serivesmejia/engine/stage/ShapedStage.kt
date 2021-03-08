@@ -2,7 +2,7 @@ package com.github.serivesmejia.engine.stage
 
 import com.github.serivesmejia.engine.stage.common.ShapedStageComponent
 
-open class ShapedStage : ShapedStageComponent<ShapedStage>() {
+open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponent<ShapedStage>() {
 
     /**
      * Initializes this Stage
@@ -28,7 +28,7 @@ open class ShapedStage : ShapedStageComponent<ShapedStage>() {
 
     /**
      * Called each frame after updating all children
-     * @param deltaTime the difference of time in millis between the current and last frame
+     * @param deltaTime the difference of time in seconds between the current and last frame
      */
     open fun update(deltaTime: Float) { }
 

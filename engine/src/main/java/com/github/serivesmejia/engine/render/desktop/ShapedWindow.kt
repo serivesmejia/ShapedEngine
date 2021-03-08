@@ -1,9 +1,6 @@
 package com.github.serivesmejia.engine.render.desktop
 
-import com.github.serivesmejia.engine.common.HierarchyShapedComponent
-import com.github.serivesmejia.engine.common.ShapedContainer
-import com.github.serivesmejia.engine.common.extension.cantHaveParentG
-import com.github.serivesmejia.engine.common.extension.cantHaveParentS
+import com.github.serivesmejia.engine.common.ShapedComponent
 import org.lwjgl.glfw.*
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
@@ -13,11 +10,7 @@ import org.lwjgl.system.MemoryUtil.*
 class ShapedWindow(val title: String = "ShapedEngine",
                    val width: Int = 640,
                    val height: Int = 480,
-                   val vsync: Boolean = true) : HierarchyShapedComponent<ShapedWindow> {
-
-    override var parent: ShapedContainer<ShapedWindow>?
-        get() = cantHaveParentG()
-        set(value) = cantHaveParentS()
+                   val vsync: Boolean = true) : ShapedComponent {
 
     /**
      * Long native pointer of this window
@@ -90,13 +83,13 @@ class ShapedWindow(val title: String = "ShapedEngine",
             glfwGetWindowSize(ptr, pWidth, pHeight)
 
             // Get the resolution of the primary monitor
-            val vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor())
+            val vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor())
 
             // Center the window
             glfwSetWindowPos(
                 ptr,
-                (vidmode!!.width() - pWidth[0]) / 2,
-                (vidmode.height() - pHeight[0]) / 2
+                (vidMode!!.width() - pWidth[0]) / 2,
+                (vidMode.height() - pHeight[0]) / 2
             )
         }
 

@@ -16,8 +16,8 @@ import com.github.serivesmejia.engine.stage.`object`.ShapedObject
  * use Kotlin's "is" keyword (similar to Java's instanceof) to perform smart casting.
  *
  */
-abstract class ShapedStageComponent : HierarchyShapedComponent<ShapedStageComponent>, ShapedContainer<ShapedObject>() {
-    override var parent: ShapedStageComponent? = null
+abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>> : HierarchyShapedComponent<T>, ShapedContainer<ShapedObject>() {
+    override var parent: ShapedContainer<T>? = null
 
     val isStage: Boolean
         get() = this is ShapedStage

@@ -12,6 +12,10 @@ class ShapedStageManager : ShapedComponent {
         return this
     }
 
+    fun update() {
+
+    }
+
     override fun destroy(): ShapedStageManager {
 
         return this
