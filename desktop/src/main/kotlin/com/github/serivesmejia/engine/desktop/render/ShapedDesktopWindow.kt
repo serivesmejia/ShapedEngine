@@ -95,6 +95,8 @@ class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
      * Initializes glfw and creates this window
      */
     override fun create(): ShapedDesktopWindow {
+        println("create window")
+
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set()

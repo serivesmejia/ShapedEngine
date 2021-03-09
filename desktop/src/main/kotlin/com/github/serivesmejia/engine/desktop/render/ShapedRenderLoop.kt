@@ -13,6 +13,8 @@ class ShapedRenderLoop(private val engine: ShapedEngine,
                        private val window: ShapedDesktopWindow) : ShapedModule<ShapedEngine> {
 
     override fun create(): ShapedRenderLoop {
+        println("create render loop")
+
         engine.stageManager.eventBus.wrap(GlfwEventWrapper(window))
         GL.createCapabilities()
 

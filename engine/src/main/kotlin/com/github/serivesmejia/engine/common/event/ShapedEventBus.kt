@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
  *
  * Note that objects with @Subscribe methods need to be manually
  * registered via the register() method.
- * Events are fired to all subscribers with the fire() method
+ * Events are fired to all subscribers, using the fire() method
  */
 class ShapedEventBus {
 

@@ -1,6 +1,7 @@
 package com.github.serivesmejia.engine
 
 import com.github.serivesmejia.engine.common.modular.ShapedModular
+import com.github.serivesmejia.engine.common.modular.ShapedModule
 import com.github.serivesmejia.engine.render.PlaceholderWindow
 import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.stage.ShapedStageManager
@@ -12,8 +13,10 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
     lateinit var stageManager: ShapedStageManager
         private set
 
-    private val fpsCounter = FpsCounter()
+    private var hasWindowModule = false
+    private var hasStageManagerModule = false
 
+    private val fpsCounter = FpsCounter()
     private val deltaTimer = ElapsedTime()
 
     /**
@@ -33,27 +36,33 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
         addModule(stageManager)
 
         checkModuleRequirements()
-
         createModules()
 
         return this
     }
 
     private fun checkModuleRequirements() {
-        var windowModules = 0
-
-        for(module in modules) {
-            if(module is ShapedWindow) {
-                //set the current window in global Shaped.Graphics to this one
-                Shaped.Graphics.window = module
-
-                windowModules++ //increase window count by one
-            }
-        }
-
-        if(windowModules != 1) throw IllegalStateException(
-            "ShapedEngine should have only 1 ShapedWindow module before creating! (currently $windowModules)"
+        if(!hasWindowModule) throw IllegalStateException(
+            "ShapedEngine should have exactly 1 ShapedWindow module before creating!"
         )
+    }
+
+    override fun onModuleAdd(module: ShapedModule<ShapedEngine>) {
+        if(module is ShapedWindow) {
+            if(!hasWindowModule) {
+                hasWindowModule = true
+                Shaped.Graphics.window = module
+            } else throw IllegalArgumentException("ShapedEngine can't have more than 1 ShapedWindow module")
+        }
+    }
+
+    fun start(exitCondition: () -> Boolean): ShapedEngine {
+        while(!exitCondition() && !Thread.currentThread().isInterrupted)
+            update()
+
+        destroy()
+
+        return this
     }
 
     /**
