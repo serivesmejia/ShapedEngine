@@ -1,7 +1,11 @@
 package com.github.serivesmejia.engine.desktop.render
 
+import com.github.serivesmejia.engine.Shaped
 import com.github.serivesmejia.engine.ShapedEngine
+import com.github.serivesmejia.engine.common.geometry.Size2
+import com.github.serivesmejia.engine.common.geometry.Vector2
 import com.github.serivesmejia.engine.common.modular.ShapedModule
+import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
@@ -21,6 +25,32 @@ class ShapedWindow(val title: String = "ShapedEngine",
 
     val isVisible: Boolean
         get() = glfwGetWindowAttrib(ptr, GLFW_VISIBLE) == GLFW_TRUE
+
+    /**
+     * Gets the current position of this window as a Vector2
+     */
+    val position: Vector2
+        get() {
+            val x = BufferUtils.createIntBuffer(1)
+            val y = BufferUtils.createIntBuffer(1)
+            glfwGetWindowPos(ptr, x, y)
+            return Vector2(x.get(0).toFloat(), y.get(0).toFloat())
+        }
+
+    /**
+     * Gets the current size of this window as a Size2
+     */
+    val size: Size2
+        get() {
+            val w = BufferUtils.createIntBuffer(1)
+            val h = BufferUtils.createIntBuffer(1)
+            glfwGetWindowSize(ptr, w, h)
+
+            return Size2(
+                w.get(0).toFloat(),
+                h.get(0).toFloat()
+            )
+        }
 
     /**
      * Initializes glfw and creates this window
@@ -55,7 +85,13 @@ class ShapedWindow(val title: String = "ShapedEngine",
         return this
     }
 
-    override fun update(deltaTime: Float) {}
+    override fun update(deltaTime: Float) {
+        val cachedSize = this.size
+        val cachedPos = this.position
+
+        Shaped.Graphics.displayRect.position.set(cachedPos.x, cachedPos.y)
+        Shaped.Graphics.displayRect.size.set(cachedSize.width, cachedSize.height)
+    }
 
     /**
      * Shows this window

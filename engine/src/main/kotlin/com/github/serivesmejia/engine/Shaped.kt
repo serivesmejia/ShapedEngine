@@ -1,5 +1,7 @@
 package com.github.serivesmejia.engine
 
+import com.github.serivesmejia.engine.common.geometry.Rectangle2
+
 object Shaped {
 
     var hasCreatedEngine = false
@@ -15,10 +17,13 @@ object Shaped {
         internal set
 
     object Graphics {
-        var width = 0
-            internal set
-        var height = 0
-            internal set
+        val displayRect = Rectangle2()
+
+        val displayX get() = displayRect.position.x
+        val displayY get() = displayRect.position.y
+
+        val displayWidth get() = displayRect.size.width
+        val displayHeight get() = displayRect.size.height
     }
 
     fun end() = engineThread?.interrupt()

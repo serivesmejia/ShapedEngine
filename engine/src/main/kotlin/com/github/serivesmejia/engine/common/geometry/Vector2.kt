@@ -23,6 +23,14 @@ data class Vector2(var x: Float = 0f,
     val angle get() = atan2(y.toDouble(), x.toDouble())
 
     /**
+     * Sets the values of this Size
+     */
+    fun set(x: Float, y: Float) {
+        this.x = x
+        this.y = y
+    }
+
+    /**
      * Rotate the vector in Cartesian space
      *
      * @param angle angle in degrees to rotate vector counter-clockwise
