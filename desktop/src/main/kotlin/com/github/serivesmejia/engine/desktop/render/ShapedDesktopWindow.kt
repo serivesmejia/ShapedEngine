@@ -12,9 +12,14 @@ import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil.NULL
 
+/**
+ * Create a window using the desktop GLFW API
+ * @property initialTitle the initial title of this window
+ * @property initialSize the initial size of this window
+ * @property vsync whether this window will use vertical synchronization or not.
+ */
 class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
-                          private val initialWidth: Int = 640,
-                          private val initialHeight: Int = 480,
+                          private val initialSize: Size2 = Size2(640f, 480f),
                           val vsync: Boolean = true) : ShapedWindow {
 
     /**
@@ -102,7 +107,12 @@ class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE) // the window will be resizable
 
         // Create the window
-        ptr = glfwCreateWindow(initialWidth, initialHeight, title, NULL, NULL)
+        ptr = glfwCreateWindow(
+            initialSize.width.toInt(),
+            initialSize.height.toInt(),
+            title, NULL, NULL
+        )
+
         if (ptr == NULL)
             throw RuntimeException("Failed to create the GLFW window")
 
