@@ -114,24 +114,4 @@ data class Vector2(var x: Float = 0f,
      */
     operator fun div(other: Vector2) = copy(x = x / other.x, y = y / other.y)
 
-    /**
-     * Adds a vector to this vector
-     * @param other vector to add
-     * @return a copy of this vector with the result
-     */
-    operator fun plusAssign(other: Vector2) {
-        x += other.x
-        y += other.y
-    }
-
-    /**
-     * Subtracts a vector to this vector
-     * @param other vector to subtract
-     * @return a copy of this vector with the result
-     */
-    operator fun minusAssign(other: Vector2) {
-        x -= other.x
-        y -= other.y
-    }
-
 }

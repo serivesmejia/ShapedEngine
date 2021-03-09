@@ -3,6 +3,8 @@ package com.github.serivesmejia.engine.common.event
 import com.github.serivesmejia.engine.common.event.wrapper.ShapedEventWrapper
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
+import kotlin.reflect.full.declaredFunctions
 
 /**
  * Handles events via a "@Subscribe(eventClass)" mechanism.
@@ -23,24 +25,24 @@ import kotlin.reflect.KClass
  */
 class ShapedEventBus {
 
-    private val subscribedMethods = mutableMapOf<Class<out ShapedEvent>, MutableList<Pair<Any, Method>>>()
+    private val subscribedMethods = mutableMapOf<KClass<out ShapedEvent>, MutableList<Pair<Any, KFunction<*>>>>()
 
     /**
      * Fires all the subscribed methods with the specified event
      * @event the event to fire (and to be passed to the subscribed methods)
      */
     fun fire(event: ShapedEvent) {
-        val eventClass = event::class.java
+        val eventClass = event::class
 
         subscribedMethods[eventClass]?.forEach { //for each subscribed method to the event
             try {
                 //try invoking the subscribed method with a "event" parameter
-                it.second.invoke(it.first, event)
-            } catch(ex: NoSuchMethodException) { //need different arguments
+                it.second.call(it.first, event)
+            } catch(ex: IllegalArgumentException) { //need different arguments
                 try {
                     //try invoking the same method without any arguments
-                    it.second.invoke(it.first)
-                } catch(ex: NoSuchMethodException) { /* give up, nothing else we can really do..*/ }
+                    it.second.call(it.first)
+                } catch(ex: IllegalArgumentException) { /* give up, nothing else we can really do..*/ }
             }
         }
     }
@@ -52,11 +54,11 @@ class ShapedEventBus {
      * @param obj the object to register the methods from
      */
     fun register(obj: Any) {
-        val methods = obj::class.java.declaredMethods
+        val functions = obj::class.declaredFunctions
 
         //iterate through all methods of the passed object
-        for (method in methods) {
-            val annotations = method.annotations
+        for (function in functions) {
+            val annotations = function.annotations
 
             //iterate through all annotations of the current method
             //searching for the "Subscribe" annotation
@@ -65,16 +67,16 @@ class ShapedEventBus {
                 if (annotation is Subscribe) {
                     //smart cast the annotation to Subscribe
                     //and get the event class specified in it
-                    val eventClass = annotation.eventClass.java
+                    val eventClass = annotation.eventClass
 
                     //add to the list of abject and method if the
                     //event class has been registered as a key before
                     if (subscribedMethods.containsKey(eventClass)) {
-                        subscribedMethods[eventClass]!!.add(Pair(obj, method))
+                        subscribedMethods[eventClass]!!.add(Pair(obj, function))
                     } else {
                         //create a new list of methods for this event class type
-                        val listOfMethods = mutableListOf<Pair<Any, Method>>()
-                        listOfMethods.add(Pair(obj, method)) //add the pair of object and value to the new list
+                        val listOfMethods = mutableListOf<Pair<Any, KFunction<*>>>()
+                        listOfMethods.add(Pair(obj, function)) //add the pair of object and value to the new list
                         subscribedMethods[eventClass] = listOfMethods //add the list to the master map
                     }
                 }

@@ -24,8 +24,6 @@ class TestObject : ShapedObject() {
         println("object resize! $evt")
     }
 
-    override fun dispose() {
-
-    }
+    override fun dispose() { }
 
 }

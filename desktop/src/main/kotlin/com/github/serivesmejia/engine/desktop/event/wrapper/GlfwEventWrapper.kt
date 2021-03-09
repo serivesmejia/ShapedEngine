@@ -15,12 +15,14 @@ import org.lwjgl.glfw.GLFW.*
 class GlfwEventWrapper(private val window: ShapedDesktopWindow) : ShapedEventWrapper {
 
     override fun wrap(eventBus: ShapedEventBus) {
+        //wrap for resize events
         glfwSetWindowSizeCallback(window.ptr) { _: Long, width: Int, height: Int ->
             eventBus.fire(
                 WindowResizeEvent(Size2(width.toFloat(), height.toFloat()))
             )
         }
 
+        //wrap for window move events
         glfwSetWindowPosCallback(window.ptr) { _: Long, x: Int, y: Int ->
             eventBus.fire(
                 WindowMoveEvent(Vector2(x.toFloat(), y.toFloat()))

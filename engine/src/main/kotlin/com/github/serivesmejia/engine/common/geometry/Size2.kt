@@ -55,24 +55,4 @@ data class Size2(var width: Float,
      */
     operator fun div(other: Size2) = copy(width = width / other.width, height = height / other.height)
 
-    /**
-     * Adds a Size to this size
-     * @param other Size to add
-     * @return a copy of this Size with the result
-     */
-    operator fun plusAssign(other: Size2) {
-        width += other.width
-        height += other.height
-    }
-
-    /**
-     * Subtracts a Size to this Size
-     * @param other Size to subtract
-     * @return a copy of this Size with the result
-     */
-    operator fun minusAssign(other: Size2) {
-        width -= other.width
-        height -= other.height
-    }
-
 }

@@ -24,7 +24,7 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
      */
     override fun create(): ShapedEngine {
         //not a precisely good idea to have more than one engine...
-        if(Shaped.hasCreatedEngine)
+        if (Shaped.hasCreatedEngine)
             throw IllegalStateException("Can't have more than one engine running per JVM")
 
         //tell globally that we have one engine running
@@ -42,21 +42,28 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
     }
 
     private fun checkModuleRequirements() {
-        if(!hasWindowModule) throw IllegalStateException(
+        if (!hasWindowModule) throw IllegalStateException(
             "ShapedEngine should have exactly 1 ShapedWindow module before creating!"
         )
     }
 
     override fun onModuleAdd(module: ShapedModule<ShapedEngine>) {
-        if(module is ShapedWindow) {
-            if(!hasWindowModule) {
+        if (module is ShapedWindow) {
+            if (!hasWindowModule) {
                 hasWindowModule = true
                 Shaped.Graphics.window = module
             } else throw IllegalArgumentException("ShapedEngine can't have more than 1 ShapedWindow module")
         }
     }
 
-    fun start(exitCondition: () -> Boolean): ShapedEngine {
+    /**
+     * Starts this engine, blocking.
+     * Make sure to add required modules and call create() before creating start
+     * Automatically calls destroy() once the exit condition is true or thread is interrupted
+     *
+     * @param exitCondition callback returning a boolean to be called every loop to determine if we need to exit, platform dependent
+     */
+    fun start(exitCondition: () -> Boolean = { true }): ShapedEngine {
         while(!exitCondition() && !Thread.currentThread().isInterrupted)
             update()
 

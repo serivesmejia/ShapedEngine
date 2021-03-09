@@ -9,12 +9,10 @@ import org.lwjgl.glfw.GLFW.glfwSwapBuffers
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 
-class ShapedRenderLoop(private val engine: ShapedEngine,
-                       private val window: ShapedDesktopWindow) : ShapedModule<ShapedEngine> {
+class ShapedDesktopRenderLoop(private val engine: ShapedEngine,
+                              private val window: ShapedDesktopWindow) : ShapedModule<ShapedEngine> {
 
-    override fun create(): ShapedRenderLoop {
-        println("create render loop")
-
+    override fun create(): ShapedDesktopRenderLoop {
         engine.stageManager.eventBus.wrap(GlfwEventWrapper(window))
         GL.createCapabilities()
 
@@ -29,7 +27,7 @@ class ShapedRenderLoop(private val engine: ShapedEngine,
         glfwPollEvents()
     }
 
-    override fun destroy(): ShapedRenderLoop {
+    override fun destroy(): ShapedDesktopRenderLoop {
         return this
     }
 
