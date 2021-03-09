@@ -42,8 +42,12 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
 
     private fun createModule(module: ShapedModule<T>) {
         module.create()
-        val pair = internalModules[module]
+        val pair = internalModules[module] //get the (ModulePriority, created) pair of this module
+
+        //tell that we created this module already
         internalModules[module] = pair!!.copy(second = true)
+
+        cachedSortedModules = null //need to invalidate sorted caches since we changed the "created" boolean
     }
 
     /**
@@ -63,14 +67,10 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
         if(!internalModules.containsKey(module)) {
             internalModules[module] = Pair(priority, false)
             onModuleAdd(module)
+
+            cachedSortedModules = null //invalidate sorted caches
         }
     }
-
-    /**
-     * Sorts the modules by their ModulePriority
-     */
-    val sortedModules: List<Pair<ShapedModule<T>, Pair<ModulePriority, Boolean>>>
-        get() = internalModules.toList().sortedBy { (_, value) -> value.first.priority }
 
     /**
      * Open function called when a module is added
@@ -87,6 +87,8 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
             module.destroy()
             internalModules.remove(module)
             onModuleRemove(module)
+
+            cachedSortedModules = null //invalidate sorted caches
         }
     }
 
@@ -95,6 +97,23 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * Can be used to perform any check or save any state
      */
     internal open fun onModuleRemove(module: ShapedModule<T>) {}
+
+    /**
+     * Caching last sorted list so that we don't have to resort every time
+     */
+    private var cachedSortedModules: List<Pair<ShapedModule<T>, Pair<ModulePriority, Boolean>>>? = null
+
+    /**
+     * Sorts the modules by their ModulePriority
+     */
+    val sortedModules: List<Pair<ShapedModule<T>, Pair<ModulePriority, Boolean>>>
+        get() {
+            if(cachedSortedModules == null) { //check if we don't have cached
+                //recreate cached list if we don't have one
+                cachedSortedModules = internalModules.toList().sortedBy { (_, value) -> value.first.priority }
+            }
+            return cachedSortedModules!! //return cached
+        }
 
 }
 

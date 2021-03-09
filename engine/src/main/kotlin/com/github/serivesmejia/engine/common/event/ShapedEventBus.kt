@@ -88,6 +88,26 @@ class ShapedEventBus {
     }
 
     /**
+     * Unregisters all subscribers from a specific object
+     * @param unregObj the object to unregister all the subscribers from
+     */
+    fun unregister(unregObj: Any) {
+        //search for obj list in every event type
+        for(list in subscribedMethods.values) {
+            //iterate the obj list as an independent typed array
+            for(pair in list.toTypedArray()) {
+                //if the obj of the current iteration equals the object to unregister
+                if(pair.first === unregObj) {
+                    list.remove(pair) //remove
+
+                    //call unregister if object to unregister is an EventRegistrator
+                    if(unregObj is ShapedEventRegistrator) unregObj.unregister(this)
+                }
+            }
+        }
+    }
+
+    /**
      * Wraps this ShapedEventBus around the specified wrapper
      * Useful for stuff like mapping GLFW events to ShapedEvents
      */

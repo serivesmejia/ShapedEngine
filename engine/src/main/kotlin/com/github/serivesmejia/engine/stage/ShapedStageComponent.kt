@@ -22,11 +22,20 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
 
     override var parent: ShapedContainer<T>? = null
 
+    /**
+     * Check whether if this StageComponent is a Stage, otherwise it's a StageObject
+     */
     val isStage: Boolean
         get() = this is ShapedStage
 
     private val eventBuses = ArrayList<ShapedEventBus>()
 
+    /**
+     * Override of addChild function to register this new children
+     * to the subscribed event buses and calling create() on them
+     *
+     * @param child the ShapedObject child to add to this component
+     */
     override fun addChild(child: ShapedObject) {
         for(eventBus in eventBuses) {
             eventBus.register(child)
@@ -36,11 +45,28 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
         super.addChild(child)
     }
 
+    /**
+     * Gets called when someone registers this component to an EventBus
+     */
     override fun register(eventBus: ShapedEventBus) {
+        //adds all children objects to the eventBus
         for(obj in children) {
             eventBus.register(obj)
         }
+        //adds the eventbus from the list of subscribed eventbuses
         eventBuses.add(eventBus)
+    }
+
+    /**
+     * Gets called when someone unregisters this component from an EventBus
+     */
+    override fun unregister(eventBus: ShapedEventBus) {
+        //removes all children objects from this eventBus
+        for(obj in children) {
+            eventBus.unregister(obj)
+        }
+        //remove the eventbus from the list of subscribed eventbuses
+        eventBuses.remove(eventBus)
     }
 
 }
