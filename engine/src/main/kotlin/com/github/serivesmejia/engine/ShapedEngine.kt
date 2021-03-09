@@ -3,11 +3,14 @@ package com.github.serivesmejia.engine
 import com.github.serivesmejia.engine.common.modular.ShapedModular
 import com.github.serivesmejia.engine.stage.ShapedStageManager
 import com.github.serivesmejia.engine.util.ElapsedTime
+import com.github.serivesmejia.engine.util.FpsCounter
 
 class ShapedEngine : ShapedModular<ShapedEngine>() {
 
     lateinit var stageManager: ShapedStageManager
         private set
+
+    private val fpsCounter = FpsCounter()
 
     private val deltaTimer = ElapsedTime()
 
@@ -43,10 +46,13 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
      */
     override fun update(deltaTime: Float) {
         Shaped.deltaTime = deltaTimer.seconds.toFloat() //calculate delta time
+        Shaped.fps = fpsCounter.fps
+
         deltaTimer.reset() //reset back to zero
 
         //update modules
         updateModules(Shaped.deltaTime)
+        fpsCounter.update()
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.github.serivesmejia.engine.desktop.render
 
 import com.github.serivesmejia.engine.ShapedEngine
-import com.github.serivesmejia.engine.common.color
+import com.github.serivesmejia.engine.common.extension.color
 import com.github.serivesmejia.engine.common.modular.ShapedModule
 import com.github.serivesmejia.engine.desktop.event.wrapper.GlfwEventWrapper
 import org.lwjgl.glfw.GLFW.glfwPollEvents

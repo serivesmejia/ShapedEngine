@@ -47,6 +47,12 @@ open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponen
         return this
     }
 
+    /**
+     * Called when destroying.
+     * Can be used to perform any operation that frees memory
+     * or destroys other (untracked) objects when this stage
+     * is being destroyed.
+     */
     open fun dispose() { }
 
 }
