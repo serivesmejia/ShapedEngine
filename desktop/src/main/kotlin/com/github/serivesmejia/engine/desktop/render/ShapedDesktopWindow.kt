@@ -12,7 +12,7 @@ import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil.NULL
 
-class ShapedDesktopWindow(private initialTitle: String = "ShapedEngine",
+class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
                           private val initialWidth: Int = 640,
                           private val initialHeight: Int = 480,
                           val vsync: Boolean = true) : ShapedWindow {
