@@ -1,6 +1,8 @@
 package com.github.serivesmejia.engine
 
 import com.github.serivesmejia.engine.common.modular.ShapedModular
+import com.github.serivesmejia.engine.render.PlaceholderWindow
+import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.stage.ShapedStageManager
 import com.github.serivesmejia.engine.util.ElapsedTime
 import com.github.serivesmejia.engine.util.FpsCounter
@@ -30,9 +32,28 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
         stageManager = ShapedStageManager()
         addModule(stageManager)
 
+        checkModuleRequirements()
+
         createModules()
 
         return this
+    }
+
+    private fun checkModuleRequirements() {
+        var windowModules = 0
+
+        for(module in modules) {
+            if(module is ShapedWindow) {
+                //set the current window in global Shaped.Graphics to this one
+                Shaped.Graphics.window = module
+
+                windowModules++ //increase window count by one
+            }
+        }
+
+        if(windowModules != 1) throw IllegalStateException(
+            "ShapedEngine should have only 1 ShapedWindow module before creating! (currently $windowModules)"
+        )
     }
 
     /**

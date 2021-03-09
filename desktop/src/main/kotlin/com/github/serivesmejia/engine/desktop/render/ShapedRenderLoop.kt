@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 
 class ShapedRenderLoop(private val engine: ShapedEngine,
-                       private val window: ShapedWindow) : ShapedModule<ShapedEngine> {
+                       private val window: ShapedDesktopWindow) : ShapedModule<ShapedEngine> {
 
     override fun create(): ShapedRenderLoop {
         engine.stageManager.eventBus.wrap(GlfwEventWrapper(window))

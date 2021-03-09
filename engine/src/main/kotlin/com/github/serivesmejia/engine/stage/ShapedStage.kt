@@ -1,7 +1,5 @@
 package com.github.serivesmejia.engine.stage
 
-import com.github.serivesmejia.engine.stage.common.ShapedStageComponent
-
 open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponent<ShapedStage>() {
 
     /**

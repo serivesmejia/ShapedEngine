@@ -1,10 +1,10 @@
 package com.github.serivesmejia.engine.desktop.render
 
 import com.github.serivesmejia.engine.Shaped
-import com.github.serivesmejia.engine.ShapedEngine
+import com.github.serivesmejia.engine.common.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.geometry.Size2
 import com.github.serivesmejia.engine.common.geometry.Vector2
-import com.github.serivesmejia.engine.common.modular.ShapedModule
+import com.github.serivesmejia.engine.render.ShapedWindow
 import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
@@ -12,10 +12,10 @@ import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil.NULL
 
-class ShapedWindow(val title: String = "ShapedEngine",
-                   val width: Int = 640,
-                   val height: Int = 480,
-                   val vsync: Boolean = true) : ShapedModule<ShapedEngine> {
+class ShapedDesktopWindow(private initialTitle: String = "ShapedEngine",
+                          private val initialWidth: Int = 640,
+                          private val initialHeight: Int = 480,
+                          val vsync: Boolean = true) : ShapedWindow {
 
     /**
      * Long native pointer of this window
@@ -23,13 +23,44 @@ class ShapedWindow(val title: String = "ShapedEngine",
     var ptr = 0L
         private set
 
-    val isVisible: Boolean
+    /**
+     * Get whether this window is currently visible
+     * Use show() or hide() functions to update visibility
+     */
+    override val isVisible: Boolean
         get() = glfwGetWindowAttrib(ptr, GLFW_VISIBLE) == GLFW_TRUE
+
+    /**
+     * Get whether this window is currently focused
+     */
+    override val isFocused: Boolean
+        get() = glfwGetWindowAttrib(ptr, GLFW_FOCUSED) == GLFW_TRUE
+
+    /**
+     * Get or set this window title
+     *
+     * Note that when setting the window title
+     * manually with the glfw function, there's
+     * no way to retrieve the current title, so
+     * any independent change won't be reflected
+     * on the value of this variable.
+     */
+    override var title: String = initialTitle
+        set(value) {
+            glfwSetWindowTitle(ptr, value)
+            field = value
+        }
+
+    override val windowRectangle: Rectangle2
+        get() = Rectangle2(position, size)
 
     /**
      * Gets the current position of this window as a Vector2
      */
-    val position: Vector2
+    override var position: Vector2
+        set(value) {
+            glfwSetWindowPos(ptr, value.x.toInt(), value.y.toInt())
+        }
         get() {
             val x = BufferUtils.createIntBuffer(1)
             val y = BufferUtils.createIntBuffer(1)
@@ -40,7 +71,10 @@ class ShapedWindow(val title: String = "ShapedEngine",
     /**
      * Gets the current size of this window as a Size2
      */
-    val size: Size2
+    override var size: Size2
+        set(value) {
+            glfwSetWindowSize(ptr, value.width.toInt(), value.height.toInt())
+        }
         get() {
             val w = BufferUtils.createIntBuffer(1)
             val h = BufferUtils.createIntBuffer(1)
@@ -55,7 +89,7 @@ class ShapedWindow(val title: String = "ShapedEngine",
     /**
      * Initializes glfw and creates this window
      */
-    override fun create(): ShapedWindow {
+    override fun create(): ShapedDesktopWindow {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set()
@@ -68,7 +102,7 @@ class ShapedWindow(val title: String = "ShapedEngine",
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE) // the window will be resizable
 
         // Create the window
-        ptr = glfwCreateWindow(width, height, title, NULL, NULL)
+        ptr = glfwCreateWindow(initialWidth, initialHeight, title, NULL, NULL)
         if (ptr == NULL)
             throw RuntimeException("Failed to create the GLFW window")
 
@@ -85,18 +119,12 @@ class ShapedWindow(val title: String = "ShapedEngine",
         return this
     }
 
-    override fun update(deltaTime: Float) {
-        val cachedSize = this.size
-        val cachedPos = this.position
-
-        Shaped.Graphics.displayRect.position.set(cachedPos.x, cachedPos.y)
-        Shaped.Graphics.displayRect.size.set(cachedSize.width, cachedSize.height)
-    }
+    override fun update(deltaTime: Float) { }
 
     /**
      * Shows this window
      */
-    fun show(): ShapedWindow {
+    override fun show(): ShapedDesktopWindow {
         glfwShowWindow(ptr)
         return this
     }
@@ -104,7 +132,7 @@ class ShapedWindow(val title: String = "ShapedEngine",
     /**
      * Hides this window
      */
-    fun hide(): ShapedWindow {
+    override fun hide(): ShapedDesktopWindow {
         glfwHideWindow(ptr)
         return this
     }
@@ -112,7 +140,7 @@ class ShapedWindow(val title: String = "ShapedEngine",
     /**
      * Centers the window in the screen
      */
-    fun center(): ShapedWindow {
+    override fun center(): ShapedDesktopWindow {
         // Get the thread stack and push a new frame
         stackPush().use { stack ->
             val pWidth = stack.mallocInt(1) // int*
@@ -138,7 +166,7 @@ class ShapedWindow(val title: String = "ShapedEngine",
     /**
      * Closes this window, terminates glfw.
      */
-    override fun destroy(): ShapedWindow {
+    override fun destroy(): ShapedDesktopWindow {
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(ptr)
         glfwDestroyWindow(ptr)

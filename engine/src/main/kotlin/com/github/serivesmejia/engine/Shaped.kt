@@ -1,6 +1,8 @@
 package com.github.serivesmejia.engine
 
 import com.github.serivesmejia.engine.common.geometry.Rectangle2
+import com.github.serivesmejia.engine.render.PlaceholderWindow
+import com.github.serivesmejia.engine.render.ShapedWindow
 
 object Shaped {
 
@@ -17,13 +19,8 @@ object Shaped {
         internal set
 
     object Graphics {
-        val displayRect = Rectangle2()
-
-        val displayX get() = displayRect.position.x
-        val displayY get() = displayRect.position.y
-
-        val displayWidth get() = displayRect.size.width
-        val displayHeight get() = displayRect.size.height
+        var window: ShapedWindow = PlaceholderWindow
+            internal set
     }
 
     fun end() = engineThread?.interrupt()

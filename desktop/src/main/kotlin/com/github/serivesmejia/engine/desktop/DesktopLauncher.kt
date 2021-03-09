@@ -2,12 +2,12 @@ package com.github.serivesmejia.engine.desktop
 
 import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.desktop.render.ShapedRenderLoop
-import com.github.serivesmejia.engine.desktop.render.ShapedWindow
+import com.github.serivesmejia.engine.desktop.render.ShapedDesktopWindow
 import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 
 object DesktopLauncher {
     val engine = ShapedEngine()
-    val window = ShapedWindow()
+    val window = ShapedDesktopWindow()
 
     fun launch() {
         engine.addModule(window)

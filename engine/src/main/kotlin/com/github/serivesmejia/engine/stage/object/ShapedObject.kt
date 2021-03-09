@@ -1,7 +1,7 @@
 package com.github.serivesmejia.engine.stage.`object`
 
 import com.github.serivesmejia.engine.stage.ShapedStage
-import com.github.serivesmejia.engine.stage.common.ShapedStageComponent
+import com.github.serivesmejia.engine.stage.ShapedStageComponent
 
 abstract class ShapedObject: ShapedStageComponent<ShapedObject>() {
 

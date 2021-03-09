@@ -1,9 +1,8 @@
-package com.github.serivesmejia.engine.stage.common
+package com.github.serivesmejia.engine.stage
 
 import com.github.serivesmejia.engine.common.HierarchyShapedComponent
 import com.github.serivesmejia.engine.common.ShapedContainer
 import com.github.serivesmejia.engine.common.event.ShapedEventBus
-import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 import com.github.serivesmejia.engine.common.event.ShapedEventRegistrator
 
@@ -32,6 +31,8 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
         for(eventBus in eventBuses) {
             eventBus.register(child)
         }
+
+        child.create()
         super.addChild(child)
     }
 
