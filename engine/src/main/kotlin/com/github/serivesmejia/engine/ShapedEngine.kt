@@ -2,7 +2,6 @@ package com.github.serivesmejia.engine
 
 import com.github.serivesmejia.engine.common.modular.ShapedModular
 import com.github.serivesmejia.engine.common.modular.ShapedModule
-import com.github.serivesmejia.engine.render.PlaceholderWindow
 import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.stage.ShapedStageManager
 import com.github.serivesmejia.engine.util.ElapsedTime

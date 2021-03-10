@@ -14,12 +14,12 @@ class TestObject : ShapedObject() {
 
     override fun update(deltaTime: Float) { }
 
-    @Subscribe(WindowMoveEvent::class)
+    @Subscribe
     fun onMove(evt: WindowMoveEvent) {
         println("object move! $evt")
     }
 
-    @Subscribe(WindowResizeEvent::class)
+    @Subscribe
     fun onResize(evt: WindowResizeEvent) {
         println("object resize! $evt")
     }
