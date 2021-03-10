@@ -9,4 +9,5 @@ import com.github.serivesmejia.engine.common.event.ShapedEventBus
  */
 interface ShapedEventWrapper {
     fun wrap(eventBus: ShapedEventBus)
+    fun unwrap(eventBus: ShapedEventBus)
 }

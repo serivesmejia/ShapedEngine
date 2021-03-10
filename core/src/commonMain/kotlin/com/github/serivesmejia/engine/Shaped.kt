@@ -9,8 +9,7 @@ object Shaped {
     var hasCreatedEngine = false
         internal set
 
-    var engineThread: Thread? = null
-        internal set
+    internal var closeRequested = false
 
     var deltaTime = 0.0f
         internal set
@@ -23,6 +22,8 @@ object Shaped {
             internal set
     }
 
-    fun end() = engineThread?.interrupt()
+    fun end() {
+        closeRequested = true
+    }
 
 }

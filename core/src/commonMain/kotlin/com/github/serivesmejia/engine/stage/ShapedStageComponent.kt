@@ -4,7 +4,8 @@ import com.github.serivesmejia.engine.common.HierarchyShapedComponent
 import com.github.serivesmejia.engine.common.ShapedContainer
 import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
-import com.github.serivesmejia.engine.common.event.ShapedEventRegistrator
+import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventRegistrator
+import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventSubscriber
 
 /**
  * Common class for all stage components to implement. including the stage itself.
@@ -22,13 +23,16 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
 
     override var parent: ShapedContainer<T>? = null
 
+    lateinit var eventBus: ShapedEventBus
+        internal set
+
+    private val subscribers = mutableListOf<ShapedEventSubscriber>()
+
     /**
      * Check whether if this StageComponent is a Stage, otherwise it's a StageObject
      */
     val isStage: Boolean
         get() = this is ShapedStage
-
-    private val eventBuses = ArrayList<ShapedEventBus>()
 
     /**
      * Override of addChild function to register this new children
@@ -37,9 +41,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      * @param child the ShapedObject child to add to this component
      */
     override fun addChild(child: ShapedObject) {
-        for(eventBus in eventBuses) {
-            eventBus.register(child)
-        }
+        child.eventBus = eventBus
 
         child.create()
         super.addChild(child)
@@ -48,25 +50,27 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     /**
      * Gets called when someone registers this component to an EventBus
      */
-    override fun register(eventBus: ShapedEventBus) {
+    override fun register(subscriber: ShapedEventSubscriber) {
         //adds all children objects to the eventBus
         for(obj in children) {
-            eventBus.register(obj)
+            subscriber.register(obj)
         }
+
         //adds the eventbus from the list of subscribed eventbuses
-        eventBuses.add(eventBus)
+        subscribers.add(subscriber)
     }
 
     /**
      * Gets called when someone unregisters this component from an EventBus
      */
-    override fun unregister(eventBus: ShapedEventBus) {
+    override fun unregister(subscriber: ShapedEventSubscriber) {
         //removes all children objects from this eventBus
         for(obj in children) {
-            eventBus.unregister(obj)
+            subscriber.unregister(obj)
         }
+
         //remove the eventbus from the list of subscribed eventbuses
-        eventBuses.remove(eventBus)
+        subscribers.remove(subscriber)
     }
 
 }

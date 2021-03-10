@@ -28,8 +28,6 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
 
         //tell globally that we have one engine running
         Shaped.hasCreatedEngine = true
-        //tell globally on which thread we're running
-        Shaped.engineThread = Thread.currentThread()
 
         stageManager = ShapedStageManager()
         addModule(stageManager)
@@ -63,7 +61,7 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
      * @param exitCondition callback returning a boolean to be called every loop to determine if we need to exit, platform dependent
      */
     fun start(exitCondition: () -> Boolean = { true }): ShapedEngine {
-        while(!exitCondition() && !Thread.currentThread().isInterrupted)
+        while(!exitCondition() && Shaped.closeRequested)
             update()
 
         destroy()

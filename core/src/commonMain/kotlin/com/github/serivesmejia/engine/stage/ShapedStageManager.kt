@@ -25,7 +25,9 @@ class ShapedStageManager : ShapedModule<ShapedEngine> {
         currentStage?.destroy()
         eventBus.clear()
 
+        stage.eventBus = eventBus
         stage.create()
+
         currentStage = stage
         eventBus.register(stage)
     }

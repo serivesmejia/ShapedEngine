@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation project(":engine")
+    implementation project(":core")
     
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
