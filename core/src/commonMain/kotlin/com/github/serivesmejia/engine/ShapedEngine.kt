@@ -3,6 +3,7 @@ package com.github.serivesmejia.engine
 import com.github.serivesmejia.engine.common.modular.ModulePriority
 import com.github.serivesmejia.engine.common.modular.ShapedModular
 import com.github.serivesmejia.engine.common.modular.ShapedModule
+import com.github.serivesmejia.engine.render.ShapedRenderer
 import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.stage.ShapedStageManager
 import com.github.serivesmejia.engine.util.ElapsedTime
@@ -18,8 +19,11 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
     private val fpsCounter = FpsCounter()
     private val deltaTimer = ElapsedTime()
 
+    //setup requirements in init block
     init {
         addRequirement<ShapedWindow>(1, 1) { it is ShapedWindow }
+        addRequirement<ShapedRenderer>(1, 1) { it is ShapedRenderer }
+
         addRequirement<ShapedStageManager>(1, 1)
     }
 
@@ -44,11 +48,12 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
 
     override fun onModuleAdd(module: ShapedModule<ShapedEngine>) {
         if (module is ShapedWindow) Shaped.Graphics.window = module
+        else if (module is ShapedRenderer) Shaped.Graphics.renderer = module
     }
 
     /**
      * Starts this engine, blocking.
-     * Make sure to add required modules and call create() before creating start
+     * Make sure to add required modules and call create() before calling this function
      * Automatically calls destroy() once the exit condition is true or engine is told to end
      *
      * @param exitCondition callback returning a boolean to be called every loop to determine if we need to exit, platform dependent

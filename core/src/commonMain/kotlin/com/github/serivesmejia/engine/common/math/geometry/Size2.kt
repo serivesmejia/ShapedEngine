@@ -1,4 +1,4 @@
-package com.github.serivesmejia.engine.common.geometry
+package com.github.serivesmejia.engine.common.math.geometry
 
 data class Size2(var width: Float,
                  var height: Float) {

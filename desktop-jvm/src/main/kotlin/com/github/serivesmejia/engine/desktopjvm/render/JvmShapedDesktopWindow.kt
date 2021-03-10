@@ -1,9 +1,8 @@
-package com.github.serivesmejia.engine.desktop.render
+package com.github.serivesmejia.engine.desktopjvm.render
 
-import com.github.serivesmejia.engine.Shaped
-import com.github.serivesmejia.engine.common.geometry.Rectangle2
-import com.github.serivesmejia.engine.common.geometry.Size2
-import com.github.serivesmejia.engine.common.geometry.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
+import com.github.serivesmejia.engine.common.math.geometry.Size2
+import com.github.serivesmejia.engine.common.math.geometry.Vector2
 import com.github.serivesmejia.engine.render.ShapedWindow
 import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
@@ -18,9 +17,9 @@ import org.lwjgl.system.MemoryUtil.NULL
  * @property initialSize the initial size of this window
  * @property vsync whether this window will use vertical synchronization or not.
  */
-class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
-                          private val initialSize: Size2 = Size2(640f, 480f),
-                          val vsync: Boolean = true) : ShapedWindow {
+class JvmShapedDesktopWindow(initialTitle: String = "ShapedEngine",
+                             private val initialSize: Size2 = Size2(640f, 480f),
+                             val vsync: Boolean = true) : ShapedWindow {
 
     /**
      * Long native pointer of this window
@@ -94,7 +93,7 @@ class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Initializes glfw and creates this window
      */
-    override fun create(): ShapedDesktopWindow {
+    override fun create(): JvmShapedDesktopWindow {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set()
@@ -134,7 +133,7 @@ class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Shows this window
      */
-    override fun show(): ShapedDesktopWindow {
+    override fun show(): JvmShapedDesktopWindow {
         glfwShowWindow(ptr)
         return this
     }
@@ -142,7 +141,7 @@ class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Hides this window
      */
-    override fun hide(): ShapedDesktopWindow {
+    override fun hide(): JvmShapedDesktopWindow {
         glfwHideWindow(ptr)
         return this
     }
@@ -150,7 +149,7 @@ class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Centers the window in the screen
      */
-    override fun center(): ShapedDesktopWindow {
+    override fun center(): JvmShapedDesktopWindow {
         // Get the thread stack and push a new frame
         stackPush().use { stack ->
             val pWidth = stack.mallocInt(1) // int*
@@ -176,7 +175,7 @@ class ShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Closes this window, terminates glfw.
      */
-    override fun destroy(): ShapedDesktopWindow {
+    override fun destroy(): JvmShapedDesktopWindow {
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(ptr)
         glfwDestroyWindow(ptr)

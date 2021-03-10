@@ -1,4 +1,4 @@
-package com.github.serivesmejia.engine.common.geometry
+package com.github.serivesmejia.engine.common.math.geometry
 
 import com.github.serivesmejia.engine.common.Math.toRadians
 import kotlin.math.atan2

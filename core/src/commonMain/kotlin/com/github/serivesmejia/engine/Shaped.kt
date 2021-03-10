@@ -1,6 +1,8 @@
 package com.github.serivesmejia.engine
 
+import com.github.serivesmejia.engine.render.PlaceholderShapedRenderer
 import com.github.serivesmejia.engine.render.PlaceholderWindow
+import com.github.serivesmejia.engine.render.ShapedRenderer
 import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.util.TimeUnit
 import kotlinx.datetime.Clock
@@ -54,6 +56,9 @@ object Shaped {
      */
     object Graphics {
         var window: ShapedWindow = PlaceholderWindow
+            internal set
+
+        var renderer: ShapedRenderer = PlaceholderShapedRenderer
             internal set
     }
 

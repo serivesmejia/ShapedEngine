@@ -1,5 +1,4 @@
 rootProject.name = 'ShapedEngine'
-include 'engine'
-include 'desktop'
+include 'desktop-jvm'
 include 'core'
 

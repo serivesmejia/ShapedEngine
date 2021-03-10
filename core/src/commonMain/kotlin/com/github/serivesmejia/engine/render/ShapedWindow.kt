@@ -1,10 +1,9 @@
 package com.github.serivesmejia.engine.render
 
 import com.github.serivesmejia.engine.ShapedEngine
-import com.github.serivesmejia.engine.common.ShapedComponent
-import com.github.serivesmejia.engine.common.geometry.Rectangle2
-import com.github.serivesmejia.engine.common.geometry.Vector2
-import com.github.serivesmejia.engine.common.geometry.Size2
+import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
+import com.github.serivesmejia.engine.common.math.geometry.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.Size2
 import com.github.serivesmejia.engine.common.modular.ShapedModule
 
 interface ShapedWindow : ShapedModule<ShapedEngine> {

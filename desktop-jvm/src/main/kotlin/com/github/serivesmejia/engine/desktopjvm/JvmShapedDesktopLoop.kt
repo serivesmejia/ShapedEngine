@@ -1,23 +1,24 @@
-package com.github.serivesmejia.engine.desktop.render
+package com.github.serivesmejia.engine.desktopjvm
 
 import com.github.serivesmejia.engine.ShapedEngine
-import com.github.serivesmejia.engine.common.extension.color
 import com.github.serivesmejia.engine.common.modular.ShapedModule
-import com.github.serivesmejia.engine.desktop.event.wrapper.GlfwEventWrapper
+import com.github.serivesmejia.engine.desktopjvm.event.wrapper.JvmGlfwEventWrapper
+import com.github.serivesmejia.engine.desktopjvm.render.JvmShapedDesktopWindow
 import com.github.serivesmejia.engine.jvm.event.JvmShapedEventSubscriber
 import org.lwjgl.glfw.GLFW.glfwPollEvents
 import org.lwjgl.glfw.GLFW.glfwSwapBuffers
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11.*
 
-class ShapedDesktopRenderLoop(private val engine: ShapedEngine,
-                              private val window: ShapedDesktopWindow) : ShapedModule<ShapedEngine> {
+class JvmShapedDesktopLoop(private val engine: ShapedEngine,
+                           private val window: JvmShapedDesktopWindow
+                           ) : ShapedModule<ShapedEngine> {
 
-    override fun create(): ShapedDesktopRenderLoop {
+    override fun create(): JvmShapedDesktopLoop {
         //wrap to make @Subscribe mechanism available for use (JVM)
         engine.stageManager.eventBus.addSubscriber(JvmShapedEventSubscriber())
         //wrap glfw callbacks with shaped events
-        engine.stageManager.eventBus.wrap(GlfwEventWrapper(window))
+        engine.stageManager.eventBus.wrap(JvmGlfwEventWrapper(window))
 
         GL.createCapabilities()
 
@@ -25,14 +26,13 @@ class ShapedDesktopRenderLoop(private val engine: ShapedEngine,
     }
 
     override fun update(deltaTime: Float) {
-        GL11.glClearColor(40f.color, 127f.color, 82f.color, 1f)
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT or GL11.GL_DEPTH_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
         glfwSwapBuffers(window.ptr)
         glfwPollEvents()
     }
 
-    override fun destroy(): ShapedDesktopRenderLoop {
+    override fun destroy(): JvmShapedDesktopLoop {
         return this
     }
 
