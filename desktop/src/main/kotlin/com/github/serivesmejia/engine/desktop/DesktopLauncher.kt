@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 
 object DesktopLauncher {
 
-    val engine = ShapedEngine()
+    val engine = ShapedEngine
     val window = ShapedDesktopWindow()
 
     fun launch() {
