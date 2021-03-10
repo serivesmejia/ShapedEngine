@@ -20,3 +20,5 @@ val Double.color
  */
 val Int.color
     get() = this / 255
+
+val Int.clipUpperZero get() = if(this > 0) this else 0

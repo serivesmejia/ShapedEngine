@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine.common.geometry
 
+import com.github.serivesmejia.engine.common.Math.toRadians
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
@@ -36,7 +37,7 @@ data class Vector2(var x: Float = 0f,
      * @param angle angle in degrees to rotate vector counter-clockwise
      */
     fun rotateBy(angle: Float): Vector2 {
-        val angleRad = Math.toRadians(angle.toDouble())
+        val angleRad = angle.toRadians()
 
         val cosA = cos(angleRad)
         val sinA = cos(angleRad)
@@ -73,7 +74,7 @@ data class Vector2(var x: Float = 0f,
     /**
      * Negates the values of this vector
      */
-    fun unaryPlus() {
+    operator fun unaryPlus() {
         x *= 1.0f
         y *= 1.0f
     }
@@ -81,7 +82,7 @@ data class Vector2(var x: Float = 0f,
     /**
      * Negates the values of this vector
      */
-    fun unaryMinus() {
+    operator fun unaryMinus() {
         x *= -1.0f
         y *= -1.0f
     }

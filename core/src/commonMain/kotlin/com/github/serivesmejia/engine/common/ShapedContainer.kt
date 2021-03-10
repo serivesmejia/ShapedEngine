@@ -1,5 +1,7 @@
 package com.github.serivesmejia.engine.common
 
+import com.github.serivesmejia.engine.common.extension.clipUpperZero
+
 /**
  * Abstract class for any sort of component that can hold ShapedComponent children
  */
@@ -12,7 +14,7 @@ abstract class ShapedContainer<C : HierarchyShapedComponent<C>> {
      * one, sp any addition or deletion won't affect the container.
      * Use addChild() or removeChild() to do so.
      */
-    val children get() = (internalChildren.clone() as ArrayList<C>)
+    val children get() = internalChildren.subList(0, (internalChildren.size - 1).clipUpperZero)
 
     private val internalChildren = ArrayList<C>()
 

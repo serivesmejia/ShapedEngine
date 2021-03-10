@@ -1,6 +1,5 @@
 package com.github.serivesmejia.engine.desktop
 
-import com.github.serivesmejia.engine.Shaped
 import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.modular.ModulePriority
 import com.github.serivesmejia.engine.desktop.render.ShapedDesktopRenderLoop
