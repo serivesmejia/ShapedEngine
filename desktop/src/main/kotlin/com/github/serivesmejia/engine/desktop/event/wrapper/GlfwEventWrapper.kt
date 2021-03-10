@@ -30,4 +30,6 @@ class GlfwEventWrapper(private val window: ShapedDesktopWindow) : ShapedEventWra
         }
     }
 
+    override fun unwrap(eventBus: ShapedEventBus) {}
+
 }

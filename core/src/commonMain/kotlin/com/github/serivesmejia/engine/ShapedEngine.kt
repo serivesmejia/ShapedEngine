@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine
 
+import com.github.serivesmejia.engine.common.modular.ModulePriority
 import com.github.serivesmejia.engine.common.modular.ShapedModular
 import com.github.serivesmejia.engine.common.modular.ShapedModule
 import com.github.serivesmejia.engine.render.ShapedWindow
@@ -24,13 +25,13 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
     override fun create(): ShapedEngine {
         //not a precisely good idea to have more than one engine...
         if (Shaped.hasCreatedEngine)
-            throw IllegalStateException("Can't have more than one engine running per JVM")
+            throw IllegalStateException("Can't have more than one engine running per program")
 
         //tell globally that we have one engine running
         Shaped.hasCreatedEngine = true
 
         stageManager = ShapedStageManager()
-        addModule(stageManager)
+        addModule(stageManager, ModulePriority.LOW)
 
         checkModuleRequirements()
         createModules()
@@ -61,7 +62,7 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
      * @param exitCondition callback returning a boolean to be called every loop to determine if we need to exit, platform dependent
      */
     fun start(exitCondition: () -> Boolean = { true }): ShapedEngine {
-        while(!exitCondition() && Shaped.closeRequested)
+        while(!exitCondition() && !Shaped.closeRequested)
             update()
 
         destroy()

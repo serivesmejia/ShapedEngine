@@ -4,6 +4,7 @@ import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.extension.color
 import com.github.serivesmejia.engine.common.modular.ShapedModule
 import com.github.serivesmejia.engine.desktop.event.wrapper.GlfwEventWrapper
+import com.github.serivesmejia.engine.jvm.event.JvmShapedEventSubscriber
 import org.lwjgl.glfw.GLFW.glfwPollEvents
 import org.lwjgl.glfw.GLFW.glfwSwapBuffers
 import org.lwjgl.opengl.GL
@@ -13,7 +14,11 @@ class ShapedDesktopRenderLoop(private val engine: ShapedEngine,
                               private val window: ShapedDesktopWindow) : ShapedModule<ShapedEngine> {
 
     override fun create(): ShapedDesktopRenderLoop {
+        //wrap to make @Subscribe mechanism available for use (JVM)
+        engine.stageManager.eventBus.addSubscriber(JvmShapedEventSubscriber())
+        //wrap glfw callbacks with shaped events
         engine.stageManager.eventBus.wrap(GlfwEventWrapper(window))
+
         GL.createCapabilities()
 
         return this
