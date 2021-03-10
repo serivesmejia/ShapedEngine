@@ -83,11 +83,12 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
         Shaped.deltaTime = deltaTimer.seconds.toFloat() //calculate delta time
         Shaped.fps = fpsCounter.fps
 
+        println("${Shaped.deltaTime}, ${Shaped.fps}")
+
         deltaTimer.reset() //reset back to zero
 
         //update modules
         updateModules(Shaped.deltaTime)
-
         fpsCounter.update()
     }
 

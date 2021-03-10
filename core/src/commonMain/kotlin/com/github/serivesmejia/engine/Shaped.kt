@@ -1,9 +1,9 @@
 package com.github.serivesmejia.engine
 
-import com.github.serivesmejia.engine.common.system.PlaceholderSystemTimer
-import com.github.serivesmejia.engine.common.system.SystemTimer
 import com.github.serivesmejia.engine.render.PlaceholderWindow
 import com.github.serivesmejia.engine.render.ShapedWindow
+import com.github.serivesmejia.engine.util.TimeUnit
+import kotlinx.datetime.Clock
 
 object Shaped {
 
@@ -19,7 +19,10 @@ object Shaped {
         internal set
 
     object System {
-        var timer: SystemTimer = PlaceholderSystemTimer
+        val clock = Clock.System
+
+        val currentTimeMillis get() = clock.now().toEpochMilliseconds()
+        val nanoTime get() = TimeUnit.MILLISECONDS.convert(currentTimeMillis, TimeUnit.NANOSECONDS)
     }
 
     object Graphics {

@@ -63,7 +63,7 @@ class ElapsedTime(private val resolution: Resolution = Resolution.SECOND_IN_NANO
         /**
          * Returns the current nanoTime, precision subject to the system lock
          */
-        val nsNow get() = Shaped.System.timer.nanoTime
+        private val nsNow get() = Shaped.System.nanoTime
 
         private val SECOND_IN_NANO = 1000000000L
         private val MILLIS_IN_NANO = 1000000L
