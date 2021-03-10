@@ -28,28 +28,28 @@ interface ShapedWindow : ShapedModule<ShapedEngine> {
 object PlaceholderWindow : ShapedWindow {
 
     override val isVisible: Boolean
-        get() = TODO("Not yet implemented")
+        get() = false
     override val isFocused: Boolean
-        get() = TODO("Not yet implemented")
+        get() = false
     override var title: String
-        get() = TODO("Not yet implemented")
+        get() = ""
         set(value) {}
 
     override val windowRectangle: Rectangle2
-        get() = TODO("Not yet implemented")
+        get() = Rectangle2(position, size)
     override var position: Vector2
-        get() = TODO("Not yet implemented")
+        get() = Vector2(0f, 0f)
         set(value) {}
     override var size: Size2
-        get() = TODO("Not yet implemented")
+        get() = Size2(0f, 0f)
         set(value) {}
 
-    override fun show(): ShapedWindow { TODO("Not yet implemented") }
-    override fun hide(): ShapedWindow { TODO("Not yet implemented") }
-    override fun center(): ShapedWindow { TODO("Not yet implemented") }
+    override fun show() = this
+    override fun hide() = this
+    override fun center() = this
 
-    override fun update(deltaTime: Float) { TODO("Not yet implemented") }
-    override fun create(): ShapedComponent { TODO("Not yet implemented") }
-    override fun destroy(): ShapedComponent { TODO("Not yet implemented") }
+    override fun update(deltaTime: Float) { }
+    override fun create() = this
+    override fun destroy() = this
 
 }

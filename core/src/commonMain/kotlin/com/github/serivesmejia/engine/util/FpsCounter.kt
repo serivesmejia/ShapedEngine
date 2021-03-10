@@ -3,12 +3,12 @@ package com.github.serivesmejia.engine.util
 class FpsCounter {
 
     private val timer = ElapsedTime()
-    @Volatile private var fpsCount = 0
+    private var fpsCount = 0
 
     var fps = 0
         private set
 
-    @Synchronized fun update() {
+    fun update() {
         fpsCount++
 
         if(timer.seconds >= 1) {

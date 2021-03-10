@@ -1,6 +1,7 @@
 package com.github.serivesmejia.engine
 
-import com.github.serivesmejia.engine.common.geometry.Rectangle2
+import com.github.serivesmejia.engine.common.system.PlaceholderSystemTimer
+import com.github.serivesmejia.engine.common.system.SystemTimer
 import com.github.serivesmejia.engine.render.PlaceholderWindow
 import com.github.serivesmejia.engine.render.ShapedWindow
 
@@ -16,6 +17,10 @@ object Shaped {
 
     var fps = 0
         internal set
+
+    object System {
+        var timer: SystemTimer = PlaceholderSystemTimer
+    }
 
     object Graphics {
         var window: ShapedWindow = PlaceholderWindow

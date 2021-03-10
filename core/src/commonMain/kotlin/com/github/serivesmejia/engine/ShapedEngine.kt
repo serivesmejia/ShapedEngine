@@ -87,6 +87,7 @@ class ShapedEngine : ShapedModular<ShapedEngine>() {
 
         //update modules
         updateModules(Shaped.deltaTime)
+
         fpsCounter.update()
     }
 

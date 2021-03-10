@@ -1,9 +1,11 @@
 package com.github.serivesmejia.engine.desktop
 
+import com.github.serivesmejia.engine.Shaped
 import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.modular.ModulePriority
 import com.github.serivesmejia.engine.desktop.render.ShapedDesktopRenderLoop
 import com.github.serivesmejia.engine.desktop.render.ShapedDesktopWindow
+import com.github.serivesmejia.engine.jvm.system.JvmSystemTimer
 import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 
 object DesktopLauncher {
@@ -12,8 +14,10 @@ object DesktopLauncher {
     val window = ShapedDesktopWindow()
 
     fun launch() {
+        Shaped.System.timer = JvmSystemTimer
+
         engine.addModule(window, ModulePriority.HIGH)
-        engine.addModule(ShapedDesktopRenderLoop(engine, window), ModulePriority.LOW)
+        engine.addModule(ShapedDesktopRenderLoop(engine, window), ModulePriority.MEDIUM)
 
         engine.create().start { glfwWindowShouldClose(window.ptr) }
     }

@@ -1,7 +1,12 @@
 package com.github.serivesmejia.engine.util
 
-import java.util.concurrent.TimeUnit
+import com.github.serivesmejia.engine.Shaped
 
+/**
+ * Utility class timer for measuring ElapsedTime
+ * @property resolution the resolution to be used by this ElapsedTime
+ * @property nsStartTime the start time of this ElapsedTime in nanoseconds
+ */
 class ElapsedTime(private val resolution: Resolution = Resolution.SECOND_IN_NANO,
                   private var nsStartTime: Long = nsNow) {
 
@@ -58,7 +63,7 @@ class ElapsedTime(private val resolution: Resolution = Resolution.SECOND_IN_NANO
         /**
          * Returns the current nanoTime, precision subject to the system lock
          */
-        val nsNow get() = System.nanoTime()
+        val nsNow get() = Shaped.System.timer.nanoTime
 
         private val SECOND_IN_NANO = 1000000000L
         private val MILLIS_IN_NANO = 1000000L
