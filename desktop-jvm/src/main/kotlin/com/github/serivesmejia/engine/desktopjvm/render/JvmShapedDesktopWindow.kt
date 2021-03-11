@@ -8,6 +8,7 @@ import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
+import org.lwjgl.opengl.GL
 import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil.NULL
 
@@ -124,6 +125,8 @@ class JvmShapedDesktopWindow(initialTitle: String = "ShapedEngine",
 
         // Make the window visible
         glfwShowWindow(ptr)
+
+        GL.createCapabilities()
 
         return this
     }

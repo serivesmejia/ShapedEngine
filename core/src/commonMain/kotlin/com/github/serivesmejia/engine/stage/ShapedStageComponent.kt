@@ -2,6 +2,7 @@ package com.github.serivesmejia.engine.stage
 
 import com.github.serivesmejia.engine.common.HierarchyShapedComponent
 import com.github.serivesmejia.engine.common.ShapedContainer
+import com.github.serivesmejia.engine.common.event.ShapedEvent
 import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventRegistrator
@@ -57,13 +58,31 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
 
     /**
      * Override of addChild function to register this new children
-     * to the subscribed event buses and calling create() on them
+     * to the subscribed event buses.
      *
      * @param child the ShapedObject child to add to this component
      */
     override fun addChild(child: ShapedObject) {
         child.eventBus = eventBus
+        for(subscriber in subscribers) {
+            subscriber.register(child)
+        }
+
         super.addChild(child)
+    }
+
+    /**
+     * Override of addChild function un register this new children
+     * to the subscribed event buses and calling destroy() on them
+     *
+     * @param child the ShapedObject child to remove from this component
+     */
+    override fun removeChild(child: ShapedObject) {
+        for(subscriber in subscribers) {
+            subscriber.unregister(child)
+        }
+        child.destroy()
+        super.removeChild(child)
     }
 
     /**
@@ -91,5 +110,20 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
         //remove the eventbus from the list of subscribed eventbuses
         subscribers.remove(subscriber)
     }
+
+    /**
+     * Short-hand function for eventBus.on
+     *
+     * Allows to register events that work on all platforms
+     *
+     * (compared to the @Subscribe mechanism which only
+     * works on platforms that can handle reflection,
+     * such as the JVM)
+     *
+     * @param T the event to listen to
+     * @param block the callback to call when the event is fired
+     */
+    inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = eventBus.on(block)
+
 
 }

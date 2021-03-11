@@ -22,6 +22,7 @@ class JvmShapedEventSubscriber : ShapedEventSubscriber() {
     private val objectCallbacks = mutableMapOf<Any, MutableList<(ShapedEvent) -> Unit>>()
 
     override fun register(obj: Any) {
+        println("register $obj")
         //create event callbacks list for this obj
         val eventCallbacks = mutableListOf<(ShapedEvent) -> Unit>()
 

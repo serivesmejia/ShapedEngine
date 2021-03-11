@@ -6,16 +6,20 @@ import com.github.serivesmejia.engine.util.TimeUnit
 import kotlinx.datetime.Clock
 
 /**
- * Static accessibility object for multiple aspects of the engine
+ * Static accessibility object for multiple util aspects of the engine
  */
 object Shaped {
 
     /**
-     *
+     * Tells whether the engine has been created or not
      */
     var hasCreatedEngine = false
         internal set
 
+    /**
+     * Tells whether the user requested
+     * to close with the end() function
+     */
     internal var closeRequested = false
         private set
 
@@ -43,9 +47,26 @@ object Shaped {
      * System module for accessing multiple multiplatform utilities
      */
     object System {
+        /**
+         * The system clock, from the kotlin
+         * datetime common library.
+         */
         val clock = Clock.System
 
+        /**
+         * Gets the current time in millis,
+         * multiplatform equivalent of Java's
+         * System.currentTimeMillis()
+         */
         val currentTimeMillis get() = clock.now().toEpochMilliseconds()
+
+        /**
+         * Gets the current nanotime, multiplatform
+         * equivalent of Java's System.nanoTime().
+         *
+         * With less precision since it's converted
+         * from currentTimeMillis to nanos
+         */
         val nanoTime get() = TimeUnit.MILLISECONDS.convert(currentTimeMillis, TimeUnit.NANOSECONDS)
     }
 
@@ -53,11 +74,37 @@ object Shaped {
      * Graphics module for accessing multiplatform rendering aspects
      */
     object Graphics {
+        /**
+         * The current window being
+         * used in the engine.
+         *
+         * Note that this property is
+         * not available before calling
+         * create() on the ShapedEngine
+         */
         lateinit var window: ShapedWindow
             internal set
 
+        /**
+         * The current renderer being
+         * used in this engine.
+         *
+         * Note that this property is
+         * not available before calling
+         * create() on the ShapedEngine
+         */
         lateinit var renderer: ShapedRenderer
             internal set
+
+        /**
+         * Short-hand for getting the
+         * ShapedShapeBuilder declared
+         * in the renderer.
+         *
+         * Used to build platform
+         * specific shapes.
+         */
+        val shapes get() = renderer.shapeBuilder
     }
 
 }

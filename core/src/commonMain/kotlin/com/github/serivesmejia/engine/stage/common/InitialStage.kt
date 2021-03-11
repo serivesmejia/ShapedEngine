@@ -9,7 +9,7 @@ class InitialStage : ShapedStage("Stage-Initial") {
 
     override fun init() {
         addChild(TestObject())
-        Shaped.Graphics.renderer.drawBackgroundColor(Color4(255f, 255f, 255f))
+        Shaped.Graphics.renderer.backgroundColor = Color4(255f, 255f, 255f)
     }
 
 }
