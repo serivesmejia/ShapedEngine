@@ -12,7 +12,7 @@ object DesktopLauncher {
 
     fun launch() {
         ShapedEngine.addModule(window, ModulePriority.HIGH)
-        ShapedEngine.addModule(JvmShapedDesktopRenderer(ShapedEngine, window), ModulePriority.HIGH)
+        ShapedEngine.addModule(JvmShapedDesktopRenderer(ShapedEngine, window), ModulePriority.LOW)
 
         ShapedEngine.create().start { glfwWindowShouldClose(window.ptr) }
     }
