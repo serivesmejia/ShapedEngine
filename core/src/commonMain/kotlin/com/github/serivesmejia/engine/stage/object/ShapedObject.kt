@@ -19,19 +19,6 @@ abstract class ShapedObject: ShapedStageComponent<ShapedObject>() {
      */
     abstract fun init()
 
-    internal fun internalUpdate(deltaTime: Float) {
-        for(child in children) {
-            child.internalUpdate(deltaTime)
-        }
-        update(deltaTime)
-    }
-
-    /**
-     * Called each frame after updating all children
-     * @param deltaTime the difference of time in seconds between the current and last frame
-     */
-    abstract fun update(deltaTime: Float)
-
     /**
      * Destroys this object and its children
      * It is not recommended to manually call this method, it

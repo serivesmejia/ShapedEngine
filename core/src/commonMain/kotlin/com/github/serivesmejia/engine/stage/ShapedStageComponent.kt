@@ -28,11 +28,32 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
 
     private val subscribers = mutableListOf<ShapedEventSubscriber>()
 
+    private var hasBeenCreated = false
+
     /**
      * Check whether if this StageComponent is a Stage, otherwise it's a StageObject
      */
     val isStage: Boolean
         get() = this is ShapedStage
+
+    internal fun internalUpdate(deltaTime: Float) {
+        if(!hasBeenCreated) { //call create on this component if we haven't done so
+            create()
+            hasBeenCreated = true
+        }
+
+        for(child in children) { //updates all the children first
+            child.internalUpdate(deltaTime)
+        }
+
+        update(deltaTime) //then call update open function
+    }
+
+    /**
+     * Called each frame after updating all children
+     * @param deltaTime the difference of time in seconds between the current and last frame
+     */
+    abstract fun update(deltaTime: Float)
 
     /**
      * Override of addChild function to register this new children
@@ -42,8 +63,6 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      */
     override fun addChild(child: ShapedObject) {
         child.eventBus = eventBus
-
-        child.create()
         super.addChild(child)
     }
 

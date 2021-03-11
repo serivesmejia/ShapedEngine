@@ -16,19 +16,11 @@ open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponen
      */
     open fun init() { }
 
-    internal fun internalUpdate(deltaTime: Float) {
-        for(child in children) { //updates all the children first
-            child.internalUpdate(deltaTime)
-        }
-
-        update(deltaTime) //then call update open function
-    }
-
     /**
      * Called each frame after updating all children
      * @param deltaTime the difference of time in seconds between the current and last frame
      */
-    open fun update(deltaTime: Float) { }
+    override fun update(deltaTime: Float) { }
 
     /**
      * Destroys this stage

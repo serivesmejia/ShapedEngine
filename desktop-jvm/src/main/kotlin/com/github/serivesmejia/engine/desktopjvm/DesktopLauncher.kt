@@ -14,7 +14,7 @@ object DesktopLauncher {
     fun launch() {
         engine.addModule(window, ModulePriority.HIGH)
         engine.addModule(JvmShapedDesktopRenderer, ModulePriority.MEDIUM)
-        engine.addModule(JvmShapedDesktopLoop(engine, window), ModulePriority.MEDIUM)
+        engine.addModule(JvmShapedDesktopLoop(engine, window), ModulePriority.LOW)
 
         engine.create().start { glfwWindowShouldClose(window.ptr) }
     }

@@ -39,7 +39,7 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
         Shaped.hasCreatedEngine = true
 
         stageManager = ShapedStageManager()
-        addModule(stageManager, ModulePriority.LOW)
+        addModule(stageManager, ModulePriority.MEDIUM)
 
         createModules()
 
