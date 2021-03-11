@@ -1,7 +1,5 @@
 package com.github.serivesmejia.engine
 
-import com.github.serivesmejia.engine.render.PlaceholderShapedRenderer
-import com.github.serivesmejia.engine.render.PlaceholderWindow
 import com.github.serivesmejia.engine.render.ShapedRenderer
 import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.util.TimeUnit
@@ -55,10 +53,10 @@ object Shaped {
      * Graphics module for accessing multiplatform rendering aspects
      */
     object Graphics {
-        var window: ShapedWindow = PlaceholderWindow
+        lateinit var window: ShapedWindow
             internal set
 
-        var renderer: ShapedRenderer = PlaceholderShapedRenderer
+        lateinit var renderer: ShapedRenderer
             internal set
     }
 

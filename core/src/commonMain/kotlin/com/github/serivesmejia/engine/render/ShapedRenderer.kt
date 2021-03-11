@@ -2,23 +2,66 @@ package com.github.serivesmejia.engine.render
 
 import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.math.Color4
-import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.modular.ShapedModule
+import com.github.serivesmejia.engine.render.shape.ShapedShape
+import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
 
-interface ShapedRenderer : ShapedModule<ShapedEngine> {
+/**
+ * Abstract class for handling multiplatform rendering
+ * Handles shape rendering, textures, background color...
+ * @see ShapedShape
+ * @see ShapedShapeBuilder
+ */
+abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
 
-    fun drawBackgroundColor(color: Color4)
+    /**
+     * The ShapedShapeBuilder to be used for the platform
+     * @see ShapedShapeBuilder
+     */
+    abstract val shapeBuilder: ShapedShapeBuilder
 
-    fun drawRectangle(rect: Rectangle2, color: Color4 = Color4(255f, 255f, 255f, 0f))
+    /**
+     * Get or set the currently rendering background color
+     */
+    abstract var backgroundColor: Color4
 
-}
+    /**
+     * Get all the shapes currently on this
+     * renderer as an independent typed array
+     */
+    val shapes get() = internalShapes.toTypedArray()
 
-object PlaceholderShapedRenderer : ShapedRenderer {
+    private val internalShapes = mutableListOf<ShapedShape>()
 
-    override fun drawBackgroundColor(color: Color4) {}
-    override fun drawRectangle(rect: Rectangle2, color: Color4) { }
+    /**
+     * Adds a shape to this renderer
+     * @param shape the shape to add to this renderer
+     */
+    fun addShape(shape: ShapedShape) {
+        if(!internalShapes.contains(shape)) {
+            internalShapes.add(shape)
+        }
+    }
 
-    override fun update(deltaTime: Float) {}
-    override fun create() = this
-    override fun destroy() = this
+    /**
+     * Removes a shape from this renderer and clears it
+     * @param shape the shape to remove from this renderer and clear
+     */
+    fun removeShape(shape: ShapedShape) {
+        if(internalShapes.contains(shape)) {
+            shape.clear()
+            internalShapes.remove(shape)
+        }
+    }
+
+    /**
+     * Clears this renderer by removing all shapes
+     * and calling clear() on each one of them
+     */
+    fun clear() {
+        for(shape in internalShapes.toTypedArray()) {
+            removeShape(shape)
+        }
+    }
+
 }

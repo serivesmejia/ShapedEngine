@@ -23,32 +23,3 @@ interface ShapedWindow : ShapedModule<ShapedEngine> {
     fun center(): ShapedWindow
 
 }
-
-object PlaceholderWindow : ShapedWindow {
-
-    override val isVisible: Boolean
-        get() = false
-    override val isFocused: Boolean
-        get() = false
-    override var title: String
-        get() = ""
-        set(value) {}
-
-    override val windowRectangle: Rectangle2
-        get() = Rectangle2(position, size)
-    override var position: Vector2
-        get() = Vector2(0f, 0f)
-        set(value) {}
-    override var size: Size2
-        get() = Size2(0f, 0f)
-        set(value) {}
-
-    override fun show() = this
-    override fun hide() = this
-    override fun center() = this
-
-    override fun update(deltaTime: Float) { }
-    override fun create() = this
-    override fun destroy() = this
-
-}

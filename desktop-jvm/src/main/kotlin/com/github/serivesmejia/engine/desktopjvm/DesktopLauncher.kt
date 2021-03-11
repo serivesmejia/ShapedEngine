@@ -8,15 +8,13 @@ import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 
 object DesktopLauncher {
 
-    val engine = ShapedEngine
     val window = JvmShapedDesktopWindow()
 
     fun launch() {
-        engine.addModule(window, ModulePriority.HIGH)
-        engine.addModule(JvmShapedDesktopRenderer, ModulePriority.MEDIUM)
-        engine.addModule(JvmShapedDesktopLoop(engine, window), ModulePriority.LOW)
+        ShapedEngine.addModule(window, ModulePriority.HIGH)
+        ShapedEngine.addModule(JvmShapedDesktopRenderer(ShapedEngine, window), ModulePriority.LOW)
 
-        engine.create().start { glfwWindowShouldClose(window.ptr) }
+        ShapedEngine.create().start { glfwWindowShouldClose(window.ptr) }
     }
 
 }

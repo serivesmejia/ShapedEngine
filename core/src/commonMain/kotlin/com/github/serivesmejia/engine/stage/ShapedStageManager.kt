@@ -18,16 +18,13 @@ class ShapedStageManager : ShapedModule<ShapedEngine> {
     }
 
     override fun update(deltaTime: Float) {
-        currentStage?.let {
-            it.internalUpdate(deltaTime)
-        }
+        currentStage?.internalUpdate(deltaTime)
     }
 
     fun changeStage(stage: ShapedStage) {
         currentStage?.destroy()
 
         eventBus.clear()
-
         stage.eventBus = eventBus
 
         currentStage = stage
