@@ -4,11 +4,12 @@ import com.github.serivesmejia.engine.common.math.Math.toRadians
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
+import kotlin.math.pow
 
 /**
- * Represents a vector in a 2d space
- * @property x the x value of this vector
- * @property y the y value of this vector
+ * Represents a vector in R^2
+ * @property x the x component of this vector i_hat
+ * @property y the y component of this vector j_hat
  */
 data class Vector2(var x: Float = 0f,
                    var y: Float = 0f) {
@@ -22,14 +23,6 @@ data class Vector2(var x: Float = 0f,
      * The angle of this vector
      */
     val angle get() = atan2(y.toDouble(), x.toDouble())
-
-    /**
-     * Sets the values of this Size
-     */
-    fun set(x: Float, y: Float) {
-        this.x = x
-        this.y = y
-    }
 
     /**
      * Rotate the vector in Cartesian space
@@ -58,34 +51,32 @@ data class Vector2(var x: Float = 0f,
      * Scalar projection of this vector onto another vector
      * @param other Vector onto which to project this vector
      */
-    fun scalarProject(other: Vector2) = dot(other) / other.mag
+    fun scalarProject(other: Vector2) = this.dot(other) / other.dot(other)
 
     /**
      * Scales the values of this vector by a scalar
+     *
+     * @param scalar scalar value the vector is to be scaled by
      */
-    fun scale(scalar: Float) = Vector2(x * scalar, y * scalar)
+    fun scale(scalar: Float) = copy(x = x * scalar, y = y * scalar)
 
     /**
      * Projects this vector onto another vector
      * @param other the other vector
      */
-    fun project(other: Vector2) = other.scale(dot(other) / (mag * other.mag))
+    fun project(other: Vector2) = other.scale(this.dot(other) / other.dot(other))
+
+    /**
+     * Positives the values of this vector
+     * @return a copy of this vector with the result
+     */
+    operator fun unaryPlus() = copy(x = +x, y = +y)
 
     /**
      * Negates the values of this vector
+     * @return a copy of this vector with the result
      */
-    operator fun unaryPlus() {
-        x *= 1.0f
-        y *= 1.0f
-    }
-
-    /**
-     * Negates the values of this vector
-     */
-    operator fun unaryMinus() {
-        x *= -1.0f
-        y *= -1.0f
-    }
+    operator fun unaryMinus() = copy(x = -x, y = -y)
 
     /**
      * Adds a vector to this vector and returns a copy
@@ -110,9 +101,23 @@ data class Vector2(var x: Float = 0f,
 
     /**
      * Divides this vector by another vector and returns a copy
-     * @param other vector to multiply by
+     * @param other vector to divide by
      * @return a copy of this vector with the result
      */
     operator fun div(other: Vector2) = copy(x = x / other.x, y = y / other.y)
 
+    /**
+     * Modulus this vector by another vector and returns a copy
+     * @param other vector to mod by
+     * @return a copy of this vector with the result
+     */
+    operator fun rem(other: Vector2) = copy(x = x % other.x, y = y % other.y)
+
+    /**
+     * Infix
+     * Exponentiates this vector by another vector and returns a copy
+     * @param other vector to exponentiate by
+     * @return a copy of this vector with the result
+     */
+    infix fun pow(other: Vector2) = copy(x = x.pow(other.x), y = y.pow(other.y))
 }
