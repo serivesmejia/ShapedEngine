@@ -18,9 +18,9 @@ import org.lwjgl.system.MemoryUtil.NULL
  * @property initialSize the initial size of this window
  * @property vsync whether this window will use vertical synchronization or not.
  */
-class JvmShapedDesktopWindow(initialTitle: String = "ShapedEngine",
-                             private val initialSize: Size2 = Size2(640f, 480f),
-                             val vsync: Boolean = true) : ShapedWindow {
+class JDShapedWindow(initialTitle: String = "ShapedEngine",
+                     private val initialSize: Size2 = Size2(640f, 480f),
+                     val vsync: Boolean = true) : ShapedWindow {
 
     /**
      * Long native pointer of this window
@@ -94,7 +94,7 @@ class JvmShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Initializes glfw and creates this window
      */
-    override fun create(): JvmShapedDesktopWindow {
+    override fun create(): JDShapedWindow {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set()
@@ -136,7 +136,7 @@ class JvmShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Shows this window
      */
-    override fun show(): JvmShapedDesktopWindow {
+    override fun show(): JDShapedWindow {
         glfwShowWindow(ptr)
         return this
     }
@@ -144,7 +144,7 @@ class JvmShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Hides this window
      */
-    override fun hide(): JvmShapedDesktopWindow {
+    override fun hide(): JDShapedWindow {
         glfwHideWindow(ptr)
         return this
     }
@@ -152,7 +152,7 @@ class JvmShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Centers the window in the screen
      */
-    override fun center(): JvmShapedDesktopWindow {
+    override fun center(): JDShapedWindow {
         // Get the thread stack and push a new frame
         stackPush().use { stack ->
             val pWidth = stack.mallocInt(1) // int*
@@ -178,7 +178,7 @@ class JvmShapedDesktopWindow(initialTitle: String = "ShapedEngine",
     /**
      * Closes this window, terminates glfw.
      */
-    override fun destroy(): JvmShapedDesktopWindow {
+    override fun destroy(): JDShapedWindow {
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(ptr)
         glfwDestroyWindow(ptr)

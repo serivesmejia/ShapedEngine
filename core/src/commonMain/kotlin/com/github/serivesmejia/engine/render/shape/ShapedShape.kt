@@ -9,8 +9,8 @@ interface ShapedShape {
     var position: Vector2
     var size: Size2
 
-    val color: Color4
-    var texture: ShapedTexture
+    var color: Color4
+    var texture: ShapedTexture?
 
     fun draw()
     fun clear()

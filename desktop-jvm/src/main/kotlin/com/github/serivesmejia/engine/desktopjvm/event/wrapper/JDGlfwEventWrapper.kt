@@ -5,14 +5,14 @@ import com.github.serivesmejia.engine.common.event.standard.*
 import com.github.serivesmejia.engine.common.event.wrapper.ShapedEventWrapper
 import com.github.serivesmejia.engine.common.math.geometry.Size2
 import com.github.serivesmejia.engine.common.math.geometry.Vector2
-import com.github.serivesmejia.engine.desktopjvm.render.JvmShapedDesktopWindow
+import com.github.serivesmejia.engine.desktopjvm.render.JDShapedWindow
 import org.lwjgl.glfw.GLFW.*
 
 /**
  * Wraps the GLFW callback system to the ShapedEventBus architecture
  * @param window the current active ShapedWindow
  */
-class JvmGlfwEventWrapper(private val window: JvmShapedDesktopWindow) : ShapedEventWrapper {
+class JDGlfwEventWrapper(private val window: JDShapedWindow) : ShapedEventWrapper {
 
     override fun wrap(eventBus: ShapedEventBus) {
         //wrap for resize events

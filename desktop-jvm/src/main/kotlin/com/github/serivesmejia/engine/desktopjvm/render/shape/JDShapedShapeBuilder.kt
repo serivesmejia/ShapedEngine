@@ -3,11 +3,12 @@ package com.github.serivesmejia.engine.desktopjvm.render.shape
 import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.math.geometry.Triangle2
+import com.github.serivesmejia.engine.common.math.geometry.Vector2
 import com.github.serivesmejia.engine.render.ShapedTexture
 import com.github.serivesmejia.engine.render.shape.ShapedShape
 import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
 
-object JvmShapedDesktopShapeBuilder : ShapedShapeBuilder {
+object JDShapedShapeBuilder : ShapedShapeBuilder() {
 
     override fun triangle(triangle: Triangle2, color: Color4): ShapedShape {
         TODO("Not yet implemented")
@@ -25,7 +26,11 @@ object JvmShapedDesktopShapeBuilder : ShapedShapeBuilder {
         TODO("Not yet implemented")
     }
 
-    override fun circle(rect: Rectangle2, radius: Float, color4: Color4): ShapedShape {
+    override fun circle(position: Vector2, radius: Float, color: Color4): ShapedShape {
+        TODO("Not yet implemented")
+    }
+
+    override fun line(from: Vector2, to: Vector2, thickness: Float, color: Color4): ShapedShape {
         TODO("Not yet implemented")
     }
 

@@ -55,6 +55,15 @@ abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
     }
 
     /**
+     * Draws all the current shapes of this ShapedRender
+     */
+    fun drawAll() {
+        for(shape in shapes) {
+            shape.draw()
+        }
+    }
+
+    /**
      * Clears this renderer by removing all shapes
      * and calling clear() on each one of them
      */
