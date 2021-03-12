@@ -1,22 +1,19 @@
 package com.github.serivesmejia.engine.desktopjvm.render
 
 import com.github.serivesmejia.engine.ShapedEngine
+import com.github.serivesmejia.engine.common.event.standard.WindowResizeEvent
 import com.github.serivesmejia.engine.common.math.Color4
-import com.github.serivesmejia.engine.common.math.geometry.Size2
-import com.github.serivesmejia.engine.common.math.geometry.Vector2
 import com.github.serivesmejia.engine.desktopjvm.event.wrapper.JDGlfwEventWrapper
 import com.github.serivesmejia.engine.desktopjvm.render.shape.JDShapedShapeBuilder
-import com.github.serivesmejia.engine.desktopjvm.render.shape.JDShapedTriangle2Shape
 import com.github.serivesmejia.engine.jvm.event.JvmShapedEventSubscriber
 import com.github.serivesmejia.engine.render.ShapedRenderer
-import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
 
 class JDShapedRenderer(private val engine: ShapedEngine,
                        private val window: JDShapedWindow) : ShapedRenderer() {
 
-    override val shapeBuilder: ShapedShapeBuilder = JDShapedShapeBuilder
+    override val shapeBuilder = JDShapedShapeBuilder
 
     override var backgroundColor: Color4 = Color4(0f, 0f, 0f)
 
@@ -34,14 +31,11 @@ class JDShapedRenderer(private val engine: ShapedEngine,
         //wrap glfw callbacks with shaped events
         engine.stageManager.eventBus.wrap(JDGlfwEventWrapper(window))
 
-        val triangle = JDShapedTriangle2Shape(
-            Vector2(0f, 0f),
-            Size2(0f, 0f),
-            Color4(255f, 255f, 255f),
-            null
-        )
+        engine.stageManager.eventBus.on<WindowResizeEvent> {
+            updateViewport()
+        }
 
-        addShape(triangle)
+        updateViewport()
 
         return this
     }
@@ -70,6 +64,10 @@ class JDShapedRenderer(private val engine: ShapedEngine,
      */
     override fun destroy(): JDShapedRenderer {
         return this
+    }
+
+    private fun updateViewport() {
+        glViewport(0, 0, window.size.width.toInt(), window.size.height.toInt())
     }
 
 }

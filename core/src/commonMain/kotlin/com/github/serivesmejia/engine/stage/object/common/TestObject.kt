@@ -6,9 +6,7 @@ import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 class TestObject : ShapedObject() {
 
     override fun init() {
-        on<WindowMoveEvent> {
-            println("hi")
-        }
+
     }
 
     override fun update(deltaTime: Float) {

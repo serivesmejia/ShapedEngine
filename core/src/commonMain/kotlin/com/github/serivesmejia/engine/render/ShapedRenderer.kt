@@ -3,13 +3,13 @@ package com.github.serivesmejia.engine.render
 import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.modular.ShapedModule
-import com.github.serivesmejia.engine.render.shape.ShapedShape
+import com.github.serivesmejia.engine.render.shape.ShapedShape2
 import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
 
 /**
  * Abstract class for handling multiplatform rendering
  * Handles shape rendering, textures, background color...
- * @see ShapedShape
+ * @see ShapedShape2
  * @see ShapedShapeBuilder
  */
 abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
@@ -31,13 +31,13 @@ abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
      */
     val shapes get() = internalShapes.toTypedArray()
 
-    private val internalShapes = mutableListOf<ShapedShape>()
+    private val internalShapes = mutableListOf<ShapedShape2>()
 
     /**
      * Adds a shape to this renderer
      * @param shape the shape to add to this renderer
      */
-    fun addShape(shape: ShapedShape) {
+    fun addShape(shape: ShapedShape2) {
         if(!internalShapes.contains(shape)) {
             internalShapes.add(shape)
         }
@@ -47,7 +47,7 @@ abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
      * Removes a shape from this renderer and clears it
      * @param shape the shape to remove from this renderer and clear
      */
-    fun removeShape(shape: ShapedShape) {
+    fun removeShape(shape: ShapedShape2) {
         if(internalShapes.contains(shape)) {
             shape.clear()
             internalShapes.remove(shape)
@@ -59,7 +59,7 @@ abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
      */
     fun drawAll() {
         for(shape in shapes) {
-            shape.draw()
+            shape.internalDraw()
         }
     }
 

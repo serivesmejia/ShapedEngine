@@ -23,7 +23,7 @@ abstract class ShapedShapeBuilder {
      *
      * @return the ShapedShape of the given triangle
      */
-    abstract fun triangle(triangle: Triangle2, color: Color4 = defColor): ShapedShape
+    abstract fun triangle(triangle: Triangle2, color: Color4 = defColor): ShapedShape2
 
     /**
      * Creates a triangle shape
@@ -46,7 +46,7 @@ abstract class ShapedShapeBuilder {
      *
      * @return the textured ShapedShape of the given triangle
      */
-    abstract fun texturedTriangle(triangle: Triangle2, texture: ShapedTexture, color: Color4 = defColor): ShapedShape
+    abstract fun texturedTriangle(triangle: Triangle2, texture: ShapedTexture, color: Color4 = defColor): ShapedShape2
 
     /**
      * Creates a textured triangle shape
@@ -69,7 +69,7 @@ abstract class ShapedShapeBuilder {
      *
      * @return the ShapedShape of the given rectangle
      */
-    abstract fun rectangle(rect: Rectangle2, color: Color4 = defColor): ShapedShape
+    abstract fun rectangle(rect: Rectangle2, color: Color4 = defColor): ShapedShape2
 
     /**
      * Creates a rectangle shape
@@ -93,7 +93,7 @@ abstract class ShapedShapeBuilder {
      *
      * @return the textured ShapedShape of the given rectangle
      */
-    abstract fun texturedRectangle(rect: Rectangle2, texture: ShapedTexture, color: Color4 = defColor): ShapedShape
+    abstract fun texturedRectangle(rect: Rectangle2, texture: ShapedTexture, color: Color4 = defColor): ShapedShape2
 
     /**
      * Creates a textured rectangle shape
@@ -108,8 +108,8 @@ abstract class ShapedShapeBuilder {
     fun texturedRectangle(position: Vector2, size: Size2, texture: ShapedTexture, color: Color4 = defColor) =
         texturedRectangle(Rectangle2(position, size), texture, color)
 
-    abstract fun circle(position: Vector2, radius: Float, color: Color4 = defColor): ShapedShape
+    abstract fun circle(position: Vector2, radius: Float, color: Color4 = defColor): ShapedShape2
 
-    abstract fun line(from: Vector2, to: Vector2, thickness: Float, color: Color4 = defColor): ShapedShape
+    abstract fun line(from: Vector2, to: Vector2, thickness: Float, color: Color4 = defColor): ShapedShape2
 
 }

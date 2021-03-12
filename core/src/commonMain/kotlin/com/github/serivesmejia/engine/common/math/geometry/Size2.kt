@@ -4,6 +4,12 @@ data class Size2(var width: Float,
                  var height: Float) {
 
     /**
+     * Gets the aspect ratio between the
+     * width and height of this Size2
+     */
+    val aspectRatio get() = width / height
+
+    /**
      * Sets the values of this Size
      */
     fun set(width: Float, height: Float) {
