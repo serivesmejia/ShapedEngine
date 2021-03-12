@@ -3,7 +3,8 @@ package com.github.serivesmejia.engine.render.shape
 import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Size2
 import com.github.serivesmejia.engine.common.math.geometry.Vector2
-import com.github.serivesmejia.engine.render.ShapedTexture
+import com.github.serivesmejia.engine.render.shader.ShapedShader
+import com.github.serivesmejia.engine.render.texture.ShapedTexture
 
 /**
  * Represents any sort of drawable shape,
@@ -51,6 +52,12 @@ abstract class ShapedShape2 {
             if(hasBeenDrawnOnce) update() //call update whenever this shape is updated
             field = value
         }
+
+    /**
+     * The shader to be used for this shape
+     * If null, nothing will be applied.
+     */
+    var shader: ShapedShader? = null
 
     private var hasBeenDrawnOnce = false
 

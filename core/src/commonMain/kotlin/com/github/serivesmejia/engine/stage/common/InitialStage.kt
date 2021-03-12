@@ -17,16 +17,6 @@ class InitialStage : ShapedStage("Stage-Initial") {
     override fun init() {
         addChild(TestObject())
 
-        triangShape = Shaped.Graphics.shapes.triangle(
-            Triangle2(
-                Vector2(200f, 200f),
-                Size2(100f, 100f)
-            ),
-            Color4(128f, 127f, 255f)
-        )
-
-        //Shaped.Graphics.renderer.addShape(triangShape)
-
         val rectShape = Shaped.Graphics.shapes.rectangle(
             Rectangle2(
                 Vector2(200f, 200f),

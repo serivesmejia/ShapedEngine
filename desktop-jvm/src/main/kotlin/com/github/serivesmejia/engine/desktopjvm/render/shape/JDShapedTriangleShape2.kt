@@ -17,10 +17,12 @@ class JDShapedTriangleShape2 : ShapedShape2() {
     val mesh = JDShapedMeshLoader.createMesh(vertices, indices)
 
     override fun update() {
-        TODO("Not yet implemented")
+
     }
 
     override fun draw() {
+        shader?.begin()
+
         glBindVertexArray(mesh.vao)
 
         glEnableVertexAttribArray(0)
@@ -28,6 +30,8 @@ class JDShapedTriangleShape2 : ShapedShape2() {
         glDisableVertexAttribArray(0)
 
         glBindVertexArray(0)
+
+        shader?.end()
     }
 
     override fun clear() {

@@ -4,37 +4,40 @@ import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.math.geometry.Triangle2
 import com.github.serivesmejia.engine.common.math.geometry.Vector2
-import com.github.serivesmejia.engine.render.ShapedTexture
+import com.github.serivesmejia.engine.render.shader.ShapedShader
+import com.github.serivesmejia.engine.render.texture.ShapedTexture
 import com.github.serivesmejia.engine.render.shape.ShapedShape2
 import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
 
 object JDShapedShapeBuilder : ShapedShapeBuilder() {
 
-    override fun triangle(triangle: Triangle2, color: Color4): ShapedShape2 {
+    override fun triangle(triangle: Triangle2, color: Color4, shader: ShapedShader): ShapedShape2 {
         val shape = JDShapedTriangleShape2()
 
         shape.position = triangle.position
         shape.size     = triangle.size
         shape.color    = color
+        shape.shader   = shader
 
         return shape
     }
 
-    override fun texturedTriangle(triangle: Triangle2, texture: ShapedTexture, color: Color4): ShapedShape2 {
+    override fun texturedTriangle(triangle: Triangle2, texture: ShapedTexture, color: Color4, shader: ShapedShader): ShapedShape2 {
         TODO("Not yet implemented")
     }
 
-    override fun rectangle(rect: Rectangle2, color: Color4): ShapedShape2 {
+    override fun rectangle(rect: Rectangle2, color: Color4, shader: ShapedShader): ShapedShape2 {
         val shape = JDShapedRectangleShape2()
 
         shape.position = rect.position
         shape.size     = rect.size
         shape.color    = color
+        shape.shader   = shader
 
         return shape
     }
 
-    override fun texturedRectangle(rect: Rectangle2, texture: ShapedTexture, color: Color4): ShapedShape2 {
+    override fun texturedRectangle(rect: Rectangle2, texture: ShapedTexture, color: Color4, shader: ShapedShader): ShapedShape2 {
         TODO("Not yet implemented")
     }
 
