@@ -2,6 +2,9 @@ package com.github.serivesmejia.engine
 
 import com.github.serivesmejia.engine.render.ShapedRenderer
 import com.github.serivesmejia.engine.render.ShapedWindow
+import com.github.serivesmejia.engine.render.shader.DefaultFragmentShader
+import com.github.serivesmejia.engine.render.shader.DefaultVertexShader
+import com.github.serivesmejia.engine.render.shader.ShapedShader
 import com.github.serivesmejia.engine.util.TimeUnit
 import kotlinx.datetime.Clock
 
@@ -47,6 +50,7 @@ object Shaped {
      * System module for accessing multiple multiplatform utilities
      */
     object System {
+
         /**
          * The system clock, from the kotlin
          * datetime common library.
@@ -68,12 +72,14 @@ object Shaped {
          * from currentTimeMillis to nanos
          */
         val nanoTime get() = TimeUnit.MILLISECONDS.convert(currentTimeMillis, TimeUnit.NANOSECONDS)
+
     }
 
     /**
      * Graphics module for accessing multiplatform rendering aspects
      */
     object Graphics {
+
         /**
          * The current window being
          * used in the engine.
@@ -105,6 +111,26 @@ object Shaped {
          * specific shapes.
          */
         val shapes get() = renderer.shapeBuilder
+
+        /**
+         * Short-hand for getting the ShapedShaderLoader
+         * declared in the renderer.
+         *
+         * Used to load ShapedShaderSource-s
+         */
+        val shaders get() = renderer.shaderLoader
+
+        /**
+         * The engine's default shader
+         *
+         * Initialized lazily, therefore it
+         * cannot be gotten before the
+         * ShapedRenderer is available
+         */
+        val defaultShader: ShapedShader by lazy {
+            shaders.loadShader(DefaultVertexShader, DefaultFragmentShader)
+        }
+
     }
 
 }
