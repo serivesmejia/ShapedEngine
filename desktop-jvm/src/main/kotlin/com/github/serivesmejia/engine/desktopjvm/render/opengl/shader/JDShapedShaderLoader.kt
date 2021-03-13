@@ -1,7 +1,7 @@
-package com.github.serivesmejia.engine.desktopjvm.render.shader
+package com.github.serivesmejia.engine.desktopjvm.render.opengl.shader
 
-import com.github.serivesmejia.engine.render.shader.ShapedShader
-import com.github.serivesmejia.engine.render.shader.ShapedShaderLoader
+import com.github.serivesmejia.engine.render.opengl.shader.ShapedShader
+import com.github.serivesmejia.engine.render.opengl.shader.ShapedShaderLoader
 import org.lwjgl.opengl.GL20.*
 
 object JDShapedShaderLoader : ShapedShaderLoader() {

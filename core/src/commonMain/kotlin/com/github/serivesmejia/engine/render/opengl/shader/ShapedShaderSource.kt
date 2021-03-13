@@ -1,4 +1,4 @@
-package com.github.serivesmejia.engine.render.shader
+package com.github.serivesmejia.engine.render.opengl.shader
 
 /**
  * Holds the source code of an OpenGL

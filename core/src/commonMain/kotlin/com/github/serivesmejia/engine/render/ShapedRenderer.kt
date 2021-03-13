@@ -3,9 +3,11 @@ package com.github.serivesmejia.engine.render
 import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.modular.ShapedModule
-import com.github.serivesmejia.engine.render.shader.ShapedShaderLoader
+import com.github.serivesmejia.engine.render.opengl.mesh.ShapedMeshBuilder
+import com.github.serivesmejia.engine.render.opengl.shader.ShapedShaderLoader
 import com.github.serivesmejia.engine.render.shape.ShapedShape2
 import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
+import com.github.serivesmejia.engine.render.texture.ShapedTextureLoader
 
 /**
  * Abstract class for handling multiplatform rendering
@@ -14,6 +16,12 @@ import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
  * @see ShapedShapeBuilder
  */
 abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
+
+    /**
+     * The ShapedMeshBuilder to be used for the platform
+     * @see ShapedMeshBuilder
+     */
+    abstract val meshBuilder: ShapedMeshBuilder
 
     /**
      * The ShapedShapeBuilder to be used for the platform
@@ -26,6 +34,12 @@ abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
      * @see ShapedShaderLoader
      */
     abstract val shaderLoader: ShapedShaderLoader
+
+    /**
+     * The ShapedTextureLoader to be used for the platform
+     * @see ShapedTextureLoader
+     */
+    abstract val textureLoader: ShapedTextureLoader
 
     /**
      * Get or set the currently rendering background color

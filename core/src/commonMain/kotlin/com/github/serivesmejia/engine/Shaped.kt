@@ -2,9 +2,9 @@ package com.github.serivesmejia.engine
 
 import com.github.serivesmejia.engine.render.ShapedRenderer
 import com.github.serivesmejia.engine.render.ShapedWindow
-import com.github.serivesmejia.engine.render.shader.DefaultFragmentShader
-import com.github.serivesmejia.engine.render.shader.DefaultVertexShader
-import com.github.serivesmejia.engine.render.shader.ShapedShader
+import com.github.serivesmejia.engine.render.opengl.shader.DefaultFragmentShader
+import com.github.serivesmejia.engine.render.opengl.shader.DefaultVertexShader
+import com.github.serivesmejia.engine.render.opengl.shader.ShapedShader
 import com.github.serivesmejia.engine.util.TimeUnit
 import kotlinx.datetime.Clock
 

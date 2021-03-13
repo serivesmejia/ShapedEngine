@@ -1,6 +1,6 @@
 package com.github.serivesmejia.engine.desktopjvm.render.shape
 
-import com.github.serivesmejia.engine.desktopjvm.render.mesh.JDShapedMeshLoader
+import com.github.serivesmejia.engine.desktopjvm.render.opengl.mesh.JDShapedMeshBuilder
 import com.github.serivesmejia.engine.render.shape.ShapedShape2
 import org.lwjgl.opengl.GL30.*
 
@@ -14,7 +14,7 @@ class JDShapedTriangleShape2 : ShapedShape2() {
 
     private var indices = intArrayOf(0, 1, 2)
 
-    val mesh = JDShapedMeshLoader.createMesh(vertices, indices)
+    val mesh = JDShapedMeshBuilder.createMesh(vertices, vertices, indices)
 
     override fun update() {
 

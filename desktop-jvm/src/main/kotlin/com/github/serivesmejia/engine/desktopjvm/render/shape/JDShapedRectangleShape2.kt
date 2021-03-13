@@ -1,7 +1,7 @@
 package com.github.serivesmejia.engine.desktopjvm.render.shape
 
-import com.github.serivesmejia.engine.desktopjvm.render.mesh.JDShapedMeshLoader
-import com.github.serivesmejia.engine.desktopjvm.render.shader.JDShapedShader
+import com.github.serivesmejia.engine.desktopjvm.render.opengl.mesh.JDShapedMeshBuilder
+import com.github.serivesmejia.engine.desktopjvm.render.opengl.shader.JDShapedShader
 import com.github.serivesmejia.engine.render.shape.ShapedShape2
 import org.lwjgl.opengl.GL30.*
 
@@ -16,7 +16,7 @@ class JDShapedRectangleShape2 : ShapedShape2() {
 
     private var indices = intArrayOf(0, 1, 2, 3)
 
-    val mesh = JDShapedMeshLoader.createMesh(vertices, indices)
+    val mesh = JDShapedMeshBuilder.createMesh(vertices, vertices, indices)
 
     override fun update() {
 
@@ -24,18 +24,16 @@ class JDShapedRectangleShape2 : ShapedShape2() {
 
     override fun draw() {
         if(shader is JDShapedShader) {
-            shader?.bindAttribute("position", mesh.vao)
+            shader?.bindAttribute("position", 0)
+            shader?.bindAttribute("textureCoords", 1)
         }
 
         shader?.begin()
+        texture?.bind()
 
-        glBindVertexArray(mesh.vao)
+        mesh.draw(GL_QUADS)
 
-        glEnableVertexAttribArray(0)
-        glDrawElements(GL_QUADS, mesh.vertex, GL_UNSIGNED_INT, 0)
-        glDisableVertexAttribArray(0)
-        glBindVertexArray(0)
-
+        texture?.unbind()
         shader?.end()
     }
 

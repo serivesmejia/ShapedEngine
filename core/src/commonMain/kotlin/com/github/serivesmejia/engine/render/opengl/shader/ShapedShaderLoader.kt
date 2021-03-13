@@ -1,4 +1,4 @@
-package com.github.serivesmejia.engine.render.shader
+package com.github.serivesmejia.engine.render.opengl.shader
 
 /**
  * Loads a GLSL shader, platform-specific.

@@ -17,12 +17,14 @@ class InitialStage : ShapedStage("Stage-Initial") {
     override fun init() {
         addChild(TestObject())
 
-        val rectShape = Shaped.Graphics.shapes.rectangle(
+        val texture = Shaped.Graphics.renderer.textureLoader.loadTexture("eocvsketch-logo.png")
+
+        val rectShape = Shaped.Graphics.shapes.texturedRectangle(
             Rectangle2(
                 Vector2(200f, 200f),
                 Size2(100f, 100f)
             ),
-            Color4(128f, 127f, 255f)
+            texture
         )
 
         Shaped.Graphics.renderer.addShape(rectShape)

@@ -1,4 +1,5 @@
 package com.github.serivesmejia.engine.render.texture
 
-class ShapedTextureLoader {
+interface ShapedTextureLoader {
+    fun loadTexture(resourcePath: String): ShapedTexture
 }

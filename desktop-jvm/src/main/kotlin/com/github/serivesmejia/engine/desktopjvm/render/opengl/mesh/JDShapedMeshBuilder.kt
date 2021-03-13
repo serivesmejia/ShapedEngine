@@ -1,5 +1,6 @@
-package com.github.serivesmejia.engine.desktopjvm.render.mesh
+package com.github.serivesmejia.engine.desktopjvm.render.opengl.mesh
 
+import com.github.serivesmejia.engine.render.opengl.mesh.ShapedMeshBuilder
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL15.*
 import org.lwjgl.opengl.GL20.glVertexAttribPointer
@@ -8,24 +9,10 @@ import org.lwjgl.opengl.GL30.glGenVertexArrays
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
-object JDShapedMeshLoader {
+object JDShapedMeshBuilder: ShapedMeshBuilder {
 
     private val vaos = mutableListOf<Int>()
     private val vbos = mutableListOf<Int>()
-
-    private fun createFloatBuffer(data: FloatArray): FloatBuffer {
-        val buffer = BufferUtils.createFloatBuffer(data.size)
-        buffer.put(data)
-        buffer.flip()
-        return buffer
-    }
-
-    private fun createIntBuffer(data: IntArray): IntBuffer {
-        val buffer = BufferUtils.createIntBuffer(data.size)
-        buffer.put(data)
-        buffer.flip()
-        return buffer
-    }
 
     private fun storeData(attribute: Int, dimensions: Int, data: FloatArray) {
         val vbo = glGenBuffers()
@@ -49,10 +36,11 @@ object JDShapedMeshLoader {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW)
     }
 
-    fun createMesh(positions: FloatArray, indices: IntArray): JDShapedMesh {
+    override fun createMesh(positions: FloatArray, uvs: FloatArray, indices: IntArray): JDShapedMesh {
         val vao = genVAO()
 
         storeData(0, 3, positions)
+        storeData(1, 2, uvs)
         bindIndices(indices)
         glBindVertexArray(0)
 
@@ -67,4 +55,18 @@ object JDShapedMeshLoader {
         return vao
     }
 
+}
+
+private fun createFloatBuffer(data: FloatArray): FloatBuffer {
+    val buffer = BufferUtils.createFloatBuffer(data.size)
+    buffer.put(data)
+    buffer.flip()
+    return buffer
+}
+
+private fun createIntBuffer(data: IntArray): IntBuffer {
+    val buffer = BufferUtils.createIntBuffer(data.size)
+    buffer.put(data)
+    buffer.flip()
+    return buffer
 }

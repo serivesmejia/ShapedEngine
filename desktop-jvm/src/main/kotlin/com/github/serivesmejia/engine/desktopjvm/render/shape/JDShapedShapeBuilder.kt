@@ -4,7 +4,7 @@ import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.math.geometry.Triangle2
 import com.github.serivesmejia.engine.common.math.geometry.Vector2
-import com.github.serivesmejia.engine.render.shader.ShapedShader
+import com.github.serivesmejia.engine.render.opengl.shader.ShapedShader
 import com.github.serivesmejia.engine.render.texture.ShapedTexture
 import com.github.serivesmejia.engine.render.shape.ShapedShape2
 import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
@@ -38,7 +38,10 @@ object JDShapedShapeBuilder : ShapedShapeBuilder() {
     }
 
     override fun texturedRectangle(rect: Rectangle2, texture: ShapedTexture, color: Color4, shader: ShapedShader): ShapedShape2 {
-        TODO("Not yet implemented")
+        val rect = rectangle(rect, color, shader)
+        rect.texture = texture
+
+        return rect
     }
 
     override fun circle(position: Vector2, radius: Float, color: Color4): ShapedShape2 {
