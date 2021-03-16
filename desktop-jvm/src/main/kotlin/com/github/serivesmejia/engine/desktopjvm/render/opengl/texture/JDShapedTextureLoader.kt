@@ -48,6 +48,8 @@ object JDShapedTextureLoader : ShapedTextureLoader {
             buffer.clear()
         }
 
+        println(id)
+
         return JDShapedTexture(id, Size2(width.toFloat(), height.toFloat()))
     }
 

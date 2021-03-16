@@ -58,7 +58,7 @@ abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
      * Adds a shape to this renderer
      * @param shape the shape to add to this renderer
      */
-    fun addShape(shape: ShapedShape2) {
+    open fun addShape(shape: ShapedShape2) {
         if(!internalShapes.contains(shape)) {
             internalShapes.add(shape)
         }
@@ -68,7 +68,7 @@ abstract class ShapedRenderer : ShapedModule<ShapedEngine> {
      * Removes a shape from this renderer and clears it
      * @param shape the shape to remove from this renderer and clear
      */
-    fun removeShape(shape: ShapedShape2) {
+    open fun removeShape(shape: ShapedShape2) {
         if(internalShapes.contains(shape)) {
             shape.clear()
             internalShapes.remove(shape)

@@ -13,6 +13,8 @@ package com.github.serivesmejia.engine.render.opengl.shader
  */
 abstract class ShapedShader(val programID: Int, val vertexShaderID: Int, val fragmentShaderID: Int) {
 
+    abstract val locationProjection: Int
+
     /**
      * Begins applying this shader
      * Everything following this call
@@ -42,5 +44,15 @@ abstract class ShapedShader(val programID: Int, val vertexShaderID: Int, val fra
      * @param attribute the value to set
      */
     abstract fun bindAttribute(variableName: String, attribute: Int)
+
+    abstract fun getUniformLocation(uniformName: String): Int
+
+    abstract fun loadMatrix(location: Int, value: FloatArray)
+
+    var projection = FloatArray(16)
+        set(value) {
+            loadMatrix(locationProjection, value)
+            field = value
+        }
 
 }

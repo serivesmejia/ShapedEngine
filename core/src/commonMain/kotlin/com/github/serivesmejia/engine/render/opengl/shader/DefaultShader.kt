@@ -18,7 +18,12 @@ void main(void) {
     pass_uvs = uvs;
 }
 
-""")
+""") {
+    override fun bindAttributes(shader: ShapedShader) {
+        shader.bindAttribute("position", 0)
+        shader.bindAttribute("textureCoords", 1)
+    }
+}
 
 /**
  * The engine's default fragment shader

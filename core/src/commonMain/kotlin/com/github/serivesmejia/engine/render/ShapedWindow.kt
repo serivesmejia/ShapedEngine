@@ -18,6 +18,8 @@ interface ShapedWindow : ShapedModule<ShapedEngine> {
     var position: Vector2
     var size: Size2
 
+    val projectionMatrix: FloatArray
+
     fun show(): ShapedWindow
     fun hide(): ShapedWindow
     fun center(): ShapedWindow
