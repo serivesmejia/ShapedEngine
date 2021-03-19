@@ -18,7 +18,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
     val modules: Array<ShapedModule<T>>
         get() = internalModules.keys.toTypedArray()
 
-    private val requirements = mutableMapOf<KClass<out ShapedModule<T>>, Pair<Range1<Int>, ((ShapedModule<T>) -> Boolean)?>>()
+    private val requirements = mutableMapOf<KClass<out ShapedModule<T>>, RequirementData<T>>()
     private var hasValidRequirements = false
 
     private val internalModules = HashMap<ShapedModule<T>, Pair<ModulePriority, Boolean>>()
@@ -114,26 +114,24 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      */
     internal fun checkRequirements() {
         //iterate through all the requirements added by user
-        for((requirement, rangeAndValidator) in requirements) {
+        for((requirement, data) in requirements) {
             var requiresAmount = 0
 
-            val validator = rangeAndValidator.second
+            val acceptor = data.acceptorBlock
 
             for(module in modules) { //iterate through all the modules
                 //found a requirement! by comparing classes or using user's validator if it isn't null
-                if(module::class == requirement || (validator != null && validator(module)))
+                if(module::class == requirement || (acceptor != null && acceptor(module)))
                     requiresAmount++
             }
 
-            val range = rangeAndValidator.first
-
             //check if we comply the min and max amount of requirements
-            if(range.isInRange(requiresAmount)) {
+            if(data.range.isInRange(requiresAmount)) {
                 continue //move on to the next
             } else {
                 //the requirement is not complied :(
                 throw IllegalStateException(
-                    "Modular ${this::class.simpleName} requires $range module(s) of type ${requirement.simpleName}"
+                    "Modular ${this::class.simpleName} requires ${data.range} module(s) of type ${requirement.simpleName}"
                 )
             }
         }
@@ -152,7 +150,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
                                 requireMin: Int,
                                 requireMax: Int = Int.MAX_VALUE,
                                 validator: ((ShapedModule<T>) -> Boolean)?) {
-        requirements[moduleKClass] = Pair(Range1(requireMin, requireMax), validator)
+        requirements[moduleKClass] = RequirementData(Range1(requireMin, requireMax), validator)
     }
 
     /**
@@ -219,6 +217,9 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
             }
             return cachedSortedModules!! //return cached
         }
+
+    private data class RequirementData<T : ShapedModular<T>>(val range: Range1<Int>,
+                                                             val acceptorBlock: ((ShapedModule<T>) -> Boolean)?)
 
 }
 
