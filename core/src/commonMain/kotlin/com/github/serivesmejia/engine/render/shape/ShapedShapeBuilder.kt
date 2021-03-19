@@ -96,7 +96,6 @@ abstract class ShapedShapeBuilder {
     fun rectangle(position: Vector2, size: Size2, color: Color4 = defColor, shader: ShapedShader = defShad) =
         rectangle(Rectangle2(position, size), color, shader)
 
-
     /**
      * Creates a textured rectangle shape
      *

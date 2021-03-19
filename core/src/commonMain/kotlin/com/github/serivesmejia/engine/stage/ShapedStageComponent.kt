@@ -7,6 +7,8 @@ import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventRegistrator
 import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventSubscriber
+import com.github.serivesmejia.engine.common.timer.ShapedTimer
+import com.github.serivesmejia.engine.common.timer.ShapedTimerManager
 
 /**
  * Common class for all stage components to implement. including the stage itself.
@@ -17,7 +19,6 @@ import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventSubscri
  *
  * The "isStage" property can be used for checking, but it's more recommended to
  * use Kotlin's "is" keyword (similar to Java's instanceof) to perform smart casting.
- *
  */
 abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     : ShapedEventRegistrator, HierarchyShapedComponent<T>, ShapedContainer<ShapedObject>() {
@@ -25,6 +26,9 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     override var parent: ShapedContainer<T>? = null
 
     lateinit var eventBus: ShapedEventBus
+        internal set
+
+    lateinit var timerManager: ShapedTimerManager
         internal set
 
     private val subscribers = mutableListOf<ShapedEventSubscriber>()
@@ -54,7 +58,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      * Called each frame after updating all children
      * @param deltaTime the difference of time in seconds between the current and last frame
      */
-    abstract fun update(deltaTime: Float)
+    open fun update(deltaTime: Float) { }
 
     /**
      * Override of addChild function to register this new children
@@ -64,6 +68,8 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      */
     override fun addChild(child: ShapedObject) {
         child.eventBus = eventBus
+        child.timerManager = timerManager
+
         for(subscriber in subscribers) {
             subscriber.register(child)
         }
@@ -125,5 +131,8 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      */
     inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = eventBus.on(block)
 
+    fun timeout(seconds: Double, block: (ShapedTimer) -> Unit) = timerManager.timeout(seconds, block)
+
+    fun interval(seconds: Double, block: (ShapedTimer) -> Unit) = timerManager.interval(seconds, block)
 
 }

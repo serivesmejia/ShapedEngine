@@ -9,11 +9,14 @@ class TestObject : ShapedObject() {
         on<WindowResizeEvent> {
             println("it works! $it")
         }
-    }
 
-    override fun update(deltaTime: Float) {
-    }
+        interval(3.0) {
+            println("interval!")
+        }
 
-    override fun dispose() { }
+        timeout(1.0) {
+            println("timeout!")
+        }
+    }
 
 }

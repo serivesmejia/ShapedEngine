@@ -146,6 +146,16 @@ object Shaped {
             shaders.loadShader(DefaultVertexShader, DefaultFragmentShader)
         }
 
+        /**
+         * Loads a texture from a resoruce file,
+         * platform-dependent call. Short-hand for
+         * the texture loader in Shaped.Graphics.renderer
+         *
+         * @param resourcePath the absolute path to the texture resource
+         * @return the loaded texture from the resource
+         */
+        fun loadTexture(resourcePath: String) = renderer.textureLoader.loadTexture(resourcePath)
+
     }
 
 }

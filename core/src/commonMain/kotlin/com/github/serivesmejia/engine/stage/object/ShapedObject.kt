@@ -10,6 +10,8 @@ abstract class ShapedObject: ShapedStageComponent<ShapedObject>() {
      * User shouldn't manually call this function
      */
     override fun create(): ShapedObject {
+        parentStage = null //invalidate cached parent state
+
         init()
         return this
     }
@@ -38,12 +40,17 @@ abstract class ShapedObject: ShapedStageComponent<ShapedObject>() {
      * or destroys other (untracked) objects when this object
      * is destroyed.
      */
-    abstract fun dispose()
+    open fun dispose() {}
 
-    val parentStage: ShapedStage?
+    var parentStage: ShapedStage? = null
+        private set
         get() {
+            //if our "field" cache is not null, return it
+            if(field != null) return field
+
             if(parent is ShapedStage) { //our parent is a stage!
-                return parent as ShapedStage //simply cast our parent as a stage
+                //store into field variable for caching
+                field = parent as ShapedStage
             } else {
                 //if our current parent is a StageComponent
                 if(parent is ShapedStageComponent<*>) {
@@ -52,13 +59,15 @@ abstract class ShapedObject: ShapedStageComponent<ShapedObject>() {
 
                     //linear bottom-to-top scan to find the stage
                     while(currParent != null) {
-                        if(currParent is ShapedStage) return currParent //we found a stage!
-                        else if(currParent is ShapedStageComponent<*>) { //if curr parent is still a stage component
+                        if(currParent is ShapedStage) { //we found a stage!
+                            field = currParent
+                            break
+                        } else if(currParent is ShapedStageComponent<*>) { //if curr parent is still a stage component
                             //didn't found a stage. set curr parent to the parent of current
                             //to continue searching in next iteration
                             currParent = currParent.parent
                         } else {
-                            //we found something that doesn't belong to this stage!
+                            //we found something that doesn't belong to this hierarchy!
                             //break the loop here since there's nothing we can do
                             break
                         }
@@ -66,7 +75,7 @@ abstract class ShapedObject: ShapedStageComponent<ShapedObject>() {
                 }
             }
 
-            return null //we didn't found any stage :(
+            return field
         }
 
 }
