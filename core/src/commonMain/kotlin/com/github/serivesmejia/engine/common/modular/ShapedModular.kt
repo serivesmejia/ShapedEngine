@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine.common.modular
 
+import com.github.serivesmejia.engine.common.math.Range1
 import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
@@ -17,7 +18,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
     val modules: Array<ShapedModule<T>>
         get() = internalModules.keys.toTypedArray()
 
-    private val requirements = mutableMapOf<KClass<out ShapedModule<T>>, Pair<Pair<Int, Int>, ((ShapedModule<T>) -> Boolean)?>>()
+    private val requirements = mutableMapOf<KClass<out ShapedModule<T>>, Pair<Range1<Int>, ((ShapedModule<T>) -> Boolean)?>>()
     private var hasValidRequirements = false
 
     private val internalModules = HashMap<ShapedModule<T>, Pair<ModulePriority, Boolean>>()
@@ -127,7 +128,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
             val range = rangeAndValidator.first
 
             //check if we comply the min and max amount of requirements
-            if(requiresAmount >= range.first && requiresAmount <= range.second) {
+            if(range.isInRange(requiresAmount)) {
                 continue //move on to the next
             } else {
                 //the requirement is not complied :(
@@ -151,7 +152,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
                                 requireMin: Int,
                                 requireMax: Int = Int.MAX_VALUE,
                                 validator: ((ShapedModule<T>) -> Boolean)?) {
-        requirements[moduleKClass] = Pair(Pair(requireMin, requireMax), validator)
+        requirements[moduleKClass] = Pair(Range1(requireMin, requireMax), validator)
     }
 
     /**
