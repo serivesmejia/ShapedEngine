@@ -120,4 +120,16 @@ data class Vector2(var x: Float = 0f,
      * @return a copy of this vector with the result
      */
     infix fun pow(other: Vector2) = copy(x = x.pow(other.x), y = y.pow(other.y))
+
+
+    /**
+     * Since R^2 (2D space) is a subspace of R^3 (3D space) this function returns the R^2 Vector in R^3
+     * @receiver a vector in R^2
+     * @return a vector in R^3
+     */
+    fun to3D(): Vector3 = run {
+        val (x, y) = this
+        Vector3(x, y, 0f)
+    }
+
 }

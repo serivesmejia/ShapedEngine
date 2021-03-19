@@ -137,13 +137,3 @@ data class Vector3(
      */
     operator fun unaryMinus() = copy(x = -x, y = -y, z = -z)
 }
-
-/**
- * Since R^2 (2D space) is a subspace of R^3 (3D space) this function returns the R^2 Vector in R^3
- * @receiver a vector in R^2
- * @return a vector in R^3
- */
-fun Vector2.to3D(): Vector3 = run {
-    val (x, y) = this
-    Vector3(x, y, 0f)
-}
