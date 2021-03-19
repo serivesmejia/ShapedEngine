@@ -68,8 +68,7 @@ abstract class ShapedShapeBuilder {
      */
     fun texturedTriangle(position: Vector2,
                          size: Size2,
-                         texture:
-                         ShapedTexture,
+                         texture: ShapedTexture,
                          color: Color4 = defColor,
                          shader: ShapedShader = defShad) = texturedTriangle(Triangle2(position, size), texture, color, shader)
 

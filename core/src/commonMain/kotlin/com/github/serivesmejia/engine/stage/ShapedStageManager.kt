@@ -15,6 +15,10 @@ class ShapedStageManager : ShapedModule<ShapedEngine> {
 
     override fun create(): ShapedStageManager {
         changeStage(InitialStage())
+
+        //add the event bus of this manager as a child to the global one
+        Shaped.globalEventBus.addChild(eventBus)
+
         return this
     }
 

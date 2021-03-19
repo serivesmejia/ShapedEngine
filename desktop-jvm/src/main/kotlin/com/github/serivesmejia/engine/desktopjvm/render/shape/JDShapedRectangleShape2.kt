@@ -22,8 +22,8 @@ class JDShapedRectangleShape2 : ShapedShape2() {
     )
 
     private var indices = intArrayOf(
-        0, 1, 2, 3
-        //1, 2, 3
+        0, 1, 2,
+        1, 2, 3
     )
 
     val mesh = JDShapedMeshBuilder.createMesh(vertices, uvs, indices)
@@ -34,7 +34,7 @@ class JDShapedRectangleShape2 : ShapedShape2() {
 
     override fun draw() {
         shader?.begin()
-        mesh.draw(GL_QUADS, texture)
+        mesh.draw(GL_TRIANGLES, texture)
         shader?.end()
     }
 

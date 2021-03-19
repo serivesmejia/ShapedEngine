@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine.desktopjvm.render
 
+import com.github.serivesmejia.engine.Shaped
 import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.event.standard.WindowResizeEvent
 import com.github.serivesmejia.engine.common.math.Color4
@@ -34,12 +35,13 @@ class JDShapedRenderer(private val engine: ShapedEngine,
      * This function shouldn't be manually called
      */
     override fun create(): JDShapedRenderer {
-        //wrap to make @Subscribe mechanism available for use (JVM)
+        //wrap to make @Subscribe mechanism available for use in StageComponents (JVM)
         engine.stageManager.eventBus.addSubscriber(JvmShapedEventSubscriber())
-        //wrap glfw callbacks with shaped events
-        engine.stageManager.eventBus.wrap(JDGlfwEventWrapper(window))
 
-        engine.stageManager.eventBus.on<WindowResizeEvent> {
+        //wrap glfw callbacks with shaped events
+        Shaped.globalEventBus.wrap(JDGlfwEventWrapper(window))
+
+        Shaped.on<WindowResizeEvent> {
             updateViewport()
         }
 

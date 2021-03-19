@@ -1,13 +1,20 @@
 package com.github.serivesmejia.engine.common.event
 
+import com.github.serivesmejia.engine.common.HierarchyShapedComponent
+import com.github.serivesmejia.engine.common.ShapedContainer
 import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventSubscriber
 import com.github.serivesmejia.engine.common.event.wrapper.ShapedEventWrapper
 import kotlin.reflect.KClass
 
 /**
  * Handles events via a callback mechanism
+ *
+ * It is also a container for other ShapedEventBus children.
+ * By adding another event bus as a children, when an event
+ * is fired to this event bus, it is also fired to the children
+ * event buses.
  */
-class ShapedEventBus {
+class ShapedEventBus : HierarchyShapedComponent<ShapedEventBus>, ShapedContainer<ShapedEventBus>() {
 
     private val callbacks = mutableMapOf<KClass<*>, MutableList<(ShapedEvent) -> Unit>>()
 
@@ -20,6 +27,9 @@ class ShapedEventBus {
     fun fire(event: ShapedEvent) {
         callbacks[event::class]?.forEach {
             it(event)
+        }
+        for(child in children) {
+            child.fire(event)
         }
     }
 
@@ -138,6 +148,21 @@ class ShapedEventBus {
     fun removeSubscriber(subscriber: ShapedEventSubscriber) {
         subscribers.remove(subscriber)
         subscriber.unwrap(this)
+    }
+
+    override var parent: ShapedContainer<ShapedEventBus>? = null
+
+    /**
+     * create() does nothing in a ShapedEventBus
+     */
+    override fun create() = this
+
+    /**
+     * Clears all the callbacks of this event bus
+     */
+    override fun destroy(): ShapedEventBus {
+        clear()
+        return this
     }
 
 }

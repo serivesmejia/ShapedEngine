@@ -1,5 +1,7 @@
 package com.github.serivesmejia.engine
 
+import com.github.serivesmejia.engine.common.event.ShapedEvent
+import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.render.ShapedRenderer
 import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.render.opengl.shader.DefaultFragmentShader
@@ -38,6 +40,19 @@ object Shaped {
      */
     var fps = 0
         internal set
+
+    /**
+     * Global event bus, parent of the
+     * event bus in ShapedStageManager.
+     */
+    val globalEventBus = ShapedEventBus()
+
+    /**
+     * Registers a callback to the global event bus
+     * Shorthand for Shaped.globalEventBus.on
+     */
+    inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) =
+        globalEventBus.on(block)
 
     /**
      * Request the engine to end
