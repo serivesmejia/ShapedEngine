@@ -124,7 +124,7 @@ abstract class ShapedShapeBuilder {
                           size: Size2,
                           texture: ShapedTexture,
                           color: Color4 = defColor,
-                          shader: ShapedShader = defShad) = texturedRectangle(Rectangle2(position, size), texture, color)
+                          shader: ShapedShader = defShad) = texturedRectangle(Rectangle2(position, size), texture, color, shader)
 
     abstract fun circle(position: Vector2, radius: Float, color: Color4 = defColor): ShapedShape2
 

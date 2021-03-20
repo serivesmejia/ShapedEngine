@@ -21,7 +21,7 @@ void main(void) {
 """) {
     override fun bindAttributes(shader: ShapedShader) {
         shader.bindAttribute("position", 0)
-        shader.bindAttribute("textureCoords", 1)
+        shader.bindAttribute("texCoords", 1)
     }
 }
 

@@ -17,6 +17,8 @@ class InitialStage : ShapedStage("Stage-Initial") {
 
         val texture = Shaped.Graphics.loadTexture("/test.png")
 
+        println("${texture.size}")
+
         val rectShape = Shaped.Graphics.shapes.texturedRectangle(
             Vector2(200f, 200f),
             Size2(100f, 100f),

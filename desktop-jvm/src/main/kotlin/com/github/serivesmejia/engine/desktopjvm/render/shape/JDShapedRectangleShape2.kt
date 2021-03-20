@@ -28,9 +28,7 @@ class JDShapedRectangleShape2 : ShapedShape2() {
 
     val mesh = JDShapedMeshBuilder.createMesh(vertices, uvs, indices)
 
-    override fun update() {
-
-    }
+    override fun update() { }
 
     override fun draw() {
         shader?.begin()

@@ -45,6 +45,9 @@ class JDShapedRenderer(private val engine: ShapedEngine,
             updateViewport()
         }
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
         updateViewport()
 
         return this
