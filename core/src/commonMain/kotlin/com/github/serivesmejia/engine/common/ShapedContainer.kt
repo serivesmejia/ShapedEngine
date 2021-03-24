@@ -1,7 +1,5 @@
 package com.github.serivesmejia.engine.common
 
-import com.github.serivesmejia.engine.common.extension.clipUpperZero
-
 /**
  * Abstract class for any sort of component that can hold ShapedComponent children
  */

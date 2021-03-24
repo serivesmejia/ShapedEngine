@@ -132,6 +132,7 @@ data class Vector3(
      */
     operator fun unaryPlus() = copy(x = +x, y = +y, z = +z)
 
+
     /**
      * Negates the values of this vector
      */
