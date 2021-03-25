@@ -7,6 +7,8 @@ import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.render.opengl.shader.DefaultFragmentShader
 import com.github.serivesmejia.engine.render.opengl.shader.DefaultVertexShader
 import com.github.serivesmejia.engine.render.opengl.shader.ShapedShader
+import com.github.serivesmejia.engine.stage.ShapedStage
+import com.github.serivesmejia.engine.stage.ShapedStageManager
 import com.github.serivesmejia.engine.util.TimeUnit
 import kotlinx.datetime.Clock
 
@@ -54,12 +56,22 @@ object Shaped {
     inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) =
         globalEventBus.on(block)
 
-    /**
-     * Request the engine to end
-     */
-    fun end() {
-        closeRequested = true
+    object Engine {
+
+        lateinit var stageManager: ShapedStageManager
+            internal set
+
+        fun changeStage(stage: ShapedStage) = stageManager.changeStage(stage)
+
+        /**
+         * Request the engine to end
+         */
+        fun end() {
+            closeRequested = true
+        }
+
     }
+
 
     /**
      * System module for accessing multiple multiplatform utilities

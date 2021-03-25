@@ -3,7 +3,7 @@ package com.github.serivesmejia.engine.stage.`object`
 import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.ShapedStageComponent
 
-abstract class ShapedObject: ShapedStageComponent<ShapedObject>() {
+open class ShapedObject: ShapedStageComponent<ShapedObject>() {
 
     /**
      * Initializes this object
@@ -19,7 +19,7 @@ abstract class ShapedObject: ShapedStageComponent<ShapedObject>() {
     /**
      * Called once, when this stage is about to be used
      */
-    abstract fun init()
+    open fun init() {}
 
     /**
      * Destroys this object and its children

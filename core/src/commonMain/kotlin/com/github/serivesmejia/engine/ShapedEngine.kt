@@ -47,8 +47,11 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
     }
 
     override fun onModuleAdd(module: ShapedModule<ShapedEngine>) {
-        if (module is ShapedWindow) Shaped.Graphics.window = module
-        else if (module is ShapedRenderer) Shaped.Graphics.renderer = module
+        when (module) {
+            is ShapedWindow -> Shaped.Graphics.window = module
+            is ShapedRenderer -> Shaped.Graphics.renderer = module
+            is ShapedStageManager -> Shaped.Engine.stageManager = module
+        }
     }
 
     /**
@@ -92,7 +95,7 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
      */
     override fun destroy(): ShapedEngine {
         destroyModules()
-        Shaped.end()
+        Shaped.Engine.end()
         return this
     }
 
