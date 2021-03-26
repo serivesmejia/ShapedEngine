@@ -2,6 +2,7 @@ package com.github.serivesmejia.engine.stage
 
 import com.github.serivesmejia.engine.common.HierarchyShapedComponent
 import com.github.serivesmejia.engine.common.ShapedContainer
+import com.github.serivesmejia.engine.common.dsl.stage.builder.ShapedObjectDslBuilder
 import com.github.serivesmejia.engine.common.event.ShapedEvent
 import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
@@ -131,8 +132,48 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      */
     inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = eventBus.on(block)
 
+    /**
+     * Adds a block to be executed ONCE after a certain timeout
+     * @param seconds the time in seconds to execute this block once it timeouts
+     * @param block the block to execute after the timeout
+     */
     fun timeout(seconds: Double, block: (ShapedTimer) -> Unit) = timerManager.timeout(seconds, block)
 
+    /**
+     * Adds a block to be executed REPETITIVELY after a certain timeout
+     * @param seconds the time in seconds to execute this block once it timeouts
+     * @param block the block to execute REPETITIVELY after each timeout
+     */
     fun interval(seconds: Double, block: (ShapedTimer) -> Unit) = timerManager.interval(seconds, block)
+
+    /**
+     * Adds a ShapedObject to this stage component,
+     * with the syntax...
+     * ```kotlin
+     *  +ShapedObject()
+     * ```
+     */
+    operator fun ShapedObject.unaryPlus() = addChild(this)
+
+    /**
+     * Removes a ShapedObject from this stage component,
+     * with the syntax...
+     * ```kotlin
+     *  -ShapedObject()
+     * ```
+     */
+    operator fun ShapedObject.unaryMinus() = removeChild(this)
+
+    /**
+     * Adds a child ShapedObject to this stage component,
+     * with a DSL syntax for adding children, event listeners, etc.
+     * @param child the children ShapedObject to add
+     * @param block the DSL block of code to run and build the object
+     */
+    fun addChild(child: ShapedObject,
+                 block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) {
+        addChild(child)
+        ShapedObjectDslBuilder(child, block).build()
+    }
 
 }

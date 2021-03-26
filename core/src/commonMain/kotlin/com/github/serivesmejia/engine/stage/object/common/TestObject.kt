@@ -6,12 +6,8 @@ import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 class TestObject : ShapedObject() {
 
     override fun init() {
-        on<WindowResizeEvent> {
-            println("it works! $it")
-        }
-
         interval(3.0) {
-            println("interval!")
+            println("my parent is $parent, parent stage is $parentStage")
         }
 
         timeout(1.0) {
