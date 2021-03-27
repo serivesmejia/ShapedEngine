@@ -13,8 +13,6 @@ class InitialStage : ShapedStage("Stage-Initial") {
     override fun init() {
         addChild(TestObject()) {
             + TestObject()
-
-
         }
 
         val texture = Shaped.Graphics.loadTexture("/test.png")
