@@ -2,15 +2,22 @@ package com.github.serivesmejia.engine.stage.`object`
 
 import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.ShapedStageComponent
+import com.github.serivesmejia.engine.stage.behavior.ShapedBehavior
+import com.github.serivesmejia.engine.stage.behavior.ShapedBehaviorManager
 
 open class ShapedObject: ShapedStageComponent<ShapedObject>() {
 
+    private lateinit var behaviorManager: ShapedBehaviorManager
+
     /**
-     * Initializes this object
+     * Initializes this object.
      * User shouldn't manually call this function
      */
     override fun create(): ShapedObject {
         parentStage = null //invalidate cached parent state
+
+        behaviorManager = ShapedBehaviorManager(this)
+        behaviorManager.create()
 
         init()
         return this
@@ -21,6 +28,13 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
      */
     open fun init() {}
 
+    override fun internalUpdate(deltaTime: Float) {
+        if(::behaviorManager.isInitialized)
+            behaviorManager.update(deltaTime)
+
+        super.internalUpdate(deltaTime)
+    }
+
     /**
      * Destroys this object and its children
      * It is not recommended to manually call this method, it
@@ -30,6 +44,7 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
     override fun destroy(): ShapedObject {
         parent = null
 
+        behaviorManager.destroy()
         dispose()
         return this
     }
@@ -77,5 +92,11 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
 
             return field
         }
+
+    fun addBehavior(behavior: ShapedBehavior) = behaviorManager.addBehavior(behavior)
+    fun removeBehavior(behavior: ShapedBehavior) = behaviorManager.removeBehavior(behavior)
+
+    operator fun ShapedBehavior.unaryPlus() = addBehavior(this)
+    operator fun ShapedBehavior.unaryMinus() = removeBehavior(this)
 
 }

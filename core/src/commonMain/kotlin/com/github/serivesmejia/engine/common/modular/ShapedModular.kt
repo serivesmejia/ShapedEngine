@@ -27,7 +27,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * Call update to all the modules
      * @param deltaTime the deltaTime to be passed to the modules update function
      */
-    internal fun updateModules(deltaTime: Float) {
+     fun updateModules(deltaTime: Float) {
         if(!hasValidRequirements) checkRequirements()
 
         for((module, data) in sortedModules) {
@@ -40,7 +40,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * Calls create() in all of the current
      * modules that haven't been created
      */
-    internal fun createModules() {
+    fun createModules() {
         checkRequirements()
         for((module, data) in sortedModules) {
             if(!data.second) createModule(module)
@@ -61,7 +61,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
     /**
      * Destroys all modules contained by this modular
      */
-    internal fun destroyModules() {
+    fun destroyModules() {
         for(module in internalModules.keys) {
             module.destroy()
         }
@@ -71,31 +71,23 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * Adds a module to this modular
      * @param module a module to add to this modular
      */
-    fun addModule(module: ShapedModule<T>, priority: ModulePriority = ModulePriority.MEDIUM) {
+    open fun addModule(module: ShapedModule<T>, priority: ModulePriority = ModulePriority.MEDIUM) {
         if(!internalModules.containsKey(module)) {
             internalModules[module] = Pair(priority, false)
-            onModuleAdd(module)
 
             cachedSortedModules = null //invalidate sorted caches
             hasValidRequirements = false //to revalidate requirements
         }
     }
-
-    /**
-     * Open function called when a module is added
-     * Can be used to perform any check or save any state
-     */
-    internal open fun onModuleAdd(module: ShapedModule<T>) {}
 
     /**
      * Removes a module from this modular
      * @param module the module to remove from this modular
      */
-    fun removeModule(module: ShapedModule<T>) {
+    open fun removeModule(module: ShapedModule<T>) {
         if(internalModules.containsKey(module)) {
             module.destroy()
             internalModules.remove(module)
-            onModuleRemove(module)
 
             cachedSortedModules = null //invalidate sorted caches
             hasValidRequirements = false //to revalidate requirements
@@ -103,16 +95,10 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
     }
 
     /**
-     * Open function called when a module is removed
-     * Can be used to perform any check or save any state
-     */
-    internal open fun onModuleRemove(module: ShapedModule<T>) {}
-
-    /**
      * Check the requirements for this module and
      * throw an exception if they're not complied
      */
-    internal fun checkRequirements() {
+    private fun checkRequirements() {
         //iterate through all the requirements added by user
         for((requirement, data) in requirements) {
             var requiresAmount = 0
@@ -146,7 +132,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * @param requireMax the maximum requirement for the module
      * @param validator the block to be called to validate this requirement
      */
-    internal fun addRequirement(moduleKClass: KClass<out ShapedModule<T>>,
+    fun addRequirement(moduleKClass: KClass<out ShapedModule<T>>,
                                 requireMin: Int,
                                 requireMax: Int = Int.MAX_VALUE,
                                 validator: ((ShapedModule<T>) -> Boolean)?) {
@@ -159,7 +145,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * @param requireMin the minimum requirement for the module
      * @param requireMax the maximum requirement for the module
      */
-    internal inline fun <reified M : ShapedModule<T>> addRequirement(requireMin: Int,
+    inline fun <reified M : ShapedModule<T>> addRequirement(requireMin: Int,
                                                                      requireMax: Int = Int.MAX_VALUE,
                                                                      noinline validator: ((ShapedModule<T>) -> Boolean)?)
     = addRequirement(M::class, requireMin, requireMax, validator)
@@ -171,7 +157,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * @param requireMin the minimum requirement for the module
      * @param requireMax the maximum requirement for the module
      */
-    internal fun addRequirement(moduleKClass: KClass<out ShapedModule<T>>,
+     fun addRequirement(moduleKClass: KClass<out ShapedModule<T>>,
                                 requireMin: Int,
                                 requireMax: Int = Int.MAX_VALUE)
     = addRequirement(moduleKClass, requireMin, requireMax, null)
@@ -191,7 +177,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * Removes a module requirement from the modular
      * @param moduleKClass the class of the module to remove
      */
-    internal fun removeRequirement(moduleKClass: KClass<out ShapedModule<T>>) {
+    fun removeRequirement(moduleKClass: KClass<out ShapedModule<T>>) {
         requirements.remove(moduleKClass)
     }
 
@@ -199,7 +185,7 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * Removes a module requirement from the modular, with a better syntax.
      * @param M the module to remove
      */
-    internal inline fun <reified M : ShapedModule<T>> addRequirement() = removeRequirement(M::class)
+    inline fun <reified M : ShapedModule<T>> addRequirement() = removeRequirement(M::class)
 
     /**
      * Caching last sorted list so that we don't have to resort every time
@@ -218,8 +204,10 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
             return cachedSortedModules!! //return cached
         }
 
-    private data class RequirementData<T : ShapedModular<T>>(val range: Range1<Int>,
-                                                             val acceptorBlock: ((ShapedModule<T>) -> Boolean)?)
+    private data class RequirementData<T : ShapedModular<T>>(
+        val range: Range1<Int>,
+        val acceptorBlock: ((ShapedModule<T>) -> Boolean)?
+    )
 
 }
 

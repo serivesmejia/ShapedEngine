@@ -42,7 +42,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     val isStage: Boolean
         get() = this is ShapedStage
 
-    internal fun internalUpdate(deltaTime: Float) {
+    internal open fun internalUpdate(deltaTime: Float) {
         if(!hasBeenCreated) { //call create on this component if we haven't done so
             create()
             hasBeenCreated = true

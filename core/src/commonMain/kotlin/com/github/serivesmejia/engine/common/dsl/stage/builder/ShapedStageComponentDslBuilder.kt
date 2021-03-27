@@ -14,24 +14,24 @@ abstract class ShapedStageComponentDslBuilder<T : ShapedStageComponent<*>>(val c
      * Adds a ShapedObject to this component
      * @param obj the object to add
      */
-    abstract fun add(obj: ShapedObject)
+    abstract fun addChild(obj: ShapedObject)
 
     /**
      * Removes a ShapedObject from this component
      * @param obj the object to add
      */
-    abstract fun remove(obj: ShapedObject)
+    abstract fun removeChild(obj: ShapedObject)
 
-    fun add(obj: ShapedObject, block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) {
+    fun addChild(obj: ShapedObject, block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) {
         objectBuilders.add(ShapedObjectDslBuilder(obj, block))
-        add(obj)
+        addChild(obj)
     }
 
-    fun stageObject(block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) {
+    fun shapedObject(block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) {
         val obj = ShapedObject()
         objectBuilders.add(ShapedObjectDslBuilder(obj, block))
 
-        add(obj)
+        addChild(obj)
     }
 
     inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = component.on(block)
@@ -42,9 +42,9 @@ abstract class ShapedStageComponentDslBuilder<T : ShapedStageComponent<*>>(val c
     fun interval(timeoutSecs: Double, block: (ShapedTimer) -> Unit) =
         component.interval(timeoutSecs, block)
 
-    operator fun ShapedObject.unaryPlus() = this@ShapedStageComponentDslBuilder.add(this)
+    operator fun ShapedObject.unaryPlus() = this@ShapedStageComponentDslBuilder.addChild(this)
 
-    operator fun ShapedObject.unaryMinus() = this@ShapedStageComponentDslBuilder.remove(this)
+    operator fun ShapedObject.unaryMinus() = this@ShapedStageComponentDslBuilder.removeChild(this)
 
     internal fun buildObjects() = objectBuilders.forEach { it.build() }
 

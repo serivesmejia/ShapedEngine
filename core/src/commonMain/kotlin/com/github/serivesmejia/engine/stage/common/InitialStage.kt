@@ -1,7 +1,6 @@
 package com.github.serivesmejia.engine.stage.common
 
 import com.github.serivesmejia.engine.Shaped
-import com.github.serivesmejia.engine.common.dsl.stage
 import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Size2
 import com.github.serivesmejia.engine.common.math.geometry.Vector2

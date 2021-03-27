@@ -2,6 +2,7 @@ package com.github.serivesmejia.engine.stage.`object`.common
 
 import com.github.serivesmejia.engine.common.event.standard.WindowResizeEvent
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
+import com.github.serivesmejia.engine.stage.behavior.common.TestBehavior
 
 class TestObject : ShapedObject() {
 
@@ -13,6 +14,8 @@ class TestObject : ShapedObject() {
         timeout(1.0) {
             println("timeout!")
         }
+
+        + TestBehavior()
     }
 
 }

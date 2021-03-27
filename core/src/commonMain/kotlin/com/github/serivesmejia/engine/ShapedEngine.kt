@@ -46,7 +46,9 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
         return this
     }
 
-    override fun onModuleAdd(module: ShapedModule<ShapedEngine>) {
+    override fun addModule(module: ShapedModule<ShapedEngine>, priority: ModulePriority) {
+        super.addModule(module, priority)
+
         when (module) {
             is ShapedWindow -> Shaped.Graphics.window = module
             is ShapedRenderer -> Shaped.Graphics.renderer = module

@@ -10,8 +10,8 @@ class ShapedStageDslBuilder(
 
     constructor(block: ShapedStageDslBuilder.(ShapedStage) -> Unit) : this(ShapedStage(), block)
 
-    override fun add(obj: ShapedObject) = stage.addChild(obj)
-    override fun remove(obj: ShapedObject) = stage.removeChild(obj)
+    override fun addChild(obj: ShapedObject) = stage.addChild(obj)
+    override fun removeChild(obj: ShapedObject) = stage.removeChild(obj)
 
     override fun build(): ShapedStage {
         block(this, stage)
