@@ -9,7 +9,7 @@ abstract class ShapedContainer<C : HierarchyShapedComponent<C>> {
     /**
      * Get the children of this container as an ArrayList
      * Note that the returned ArrayList is a clone of the internal
-     * one, sp any addition or deletion won't affect the container.
+     * one, so any addition or deletion to this List won't affect the container.
      * Use addChild() or removeChild() to do so.
      */
     val children get() = internalChildren.subList(0, internalChildren.size)

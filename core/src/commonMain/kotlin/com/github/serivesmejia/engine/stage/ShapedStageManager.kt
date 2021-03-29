@@ -33,11 +33,11 @@ class ShapedStageManager : ShapedModule<ShapedEngine> {
     fun changeStage(stage: ShapedStage) {
         currentStage?.destroy()
 
-        //clear all shapes and destroy all timers
+        //clear all shapes and event bus, and destroy all timers
         Shaped.Graphics.renderer.clear()
         timerManager.destroyAll()
-
         eventBus.clear()
+
         stage.eventBus = eventBus
         stage.timerManager = timerManager
 

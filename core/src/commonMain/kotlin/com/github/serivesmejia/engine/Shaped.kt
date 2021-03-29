@@ -18,49 +18,55 @@ import kotlinx.datetime.Clock
 object Shaped {
 
     /**
-     * Tells whether the engine has been created or not
-     */
-    var hasCreatedEngine = false
-        internal set
-
-    /**
-     * Tells whether the user requested
-     * to close with the end() function
-     */
-    internal var closeRequested = false
-        private set
-
-    /**
-     * Difference of time between the last
-     * and current frame, in seconds
-     */
-    var deltaTime = 0.0f
-        internal set
-
-    /**
-     * Current FPS of the engine loop
-     */
-    var fps = 0
-        internal set
-
-    /**
      * Global event bus, parent of the
      * event bus in ShapedStageManager.
      */
     val globalEventBus = ShapedEventBus()
 
     /**
-     * Registers a callback to the global event bus
+     * Registers a callback to the global event bus.
      * Shorthand for Shaped.globalEventBus.on
      */
-    inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) =
-        globalEventBus.on(block)
+    inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = globalEventBus.on(block)
 
     object Engine {
 
+        /**
+         * The current stage manager being used
+         */
         lateinit var stageManager: ShapedStageManager
             internal set
 
+        /**
+         * Tells whether the engine has been created or not
+         */
+        var hasCreatedEngine = false
+            internal set
+
+        /**
+         * Tells whether the user requested
+         * to close with the end() function
+         */
+        internal var closeRequested = false
+            private set
+
+        /**
+         * Difference of time between the last
+         * and current frame, in seconds
+         */
+        var deltaTime = 0.0f
+            internal set
+
+        /**
+         * Current FPS of the engine loop
+         */
+        var fps = 0
+            internal set
+
+        /**
+         * Changes to another stage and destroys the old one
+         * @param stage the stage to change to
+         */
         fun changeStage(stage: ShapedStage) = stageManager.changeStage(stage)
 
         /**

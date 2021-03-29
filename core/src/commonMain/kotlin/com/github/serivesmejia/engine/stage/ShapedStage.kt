@@ -23,7 +23,7 @@ open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponen
     override fun update(deltaTime: Float) { }
 
     /**
-     * Destroys this stage
+     * Destroys this stage.
      * It is not recommended to manually call this method, it will
      * be called by the current StageManager once it determines
      * that this stage is no longer necessary for any reason.

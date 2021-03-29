@@ -133,9 +133,9 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * @param validator the block to be called to validate this requirement
      */
     fun addRequirement(moduleKClass: KClass<out ShapedModule<T>>,
-                                requireMin: Int,
-                                requireMax: Int = Int.MAX_VALUE,
-                                validator: ((ShapedModule<T>) -> Boolean)?) {
+                       requireMin: Int,
+                       requireMax: Int = Int.MAX_VALUE,
+                       validator: ((ShapedModule<T>) -> Boolean)?) {
         requirements[moduleKClass] = RequirementData(Range1(requireMin, requireMax), validator)
     }
 
@@ -146,10 +146,9 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * @param requireMax the maximum requirement for the module
      */
     inline fun <reified M : ShapedModule<T>> addRequirement(requireMin: Int,
-                                                                     requireMax: Int = Int.MAX_VALUE,
-                                                                     noinline validator: ((ShapedModule<T>) -> Boolean)?)
+                                                            requireMax: Int = Int.MAX_VALUE,
+                                                            noinline validator: (ShapedModule<T>) -> Boolean)
     = addRequirement(M::class, requireMin, requireMax, validator)
-
 
     /**
      * Adds a module requirement from the modular
@@ -158,8 +157,8 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * @param requireMax the maximum requirement for the module
      */
      fun addRequirement(moduleKClass: KClass<out ShapedModule<T>>,
-                                requireMin: Int,
-                                requireMax: Int = Int.MAX_VALUE)
+                        requireMin: Int,
+                        requireMax: Int = Int.MAX_VALUE)
     = addRequirement(moduleKClass, requireMin, requireMax, null)
 
     /**
@@ -168,8 +167,8 @@ abstract class ShapedModular<T : ShapedModular<T>> : ShapedModule<T> {
      * @param requireMin the minimum requirement for the module
      * @param requireMax the maximum requirement for the module
      */
-    internal inline fun <reified M : ShapedModule<T>> addRequirement(requireMin: Int,
-                                                                     requireMax: Int = Int.MAX_VALUE) {
+    inline fun <reified M : ShapedModule<T>> addRequirement(requireMin: Int,
+                                                            requireMax: Int = Int.MAX_VALUE) {
         addRequirement(M::class, requireMin, requireMax)
     }
 

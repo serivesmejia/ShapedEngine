@@ -9,12 +9,10 @@ import com.github.serivesmejia.engine.stage.ShapedStageManager
 import com.github.serivesmejia.engine.util.ElapsedTime
 import com.github.serivesmejia.engine.util.FpsCounter
 
-object ShapedEngine : ShapedModular<ShapedEngine>() {
+class ShapedEngine : ShapedModular<ShapedEngine>() {
 
     lateinit var stageManager: ShapedStageManager
         private set
-
-    private var hasWindowModule = false
 
     private val fpsCounter = FpsCounter()
     private val deltaTimer = ElapsedTime()
@@ -32,11 +30,11 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
      */
     override fun create(): ShapedEngine {
         //not a precisely good idea to have more than one engine...
-        if (Shaped.hasCreatedEngine)
+        if (Shaped.Engine.hasCreatedEngine)
             throw IllegalStateException("Can't have more than one engine running per program")
 
         //tell globally that we have one engine running
-        Shaped.hasCreatedEngine = true
+        Shaped.Engine.hasCreatedEngine = true
 
         stageManager = ShapedStageManager()
         addModule(stageManager, ModulePriority.MEDIUM)
@@ -64,7 +62,7 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
      * @param exitCondition callback returning a boolean to be called every loop to determine if we need to exit, platform dependent
      */
     fun start(exitCondition: () -> Boolean = { true }): ShapedEngine {
-        while(!exitCondition() && !Shaped.closeRequested)
+        while(!exitCondition() && !Shaped.Engine.closeRequested)
             update()
 
         destroy()
@@ -82,13 +80,12 @@ object ShapedEngine : ShapedModular<ShapedEngine>() {
      * @param deltaTime ignored delta time (can be defaulted to zero)
      */
     override fun update(deltaTime: Float) {
-        Shaped.deltaTime = deltaTimer.seconds.toFloat() //calculate delta time
-        Shaped.fps = fpsCounter.fps
+        Shaped.Engine.deltaTime = deltaTimer.seconds.toFloat() //calculate delta time
+        Shaped.Engine.fps = fpsCounter.fps
 
         deltaTimer.reset() //reset back to zero
 
-        //update modules
-        updateModules(Shaped.deltaTime) //update all modules
+        updateModules(Shaped.Engine.deltaTime) //update all modules
         fpsCounter.update() //fps counting
     }
 

@@ -18,7 +18,6 @@ object IOUtil {
         return newBuffer
     }
 
-
     /**
      * Reads the specified resource and returns the raw data as a ByteBuffer.
      *

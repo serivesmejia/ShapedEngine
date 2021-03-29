@@ -10,7 +10,7 @@ import com.github.serivesmejia.engine.render.shape.ShapedShapeBuilder
 import com.github.serivesmejia.engine.render.texture.ShapedTextureLoader
 
 /**
- * Abstract class for handling multiplatform rendering
+ * Abstract class for handling multiplatform rendering.
  * Handles shape rendering, textures, background color...
  * @see ShapedShape2
  * @see ShapedShapeBuilder
