@@ -105,6 +105,13 @@ data class Vector3(
      */
     operator fun times(other: Vector3) = copy(x = x * other.x, y = y * other.y, z = z * other.z)
 
+    operator fun times(q: Quaternion) = Quaternion(
+        +x * q.w + y * q.z - z * q.y,
+        +y * q.w + z * q.x - x * q.z,
+        +z * q.w + x * q.y - y * q.x,
+        -x * q.x - y * q.y - z * q.z
+    )
+
     /**
      * Divides this vector by another vector and returns a copy
      * @param other vector to divide by

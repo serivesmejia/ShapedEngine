@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine.stage.behavior.common
 
+import com.github.serivesmejia.engine.common.math.geometry.Quaternion
 import com.github.serivesmejia.engine.common.math.geometry.Vector3
 import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
@@ -9,16 +10,21 @@ class TransformBehavior : ShapedBehavior() {
 
     var position = Vector3()
 
-    val absolutePosition: Vector3 get() {
-        return when (shapedObject.parent) {
-            is ShapedStage ->
-                position
+    val absolutePosition: Vector3 get() =
+        when (shapedObject.parent) {
             is ShapedObject ->
                 position + (shapedObject.parent as ShapedObject).transform.absolutePosition
-            else ->
-                Vector3()
+            else -> position
         }
-    }
+
+    var rotation = Quaternion()
+
+    val absoluteRotation: Quaternion get() =
+        when (shapedObject.parent) {
+            is ShapedObject ->
+                rotation + (shapedObject.parent as ShapedObject).transform.absoluteRotation
+            else -> rotation
+        }
 
     val isLocal get() = shapedObject.parent !is ShapedStage
 
@@ -26,11 +32,7 @@ class TransformBehavior : ShapedBehavior() {
 
     override fun update(deltaTime: Float) { }
 
-    fun translate(to: Vector3) {
-        position += to
-    }
-
-    fun translate(x: Float, y: Float, z: Float = 0f) {
+    fun translate(x: Float = 0f, y: Float = 0f, z: Float = 0f) {
         position += Vector3(x, y, z)
     }
 

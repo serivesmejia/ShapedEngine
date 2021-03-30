@@ -14,13 +14,12 @@ import com.github.serivesmejia.engine.stage.behavior.common.TransformBehavior
 class DefaultStage : ShapedStage("Stage-Default") {
 
     override fun init() {
-        val texture = Shaped.Graphics.loadTexture("/test.png")
+        //val texture = Shaped.Graphics.loadTexture("/test.png")
 
         Shaped.Graphics.run {
-            val rectShape = shapes.texturedRectangle(
+            val rectShape = shapes.rectangle(
                 Vector2(200f, 200f),
-                Size2(100f, 100f),
-                texture
+                Size2(100f, 100f)
             )
 
             renderer.addShape(rectShape)
