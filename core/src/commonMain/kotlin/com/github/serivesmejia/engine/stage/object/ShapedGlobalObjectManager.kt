@@ -49,10 +49,8 @@ class ShapedGlobalObjectManager(private val stageManager: ShapedStageManager) : 
     }
 
     override fun destroy(): ShapedGlobalObjectManager {
-        if(stageManager.currentStage != null) { //if our current stage is null, destroy the objects ourselves
-            for (obj in globalObjects) {
-                obj.destroy()
-            }
+        for (obj in globalObjects) {
+            removeGlobalObject(obj)
         }
 
         return this

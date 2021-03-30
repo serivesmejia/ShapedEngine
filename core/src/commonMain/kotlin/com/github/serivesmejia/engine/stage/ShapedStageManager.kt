@@ -48,7 +48,7 @@ class ShapedStageManager : ShapedModule<ShapedEngine> {
         stage.eventBus = eventBus
         stage.timerManager = timerManager
 
-        eventBus.register(stage)
+        eventBus.register(stage) //register this stage to the stagemanager event bus
         Shaped.fire(StageChangeEvent(currentStage, stage)) //fire a global StageChangeEvent
 
         currentStage = stage
@@ -56,6 +56,8 @@ class ShapedStageManager : ShapedModule<ShapedEngine> {
 
     override fun destroy(): ShapedStageManager {
         currentStage?.destroy()
+        globalObjectManager.destroy()
+
         return this
     }
 

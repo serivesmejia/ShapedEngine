@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine.stage.`object`.common
 
+import com.github.serivesmejia.engine.common.event.standard.WindowResizeEvent
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 import com.github.serivesmejia.engine.stage.behavior.common.TestBehavior
 
@@ -17,6 +18,10 @@ class GlobalObject : ShapedObject() {
         }
 
         +TestBehavior()
+
+        on<WindowResizeEvent> {
+            println("global resize!")
+        }
     }
 
     var frames = 0

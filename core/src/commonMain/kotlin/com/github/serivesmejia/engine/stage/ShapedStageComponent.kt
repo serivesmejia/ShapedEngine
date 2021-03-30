@@ -72,12 +72,21 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
         if(children.contains(child)) return
 
         if(child.isGlobal) {
-            child.eventBus = Shaped.globalEventBus
-        } else {
-            child.eventBus = eventBus
-        }
+            //if we're global, we need to use a new child of the global event bus instead
+            //since the child one passed to us from the stage manager, gets
+            //cleared every time we change to another stage
+            child.eventBus = ShapedEventBus().run {
+                Shaped.globalEventBus.addChild(this) //add as a child to the global one
+                this //return this to pass that to the child.eventBus
+            }
 
-        child.timerManager = timerManager
+            //same thing for the timer manager, we need an independent one.
+            child.timerManager = ShapedTimerManager()
+        } else {
+            //if we're not global, grab the ones from the stage manager
+            child.eventBus = eventBus
+            child.timerManager = timerManager
+        }
 
         for(subscriber in subscribers) {
             subscriber.register(child)

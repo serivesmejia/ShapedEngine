@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine.stage.`object`
 
+import com.github.serivesmejia.engine.common.timer.ShapedTimerManager
 import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.ShapedStageComponent
 import com.github.serivesmejia.engine.stage.behavior.ShapedBehavior
@@ -32,10 +33,14 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
     open fun init() {}
 
     override fun internalUpdate(deltaTime: Float) {
+        super.internalUpdate(deltaTime)
+
         if(::behaviorManager.isInitialized)
             behaviorManager.update(deltaTime)
 
-        super.internalUpdate(deltaTime)
+        //if we're global, we have our own, independent timerManager
+        //therefore, we need to update here manually
+        if(isGlobal) timerManager.update()
     }
 
     /**
