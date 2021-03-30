@@ -68,6 +68,8 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      * @param child the ShapedObject child to add to this component
      */
     override fun addChild(child: ShapedObject) {
+        if(children.contains(child)) return
+
         child.eventBus = eventBus
         child.timerManager = timerManager
 
@@ -88,7 +90,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
         for(subscriber in subscribers) {
             subscriber.unregister(child)
         }
-        child.destroy()
+        if(!child.isGlobal) child.destroy()
         super.removeChild(child)
     }
 
@@ -153,7 +155,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      *  +ShapedObject()
      * ```
      */
-    operator fun ShapedObject.unaryPlus() = addChild(this)
+    operator fun ShapedObject.unaryPlus() = this@ShapedStageComponent.addChild(this)
 
     /**
      * Removes a ShapedObject from this stage component,
@@ -162,7 +164,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      *  -ShapedObject()
      * ```
      */
-    operator fun ShapedObject.unaryMinus() = removeChild(this)
+    operator fun ShapedObject.unaryMinus() =  this@ShapedStageComponent.removeChild(this)
 
     /**
      * Adds a child ShapedObject to this stage component,
@@ -170,7 +172,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      * @param child the children ShapedObject to add
      * @param block the DSL block of code to run and build the object
      */
-    infix fun addChild(child: ShapedObject,
+    fun addChild(child: ShapedObject,
                  block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) {
         addChild(child)
         ShapedObjectDslBuilder(child, block).build()

@@ -1,6 +1,7 @@
 package com.github.serivesmejia.engine.stage.common
 
 import com.github.serivesmejia.engine.Shaped
+import com.github.serivesmejia.engine.common.dsl.shapedObject
 import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Size2
 import com.github.serivesmejia.engine.common.math.geometry.Vector2
@@ -10,9 +11,6 @@ import com.github.serivesmejia.engine.stage.`object`.common.TestObject
 class InitialStage : ShapedStage("Stage-Initial") {
 
     override fun init() {
-        addChild(TestObject()) {
-            + TestObject()
-        }
 
         val texture = Shaped.Graphics.loadTexture("/test.png")
 
@@ -29,6 +27,10 @@ class InitialStage : ShapedStage("Stage-Initial") {
             renderer.backgroundColor = Color4(127f, 255f, 100f)
 
             window.center()
+        }
+
+        + shapedObject {
+            + TestObject()
         }
     }
 

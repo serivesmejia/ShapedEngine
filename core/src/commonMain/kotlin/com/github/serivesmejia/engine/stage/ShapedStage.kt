@@ -30,7 +30,7 @@ open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponen
      */
     override fun destroy(): ShapedStage {
         for(child in children) {
-            child.destroy()
+            if(!child.isGlobal) child.destroy()
         }
 
         dispose()

@@ -9,6 +9,9 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
 
     private lateinit var behaviorManager: ShapedBehaviorManager
 
+    var isGlobal = false
+        internal set
+
     /**
      * Initializes this object.
      * User shouldn't manually call this function

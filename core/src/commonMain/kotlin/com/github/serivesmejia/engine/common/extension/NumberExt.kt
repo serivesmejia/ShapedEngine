@@ -27,7 +27,7 @@ val Int.color
 val Int.clipUpperZero get() = if(this > 0) this else 0
 
 /**
- * Converts an non-zero based Int index to zero based
+ * Converts a non-zero based Int index to zero based
  * (e.g a Array.size()), while assuring that the value
  * stays higher than zero to avoid out of bounds exceptions.
  */

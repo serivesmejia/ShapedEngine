@@ -26,8 +26,16 @@ object Shaped {
     /**
      * Registers a callback to the global event bus.
      * Shorthand for Shaped.globalEventBus.on
+     * @see ShapedEventBus.on
      */
     inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = globalEventBus.on(block)
+
+    /**
+     * Fires an event to the global event bus.
+     * Shorthand for Shaped.globalEventBus.fire
+     * @see ShapedEventBus.fire
+     */
+    fun fire(event: ShapedEvent) = globalEventBus.fire(event)
 
     object Engine {
 

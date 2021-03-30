@@ -27,13 +27,6 @@ abstract class ShapedStageComponentDslBuilder<T : ShapedStageComponent<*>>(val c
         addChild(obj)
     }
 
-    fun shapedObject(block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) {
-        val obj = ShapedObject()
-        objectBuilders.add(ShapedObjectDslBuilder(obj, block))
-
-        addChild(obj)
-    }
-
     inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = component.on(block)
 
     fun timeout(timeoutSecs: Double, block: (ShapedTimer) -> Unit) =

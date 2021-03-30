@@ -7,7 +7,6 @@ import com.github.serivesmejia.engine.render.texture.ShapedTextureLoader
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.stb.STBImage.*
 import org.lwjgl.system.MemoryStack
-import java.lang.Math.round
 import java.nio.ByteBuffer
 import kotlin.experimental.and
 import kotlin.math.roundToInt
