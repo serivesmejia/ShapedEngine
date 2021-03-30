@@ -12,7 +12,7 @@ abstract class ShapedContainer<C : HierarchyShapedComponent<C>> {
      * one, so any addition or deletion to this List won't affect the container.
      * Use addChild() or removeChild() to do so.
      */
-    val children get() = internalChildren.subList(0, internalChildren.size)
+    val children get() = internalChildren.toTypedArray<HierarchyShapedComponent<*>>()
 
     private val internalChildren = ArrayList<C>()
 

@@ -9,7 +9,9 @@ import com.github.serivesmejia.engine.render.opengl.shader.DefaultVertexShader
 import com.github.serivesmejia.engine.render.opengl.shader.ShapedShader
 import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.ShapedStageManager
+import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 import com.github.serivesmejia.engine.util.TimeUnit
+import com.github.serivesmejia.engine.stage.`object`.ShapedGlobalObjectManager
 import kotlinx.datetime.Clock
 
 /**
@@ -76,6 +78,22 @@ object Shaped {
          * @param stage the stage to change to
          */
         fun changeStage(stage: ShapedStage) = stageManager.changeStage(stage)
+
+        /**
+         * Adds a global object (persists through all
+         * stages & is not disposed until the game ends or
+         * it is manually removed).
+         * @param obj the object to add and make global
+         * @see ShapedGlobalObjectManager
+         */
+        fun addGlobalObject(obj: ShapedObject) = stageManager.globalObjectManager.addGlobalObject(obj)
+
+        /**
+         * Removes a global object.
+         * @param obj the object to remove and unmake global
+         * @see ShapedGlobalObjectManager
+         */
+        fun removeGlobalObject(obj: ShapedObject) = stageManager.globalObjectManager.removeGlobalObject(obj)
 
         /**
          * Request the engine to end

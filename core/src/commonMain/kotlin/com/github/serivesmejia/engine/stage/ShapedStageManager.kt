@@ -8,7 +8,7 @@ import com.github.serivesmejia.engine.common.modular.ShapedModule
 import com.github.serivesmejia.engine.common.timer.ShapedTimerManager
 import com.github.serivesmejia.engine.stage.`object`.ShapedGlobalObjectManager
 import com.github.serivesmejia.engine.stage.`object`.common.GlobalObject
-import com.github.serivesmejia.engine.stage.common.InitialStage
+import com.github.serivesmejia.engine.stage.common.DefaultStage
 
 class ShapedStageManager : ShapedModule<ShapedEngine> {
 
@@ -21,7 +21,7 @@ class ShapedStageManager : ShapedModule<ShapedEngine> {
     val timerManager = ShapedTimerManager()
 
     override fun create(): ShapedStageManager {
-        changeStage(InitialStage())
+        changeStage(DefaultStage())
 
         //add the event bus of this manager as a child to the global one
         Shaped.globalEventBus.addChild(eventBus)

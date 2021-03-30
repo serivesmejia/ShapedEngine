@@ -50,7 +50,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
         }
 
         for(child in children) { //updates all the children first
-            child.internalUpdate(deltaTime)
+            if(child is ShapedStageComponent) child.internalUpdate(deltaTime)
         }
 
         update(deltaTime) //then call update open function

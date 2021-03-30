@@ -5,8 +5,8 @@ import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 
 abstract class ShapedBehavior : ShapedLoopComponent {
 
-    lateinit var parent: ShapedObject
-    val parentStage get() = parent.parentStage
+    lateinit var shapedObject: ShapedObject
+    val parentStage get() = shapedObject.parentStage
 
     var created = false
         private set

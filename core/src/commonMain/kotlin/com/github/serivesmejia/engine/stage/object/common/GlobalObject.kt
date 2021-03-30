@@ -1,41 +1,22 @@
 package com.github.serivesmejia.engine.stage.`object`.common
 
-import com.github.serivesmejia.engine.common.event.standard.WindowResizeEvent
+import com.github.serivesmejia.engine.common.dsl.shapedObject
+import com.github.serivesmejia.engine.common.math.geometry.Vector3
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
-import com.github.serivesmejia.engine.stage.behavior.common.TestBehavior
 
 class GlobalObject : ShapedObject() {
 
     override fun init() {
-        println("create global object")
+        transform.position += Vector3(20f, 20f, 0f)
 
-        interval(3.0) {
-            println("global, my parent is $parent, parent stage is $parentStage")
-        }
+        println(transform.absolutePosition)
 
-        timeout(1.0) {
-            println("timeout global!")
-        }
-
-        +TestBehavior()
-
-        on<WindowResizeEvent> {
-            println("global resize!")
+        + shapedObject {
+            it.transform.position += Vector3(15f, 15f, 0f)
+            println(it.transform.absolutePosition)
         }
     }
 
-    var frames = 0
-
-    override fun update(deltaTime: Float) {
-        frames++
-        if(frames > 30) {
-            frames = 0
-            println("update global 30!")
-        }
-    }
-
-    override fun dispose() {
-        println("dispose global")
-    }
+    override fun update(deltaTime: Float) { }
 
 }

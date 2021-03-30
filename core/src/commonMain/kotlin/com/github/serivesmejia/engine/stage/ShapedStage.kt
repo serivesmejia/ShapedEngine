@@ -1,5 +1,7 @@
 package com.github.serivesmejia.engine.stage
 
+import com.github.serivesmejia.engine.stage.`object`.ShapedObject
+
 open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponent<ShapedStage>() {
 
     /**
@@ -30,7 +32,7 @@ open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponen
      */
     override fun destroy(): ShapedStage {
         for(child in children) {
-            if(!child.isGlobal) child.destroy()
+            if(child is ShapedObject && !child.isGlobal) child.destroy()
         }
 
         dispose()

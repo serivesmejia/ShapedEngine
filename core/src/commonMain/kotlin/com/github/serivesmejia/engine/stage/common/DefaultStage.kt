@@ -7,16 +7,14 @@ import com.github.serivesmejia.engine.common.event.standard.WindowResizeEvent
 import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Size2
 import com.github.serivesmejia.engine.common.math.geometry.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.Vector3
 import com.github.serivesmejia.engine.stage.ShapedStage
-import com.github.serivesmejia.engine.stage.`object`.common.TestObject
+import com.github.serivesmejia.engine.stage.behavior.common.TransformBehavior
 
-class InitialStage : ShapedStage("Stage-Initial") {
+class DefaultStage : ShapedStage("Stage-Default") {
 
     override fun init() {
-
         val texture = Shaped.Graphics.loadTexture("/test.png")
-
-        println("${texture.size}")
 
         Shaped.Graphics.run {
             val rectShape = shapes.texturedRectangle(
@@ -31,14 +29,12 @@ class InitialStage : ShapedStage("Stage-Initial") {
             window.center()
         }
 
-        + shapedObject {
-            + TestObject()
-        }
-
         on<WindowResizeEvent> {
-            Shaped.Engine.changeStage(shapedStage {
-                Shaped.Graphics.renderer.backgroundColor = Color4(25f, 100f, 100f)
-            })
+            Shaped.Engine.changeStage(
+                shapedStage {
+                    Shaped.Graphics.renderer.backgroundColor = Color4(25f, 100f, 100f)
+                }
+            )
         }
     }
 

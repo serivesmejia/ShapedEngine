@@ -5,6 +5,8 @@ import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.ShapedStageComponent
 import com.github.serivesmejia.engine.stage.behavior.ShapedBehavior
 import com.github.serivesmejia.engine.stage.behavior.ShapedBehaviorManager
+import com.github.serivesmejia.engine.stage.behavior.common.TransformBehavior
+import kotlin.reflect.KClass
 
 open class ShapedObject: ShapedStageComponent<ShapedObject>() {
 
@@ -12,6 +14,8 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
 
     var isGlobal = false
         internal set
+
+    val transform = TransformBehavior()
 
     /**
      * Initializes this object.
@@ -22,6 +26,8 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
 
         behaviorManager = ShapedBehaviorManager(this)
         behaviorManager.create()
+
+        addBehavior(transform)
 
         init()
         return this
@@ -101,10 +107,21 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
             return field
         }
 
-    fun addBehavior(behavior: ShapedBehavior) = behaviorManager.addBehavior(behavior)
-    fun removeBehavior(behavior: ShapedBehavior) = behaviorManager.removeBehavior(behavior)
-
     operator fun ShapedBehavior.unaryPlus() = addBehavior(this)
     operator fun ShapedBehavior.unaryMinus() = removeBehavior(this)
+
+    fun addBehavior(behavior: ShapedBehavior) = behaviorManager.addBehavior(behavior)
+
+    fun removeBehavior(behavior: ShapedBehavior) = behaviorManager.removeBehavior(behavior)
+
+    fun <B : ShapedBehavior> removeBehavior(behaviorClass: KClass<B>) =
+        behaviorManager.removeBehavior(behaviorClass)
+
+    inline fun <reified B : ShapedBehavior> removeBehavior() = removeBehavior(B::class)
+
+    fun <B : ShapedBehavior> getBehavior(clazz: KClass<out B>) = behaviorManager.getBehavior(clazz)
+
+    inline fun <reified B : ShapedBehavior> getBehavior() =
+        getBehavior(B::class) ?: throw NoSuchElementException("Behavior ${B::class} is not part of ${this::class}")
 
 }

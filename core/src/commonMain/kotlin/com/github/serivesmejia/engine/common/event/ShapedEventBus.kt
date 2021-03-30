@@ -29,7 +29,7 @@ class ShapedEventBus : HierarchyShapedComponent<ShapedEventBus>, ShapedContainer
             it(event)
         }
         for(child in children) {
-            child.fire(event)
+            if(child is ShapedEventBus) child.fire(event)
         }
     }
 
