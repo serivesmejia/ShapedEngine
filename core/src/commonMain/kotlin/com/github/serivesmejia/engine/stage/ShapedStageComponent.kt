@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine.stage
 
+import com.github.serivesmejia.engine.Shaped
 import com.github.serivesmejia.engine.common.HierarchyShapedComponent
 import com.github.serivesmejia.engine.common.ShapedContainer
 import com.github.serivesmejia.engine.common.dsl.stage.builder.ShapedObjectDslBuilder
@@ -70,7 +71,12 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     override fun addChild(child: ShapedObject) {
         if(children.contains(child)) return
 
-        child.eventBus = eventBus
+        if(child.isGlobal) {
+            child.eventBus = Shaped.globalEventBus
+        } else {
+            child.eventBus = eventBus
+        }
+
         child.timerManager = timerManager
 
         for(subscriber in subscribers) {
