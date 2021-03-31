@@ -188,7 +188,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      * @param block the DSL block of code to run and build the object
      */
     fun addChild(child: ShapedObject,
-                 block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) {
+                 block: ShapedObject.() -> Unit) {
         addChild(child)
         ShapedObjectDslBuilder(child, block).build()
     }

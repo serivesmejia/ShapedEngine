@@ -9,6 +9,7 @@ import com.github.serivesmejia.engine.common.math.geometry.Size2
 import com.github.serivesmejia.engine.common.math.geometry.Vector2
 import com.github.serivesmejia.engine.common.math.geometry.Vector3
 import com.github.serivesmejia.engine.stage.ShapedStage
+import com.github.serivesmejia.engine.stage.`object`.common.GlobalObject
 import com.github.serivesmejia.engine.stage.behavior.common.TransformBehavior
 
 class DefaultStage : ShapedStage("Stage-Default") {
@@ -32,6 +33,9 @@ class DefaultStage : ShapedStage("Stage-Default") {
             Shaped.Engine.changeStage(
                 shapedStage {
                     Shaped.Graphics.renderer.backgroundColor = Color4(25f, 100f, 100f)
+                    addChild(GlobalObject()) {
+                        + shapedObject { }
+                    }
                 }
             )
         }

@@ -10,7 +10,7 @@ class ShapedDslStage(
 
     //placeholder this() call, can't access "this" right now so we'll redefine builder later
     constructor(name: String = "Stage-Unknown",
-                block: ShapedStageDslBuilder.(ShapedStage) -> Unit) : this(name, placeholderBuilder) {
+                block: ShapedStage.() -> Unit) : this(name, placeholderBuilder) {
         builder = ShapedStageDslBuilder(this, block) //redefine builder with "this" object
     }
 

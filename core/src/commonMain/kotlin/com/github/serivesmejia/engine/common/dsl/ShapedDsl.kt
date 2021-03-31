@@ -8,6 +8,6 @@ import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 
 fun shapedStage(name: String = "Stage-Unknown",
-                block: ShapedStageDslBuilder.(ShapedStage) -> Unit) = ShapedDslStage(name, block)
+                block: ShapedStage.() -> Unit) = ShapedDslStage(name, block)
 
-fun shapedObject(block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) = ShapedDslObject(block)
+fun shapedObject(block: ShapedObject.() -> Unit) = ShapedDslObject(block)

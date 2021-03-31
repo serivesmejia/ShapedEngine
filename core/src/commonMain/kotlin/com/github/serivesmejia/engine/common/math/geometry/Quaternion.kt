@@ -6,11 +6,11 @@ import kotlin.math.*
 class Quaternion {
 
     companion object {
-        fun fromDegrees(roll: Float = 0f, pitch: Float = 0f, yaw: Float = 0f) =
+        fun fromDegrees(yaw: Float = 0f, roll: Float = 0f, pitch: Float = 0f) =
             Quaternion(
+                yaw.toRadians().toFloat(),
                 roll.toRadians().toFloat(),
-                pitch.toRadians().toFloat(),
-                yaw.toRadians().toFloat()
+                pitch.toRadians().toFloat()
             )
     }
 
@@ -43,19 +43,30 @@ class Quaternion {
         )
     }
 
-    constructor(roll: Float, pitch: Float = 0f, yaw: Float = 0f) {
-        val cosYaw = yaw.cos()
-        val sinYaw = yaw.sin()
-        val cosPitch = pitch.cos()
-        val sinPitch = pitch.sin()
-        val cosRoll = roll.cos()
-        val sinRoll = roll.cos()
+    constructor(yaw: Float = 0f, roll: Float = 0f, pitch: Float = 0f) {
+        var angle = yaw * 0.5f
+
+        val sinY = sin(angle)
+        val cosY = cos(angle)
+
+        angle = roll * 0.5f
+        val sinR = sin(angle)
+        val cosR = cos(angle)
+
+        angle = pitch * 0.5f
+        val sinP = sin(angle)
+        val cosP = cos(angle)
+
+        val cosYR = cosY * cosR
+        val sinYR = sinY * sinR
+        val cosYsinR = cosY * sinR
+        val sinYcosR = sinY * cosR
 
         put(
-            cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw,
-            cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw,
-            sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw,
-            cosRoll * cosPitch * cosYaw + sinRoll * sinPitch * sinYaw
+            cosYR * cosP - sinYR * sinP,
+            cosYR * sinP + sinYR * cosP,
+            sinYcosR * cosP + cosYsinR * sinP,
+            cosYsinR * cosP - sinYcosR * sinP
         )
     }
 

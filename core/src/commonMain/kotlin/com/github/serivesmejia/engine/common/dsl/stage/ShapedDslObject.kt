@@ -8,7 +8,7 @@ class ShapedDslObject(
 ) : ShapedObject() {
 
     //placeholder this() call, can't access "this" right now so we'll redefine builder later
-    constructor(block: ShapedObjectDslBuilder.(ShapedObject) -> Unit) : this(placeholderBuilder) {
+    constructor(block: ShapedObject.() -> Unit) : this(placeholderBuilder) {
         builder = ShapedObjectDslBuilder(this, block) //redefine builder with "this" object
     }
 

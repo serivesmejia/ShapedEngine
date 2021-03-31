@@ -10,16 +10,16 @@ import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 class GlobalObject : ShapedObject() {
 
     override fun init() {
-        transform.position = Vector3(20f, 20f, 0f)
-        transform.rotation = Quaternion.fromDegrees(60f)
+        transform.position = Vector3(20f, 20f)
+        transform.rotation = Quaternion.fromDegrees(40f)
 
-        println("${transform.absolutePosition}, ${transform.rotation.angle.toDegrees()}")
+        println("${transform.absolutePosition}, ${transform.absoluteRotation.angle}")
 
         + shapedObject {
-            it.transform.position = Vector3(15f, 15f, 0f)
-            it.transform.rotation = Quaternion.fromDegrees(20f)
+            transform.position = Vector3(15f, 15f)
+            transform.rotation = Quaternion.fromDegrees(20f)
 
-            println("${it.transform.absolutePosition}, ${it.transform.rotation.angle.toDegrees()}")
+            println("${transform.absolutePosition}, ${transform.absoluteRotation.angle}")
         }
     }
 

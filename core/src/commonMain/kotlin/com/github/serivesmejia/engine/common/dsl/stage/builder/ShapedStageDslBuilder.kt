@@ -5,18 +5,13 @@ import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 
 class ShapedStageDslBuilder(
     private val stage: ShapedStage,
-    private val block: ShapedStageDslBuilder.(ShapedStage) -> Unit
+    private val block: ShapedStage.() -> Unit
 ) : ShapedStageComponentDslBuilder<ShapedStage>(stage) {
 
-    constructor(block: ShapedStageDslBuilder.(ShapedStage) -> Unit) : this(ShapedStage(), block)
-
-    override fun addChild(obj: ShapedObject) = stage.addChild(obj)
-    override fun removeChild(obj: ShapedObject) = stage.removeChild(obj)
+    constructor(block: ShapedStage.() -> Unit) : this(ShapedStage(), block)
 
     override fun build(): ShapedStage {
-        block(this, stage)
-        buildObjects()
-
+        block(stage)
         return stage
     }
 
