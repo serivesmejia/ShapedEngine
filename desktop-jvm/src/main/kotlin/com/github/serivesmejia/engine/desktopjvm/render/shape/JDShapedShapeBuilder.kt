@@ -3,7 +3,7 @@ package com.github.serivesmejia.engine.desktopjvm.render.shape
 import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.math.geometry.Triangle2
-import com.github.serivesmejia.engine.common.math.geometry.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.position.Vector2
 import com.github.serivesmejia.engine.render.opengl.shader.ShapedShader
 import com.github.serivesmejia.engine.render.texture.ShapedTexture
 import com.github.serivesmejia.engine.render.shape.ShapedShape2

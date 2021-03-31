@@ -1,6 +1,8 @@
-package com.github.serivesmejia.engine.common.math.geometry
+package com.github.serivesmejia.engine.common.math.geometry.position
 
-import com.github.serivesmejia.engine.common.math.Math.toRadians
+import com.github.serivesmejia.engine.common.math.*
+import com.github.serivesmejia.engine.common.math.geometry.rotation.Axis
+import com.github.serivesmejia.engine.common.math.geometry.rotation.Quaternion
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
@@ -17,12 +19,6 @@ data class Vector3(
     var y: Float = 0f,
     var z: Float = 0f,
 ) {
-    /**
-     * Enum for the different axes of rotation for 3D space
-     */
-    enum class Axis {
-        X, Y, Z
-    }
 
     /**
      * Returns the magnitude of this Vector (uses Euclidean distance formula)
@@ -57,6 +53,17 @@ data class Vector3(
                 z = z
             )
         }
+    }
+
+    val normalized: Vector3
+        get() {
+        var length = x * x + y * y + z * z
+
+        if(length != 1f && length != 0f) {
+            length = 1.0f / sqrt(length)
+            return Vector3(x * length, y * length, z * length)
+        }
+        return copy()
     }
 
     /**

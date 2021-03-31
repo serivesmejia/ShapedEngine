@@ -1,6 +1,6 @@
-package com.github.serivesmejia.engine.common.math.geometry
+package com.github.serivesmejia.engine.common.math.geometry.position
 
-import com.github.serivesmejia.engine.common.math.Math.toRadians
+import com.github.serivesmejia.engine.common.math.*
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot

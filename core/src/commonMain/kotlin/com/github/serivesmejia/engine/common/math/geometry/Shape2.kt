@@ -1,5 +1,7 @@
 package com.github.serivesmejia.engine.common.math.geometry
 
+import com.github.serivesmejia.engine.common.math.geometry.position.Vector2
+
 interface Shape2 {
     val position: Vector2
     val size: Size2

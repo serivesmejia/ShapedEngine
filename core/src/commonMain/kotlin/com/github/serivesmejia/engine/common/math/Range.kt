@@ -1,7 +1,7 @@
 package com.github.serivesmejia.engine.common.math
 
-import com.github.serivesmejia.engine.common.math.geometry.Vector2
-import com.github.serivesmejia.engine.common.math.geometry.Vector3
+import com.github.serivesmejia.engine.common.math.geometry.position.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.position.Vector3
 
 /**
  * Utility functions for range-related

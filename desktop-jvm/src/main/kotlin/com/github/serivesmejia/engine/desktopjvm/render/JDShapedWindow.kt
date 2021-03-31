@@ -2,7 +2,7 @@ package com.github.serivesmejia.engine.desktopjvm.render
 
 import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.math.geometry.Size2
-import com.github.serivesmejia.engine.common.math.geometry.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.position.Vector2
 import com.github.serivesmejia.engine.render.ShapedWindow
 import org.joml.Matrix4f
 import org.lwjgl.BufferUtils
