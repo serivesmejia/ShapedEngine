@@ -31,40 +31,67 @@ data class Vector3(
      * @param angle angle in degrees to rotate the vector counter clockwise
      * @param axis  the axis by which the vector is to be rotated in relation towards
      */
-    fun rotateBy(angle: Float, axis: Axis): Vector3 {
-        val angleInRadians = angle.toRadians()
-
-        val (cosA, sinA) = cos(angleInRadians).toFloat() to sin(angleInRadians).toFloat()
-
-        return when(axis) {
-            Axis.X -> Vector3(
-                x = x,
-                y = y * cosA - z * sinA,
-                z = y * sinA + z * cosA,
-            )
-            Axis.Y -> Vector3(
-                x = x * cosA + z * sinA,
-                y = y,
-                z = -x * sinA + z * cosA,
-            )
-            Axis.Z -> Vector3(
-                x = x * cosA - y * sinA,
-                y = x * sinA + y * cosA,
-                z = z
-            )
-        }
+    fun rotateBy(angle: Float, axis: Axis): Vector3 = when(axis) {
+        Axis.X -> rotateBy(angle, 0f, 0f)
+        Axis.Z -> rotateBy(0f, angle, 0f)
+        Axis.Y -> rotateBy(0f, 0f, angle)
     }
+
+    /**
+     * Rotate this Vector in R^3 by the given Axes
+     *
+     * @param angleX angle of the X axis in degrees to rotate the vector counter clockwise
+     * @param angleY angle of the Y axis in degrees to rotate the vector counter clockwise
+     * @param angleZ angle of the Z axis in degrees to rotate the vector counter clockwise
+     */
+    fun rotateBy(angleX: Float, angleY: Float, angleZ: Float): Vector3 {
+        var x = this.x
+        var y = this.y
+        var z = this.z
+
+        if(angleX != 0f) {
+            val angleInRadians = angleX.toRadians()
+            val (cosA, sinA) = cos(angleInRadians) to sin(angleInRadians)
+
+            y = y * cosA - z * sinA
+            z = y * sinA + z * cosA
+        }
+
+        if(angleY != 0f) {
+            val angleInRadians = angleY.toRadians()
+            val (cosA, sinA) = cos(angleInRadians) to sin(angleInRadians)
+
+            x = x * cosA + z * sinA
+            z = -x * sinA + z * cosA
+        }
+
+        if(angleZ != 0f) {
+            val angleInRadians = angleZ.toRadians()
+            val (cosA, sinA) = cos(angleInRadians) to sin(angleInRadians)
+
+            x = x * cosA - y * sinA
+            y = x * sinA + y * cosA
+        }
+
+        return Vector3(x, y, z)
+    }
+
+    /**
+     * Rotates this Vector3 by the euler angles of a Quaternion
+     * @param q the quaternion to rotate this Vector3 by
+     */
+    fun rotateBy(q: Quaternion) = rotateBy(q.euler.pitch, q.euler.yaw, q.euler.roll)
 
     val normalized: Vector3
         get() {
-        var length = x * x + y * y + z * z
+            var length = x * x + y * y + z * z
 
-        if(length != 1f && length != 0f) {
-            length = 1.0f / sqrt(length)
-            return Vector3(x * length, y * length, z * length)
+            if(length != 1f && length != 0f) {
+                length = 1.0f / sqrt(length)
+                return Vector3(x * length, y * length, z * length)
+            }
+            return copy()
         }
-        return copy()
-    }
 
     /**
      * Scalar projection of this vector onto another vector
@@ -112,13 +139,6 @@ data class Vector3(
      */
     operator fun times(other: Vector3) = copy(x = x * other.x, y = y * other.y, z = z * other.z)
 
-    operator fun times(q: Quaternion) = Quaternion(
-        +x * q.w + y * q.z - z * q.y,
-        +y * q.w + z * q.x - x * q.z,
-        +z * q.w + x * q.y - y * q.x,
-        -x * q.x - y * q.y - z * q.z
-    )
-
     /**
      * Divides this vector by another vector and returns a copy
      * @param other vector to divide by
@@ -145,7 +165,6 @@ data class Vector3(
      * Positives the values of this vector
      */
     operator fun unaryPlus() = copy(x = +x, y = +y, z = +z)
-
 
     /**
      * Negates the values of this vector

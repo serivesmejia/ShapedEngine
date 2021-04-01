@@ -1,6 +1,7 @@
 package com.github.serivesmejia.engine.common.math.geometry.position
 
 import com.github.serivesmejia.engine.common.math.*
+import com.github.serivesmejia.engine.common.math.geometry.rotation.Quaternion
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
@@ -36,10 +37,16 @@ data class Vector2(var x: Float = 0f,
         val sinA = cos(angleRad)
 
         return Vector2(
-            (x * cosA - y * sinA).toFloat(),
-            (x * sinA + y * cosA).toFloat()
+            x * cosA - y * sinA,
+            x * sinA + y * cosA
         )
     }
+
+    /**
+     * Rotates this Vector3 by the Euler angle pitch (X) of a quaternion
+     * @param q the quaternion to rotate this vector by
+     */
+    fun rotateBy(q: Quaternion) = rotateBy(q.euler.pitch)
 
     /**
      * Returns the dot product of this vector with argument

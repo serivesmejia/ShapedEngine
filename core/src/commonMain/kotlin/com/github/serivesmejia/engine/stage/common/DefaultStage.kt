@@ -31,9 +31,6 @@ class DefaultStage : ShapedStage("Stage-Default") {
             Shaped.Engine.changeStage(
                 shapedStage {
                     Shaped.Graphics.renderer.backgroundColor = Color4(25f, 100f, 100f)
-                    addChild(GlobalObject()) {
-                        + shapedObject { }
-                    }
                 }
             )
         }

@@ -6,13 +6,6 @@ import kotlin.math.*
 
 class Quaternion {
 
-    companion object {
-        fun fromDegrees(pitch: Float = 0f, yaw: Float = 0f, roll: Float = 0f) =
-            fromDegrees(EulerAngles(pitch, yaw, roll))
-
-        fun fromDegrees(eulerAngles: EulerAngles) = Quaternion(eulerAngles.toRadians())
-    }
-
     var x = 0f
         private set
     var y = 0f
@@ -33,7 +26,7 @@ class Quaternion {
 
     /**
      * Creates this quaternion from the values
-     * specified by an angle and a axis of rotation.
+     * specified by an angle in degrees and a axis of rotation.
      *
      * @param angle the angle to rotate (in radians)
      * @param axis the axis of rotation
@@ -44,7 +37,7 @@ class Quaternion {
         if(normAxis.x == 0f && normAxis.y == 0f && normAxis.z == 0f) {
             loadIdentity()
         } else {
-            val halfAngle = angle * 0.5f
+            val halfAngle = angle.toRadians() * 0.5f
             val sin = sin(halfAngle)
 
             w = cos(halfAngle)
@@ -55,18 +48,22 @@ class Quaternion {
     }
 
     /**
-     * Creates this Quaternion from EulerAngles, in radians
+     * Creates this Quaternion from EulerAngles, in degrees
      * @param eulerAngles the EulerAngles in radians to create this quaternion from
      */
     constructor(eulerAngles: EulerAngles) : this(eulerAngles.pitch, eulerAngles.yaw, eulerAngles.roll)
 
     /**
-     * Creates this Quaternion from euler angles: pitch, yaw & roll
+     * Creates this Quaternion from euler angles in degrees
+     * @param pitch the pitch (X) euler angle to create this quaternion from
+     * @param yaw the yaw (Y) euler angle to create this quaternion from
+     * @param roll the roll (Z) euler angle to create this quaternion from
      */
     constructor(pitch: Float = 0f, yaw: Float = 0f, roll: Float = 0f) {
-        fromAngles(pitch, yaw, roll)
+        fromAngles(pitch.toRadians(), yaw.toRadians(), roll.toRadians())
     }
 
+    //set the values of this quaternion for euler angles in radians
     private fun fromAngles(xAngle: Float, yAngle: Float, zAngle: Float) {
         var angle = zAngle * 0.5f
         val sinZ = sin(angle)
@@ -86,10 +83,10 @@ class Quaternion {
         val sinYXcosZ = sinY * cosZ
 
         put(
-            cosYXcosZ * sinX + sinYXsinZ * cosX,
-            sinYXcosZ * cosX + cosYXsinZ * sinX,
-            cosYXsinZ * cosX - sinYXcosZ * sinX,
-            cosYXcosZ * cosX - sinYXsinZ * sinX
+            (cosYXcosZ * sinX + sinYXsinZ * cosX),
+            (sinYXcosZ * cosX + cosYXsinZ * sinX),
+            (cosYXsinZ * cosX - sinYXcosZ * sinX),
+            (cosYXcosZ * cosX - sinYXsinZ * sinX)
         )
 
         normalizeLocal()
@@ -116,49 +113,49 @@ class Quaternion {
 
     /**
      * This quaternion converted to Euler
-     * rotation angles (pitch, yaw, roll)
+     * rotation angles in degrees (pitch, yaw, roll)
      */
     val euler: EulerAngles
         get() {
-        //if we already performed calculations before,
-        //return them to improve performance
-        if(cachedEuler != null) return cachedEuler!!
+            // if we already performed calculations before,
+            // return them to improve performance
+            if(cachedEuler != null) return cachedEuler!!.toDegrees()
 
-        val sqw = w * w
-        val sqx = x * x
-        val sqy = y * y
-        val sqz = z * z
+            val sqw = w * w
+            val sqx = x * x
+            val sqy = y * y
+            val sqz = z * z
 
-        val unit = sqx + sqy + sqz + sqw
-        val test = x * y + z * w
+            val unit = sqx + sqy + sqz + sqw
+            val test = x * y + z * w
 
-        //save the result in a cached variable so that we only need to perform this once
-        cachedEuler = when {
-            test > 0.499 * unit -> { // singularity at north pole
-                EulerAngles(
-                    0f,
-                    2f * atan2(x, w),
-                    HALF_PI.toFloat()
-                )
+            //save the result in a cached variable so that we only need to perform this once
+            cachedEuler = when {
+                test > 0.499 * unit -> { // singularity at north pole
+                    EulerAngles(
+                        0f,
+                        2f * atan2(x, w),
+                        HALF_PI.toFloat(),
+                    )
+                }
+                test < -0.499 * unit -> { //singularity at south pole
+                    EulerAngles(
+                        0f,
+                        -2f * atan2(x, w),
+                        -HALF_PI.toFloat(),
+                    )
+                }
+                else -> {
+                    EulerAngles(
+                        atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw), // pitch
+                        atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw), // yaw
+                        asin(2 * test / unit) // roll
+                    )
+                }
             }
-            test < 0.499 * unit -> { //singularity at south pole
-                EulerAngles(
-                    0f,
-                    -2f * atan2(x, w),
-                    -HALF_PI.toFloat()
-                )
-            }
-            else -> {
-                EulerAngles(
-                    atan2(2 * x * w - 2 * y * 2, -sqx + sqy - sqz + sqw), // pitch
-                    atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw), // yaw
-                    asin(2 * test / unit) // roll
-                )
-            }
+
+            return cachedEuler!!.toDegrees()
         }
-
-        return cachedEuler!!
-    }
 
     /**
      * The norm of this quaternion. This is the
@@ -166,8 +163,18 @@ class Quaternion {
      */
     val norm get() = w * w + x * x + y * y + z * z
 
+    /**
+     * Sums another quaternion to this quaternion
+     */
     operator fun plus(q: Quaternion) = Quaternion(
         x + q.x, y + q.y, z + q.z, w + q.w
+    )
+
+    /**
+     * Subtracts another quaternion from this quaternion
+     */
+    operator fun minus(q: Quaternion) = Quaternion(
+        x - q.x, y - q.y, z - q.z, w - q.w
     )
 
     /**
