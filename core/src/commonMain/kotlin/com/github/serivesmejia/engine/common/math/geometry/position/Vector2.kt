@@ -139,4 +139,6 @@ data class Vector2(var x: Float = 0f,
         Vector3(x, y, 0f)
     }
 
+    companion object
+
 }

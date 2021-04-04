@@ -4,25 +4,21 @@ import com.github.serivesmejia.engine.common.math.*
 import com.github.serivesmejia.engine.common.math.geometry.position.Vector3
 import kotlin.math.*
 
-class Quaternion {
-
-    var x = 0f
-        private set
-    var y = 0f
-        private set
-    var z = 0f
-        private set
-    var w = 0f
-        private set
-
-    constructor()
-
-    constructor(x: Float, y: Float, z: Float, w: Float) {
-        this.x = x
-        this.y = y
-        this.z = z
-        this.w = w
-    }
+/**
+ * A quaternion in the form of w + xi + yj + zk
+ *                             w+x\hat{i}+y\hat{j}+z\hat{k}
+ *
+ * @param w is the real component
+ * @param x is the i_hat component
+ * @param y is the j_hat component
+ * @param z is the z_hat component
+ */
+data class Quaternion(
+    private var w: Float = 0f,
+    private var x: Float = 0f,
+    private var y: Float = 0f,
+    private var z: Float = 0f,
+) {
 
     /**
      * Creates this quaternion from the values
@@ -30,8 +26,10 @@ class Quaternion {
      *
      * @param angle the angle to rotate (in radians)
      * @param axis the axis of rotation
+     *
+     * q=e^{\frac{\Theta}{2}(x\hat{i}+y\hat{j}+z\hat{k})}=cos{\frac{\Theta}{2}}+(x\hat{i}+y\hat{j}+z\hat{k})sin{\frac{\Theta}{2}}
      */
-    constructor(angle: Float, axis: Vector3) {
+    constructor(angle: Float, axis: Vector3) : this() {
         val normAxis = axis.normalized
 
         if(normAxis.x == 0f && normAxis.y == 0f && normAxis.z == 0f) {
@@ -51,7 +49,7 @@ class Quaternion {
      * Creates this Quaternion from EulerAngles, in degrees
      * @param eulerAngles the EulerAngles in radians to create this quaternion from
      */
-    constructor(eulerAngles: EulerAngles) : this(eulerAngles.pitch, eulerAngles.yaw, eulerAngles.roll)
+    constructor(eulerAngles: EulerAngles) : this(pitch = eulerAngles.pitch, yaw = eulerAngles.yaw, roll = eulerAngles.roll)
 
     /**
      * Creates this Quaternion from euler angles in degrees
@@ -59,146 +57,195 @@ class Quaternion {
      * @param yaw the yaw (Y) euler angle to create this quaternion from
      * @param roll the roll (Z) euler angle to create this quaternion from
      */
-    constructor(pitch: Float = 0f, yaw: Float = 0f, roll: Float = 0f) {
+    constructor(pitch: Float, yaw: Float, roll: Float) : this() {
         fromAngles(pitch.toRadians(), yaw.toRadians(), roll.toRadians())
     }
 
     //set the values of this quaternion for euler angles in radians
-    private fun fromAngles(xAngle: Float, yAngle: Float, zAngle: Float) {
-        var angle = zAngle * 0.5f
-        val sinZ = sin(angle)
-        val cosZ = cos(angle)
+    /**
+     *  (cos{\frac{\phi}{2}}cos{\frac{\theta}{2}}cos{\frac{\psi}{2}}+sin{\frac{\phi}{2}}sin{\frac{\theta}{2}}sin{\frac{\psi}{2}})
+     * +(sin{\frac{\phi}{2}}cos{\frac{\theta}{2}}cos{\frac{\psi}{2}}-cos{\frac{\phi}{2}}sin{\frac{\theta}{2}}sin{\frac{\psi}{2}})\hat{i}
+     * +(cos{\frac{\phi}{2}}sin{\frac{\theta}{2}}cos{\frac{\psi}{2}}+sin{\frac{\phi}{2}}cos{\frac{\theta}{2}}sin{\frac{\psi}{2}})\hat{j}
+     * +(cos{\frac{\phi}{2}}cos{\frac{\theta}{2}}sin{\frac{\psi}{2}}-sin{\frac{\phi}{2}}sin{\frac{\theta}{2}}cos{\frac{\psi}{2}})\hat{k}
+     */
+    private fun fromAngles(yaw: Float, pitch: Float, roll: Float) {
+        val (halfYaw, halfPitch, halfRoll) = Triple(
+            yaw * 0.5f,
+            pitch * 0.5f,
+            roll * 0.5f,
+        )
 
-        angle = yAngle * 0.5f
-        val sinY = sin(angle)
-        val cosY = cos(angle)
+        val (cosYaw, cosPitch, cosRoll) = Triple(
+            cos(halfYaw),
+            cos(halfPitch),
+            cos(halfRoll),
+        )
 
-        angle = xAngle * 0.5f
-        val sinX = sin(angle)
-        val cosX = cos(angle)
-
-        val cosYXcosZ = cosY * cosZ
-        val sinYXsinZ = sinY * sinZ
-        val cosYXsinZ = cosY * sinZ
-        val sinYXcosZ = sinY * cosZ
+        val (sinYaw, sinPitch, sinRoll) = Triple(
+            sin(halfYaw),
+            sin(halfPitch),
+            sin(halfRoll),
+        )
 
         put(
-            (cosYXcosZ * sinX + sinYXsinZ * cosX),
-            (sinYXcosZ * cosX + cosYXsinZ * sinX),
-            (cosYXsinZ * cosX - sinYXcosZ * sinX),
-            (cosYXcosZ * cosX - sinYXsinZ * sinX)
+            w = cosRoll * cosPitch * cosYaw + sinRoll * sinPitch * sinYaw,
+            x = sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw,
+            y = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw,
+            z = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw,
         )
 
         normalizeLocal()
     }
 
-    private fun put(x: Float, y: Float, z: Float, w: Float) {
+    private fun put(w: Float, x: Float, y: Float, z: Float) {
+        this.w = w
         this.x = x
         this.y = y
         this.z = z
-        this.w = w
     }
 
     private fun normalizeLocal() {
-        val n = norm.invSqrt()
+        val n = 1 / norm
         x *= n
         y *= n
         z *= n
         w *= n
     }
 
-    private fun loadIdentity() = put(0f, 0f, 0f, 1f)
-
-    private var cachedEuler: EulerAngles? = null
+    private fun loadIdentity() = put(w=1f, x=0f, y=0f, z=0f)
 
     /**
      * This quaternion converted to Euler
      * rotation angles in degrees (pitch, yaw, roll)
      */
-    val euler: EulerAngles
-        get() {
-            // if we already performed calculations before,
-            // return them to improve performance
-            if(cachedEuler != null) return cachedEuler!!.toDegrees()
+    val euler: EulerAngles by lazy { // utilize lazy initialization to perform calculation on first call and store for later use
+        val sqw = w * w
+        val sqx = x * x
+        val sqy = y * y
+        val sqz = z * z
 
-            val sqw = w * w
-            val sqx = x * x
-            val sqy = y * y
-            val sqz = z * z
+        val unit = sqx + sqy + sqz + sqw
+        val test = x * y + z * w
 
-            val unit = sqx + sqy + sqz + sqw
-            val test = x * y + z * w
-
-            //save the result in a cached variable so that we only need to perform this once
-            cachedEuler = when {
-                test > 0.499 * unit -> { // singularity at north pole
-                    EulerAngles(
-                        0f,
-                        2f * atan2(x, w),
-                        HALF_PI.toFloat(),
-                    )
-                }
-                test < -0.499 * unit -> { //singularity at south pole
-                    EulerAngles(
-                        0f,
-                        -2f * atan2(x, w),
-                        -HALF_PI.toFloat(),
-                    )
-                }
-                else -> {
-                    EulerAngles(
-                        atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw), // pitch
-                        atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw), // yaw
-                        asin(2 * test / unit) // roll
-                    )
-                }
+        when {
+            test > 0.499 * unit -> { // singularity at north pole
+                EulerAngles(
+                    0f,
+                    2f * atan2(x, w),
+                    HALF_PI.toFloat(),
+                )
             }
-
-            return cachedEuler!!.toDegrees()
-        }
+            test < -0.499 * unit -> { //singularity at south pole
+                EulerAngles(
+                    0f,
+                    -2f * atan2(x, w),
+                    -HALF_PI.toFloat(),
+                )
+            }
+            else -> {
+                EulerAngles(
+                    atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw), // pitch
+                    atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw), // yaw
+                    asin(2 * test / unit) // roll
+                )
+            }
+        }.toDegrees()
+    }
 
     /**
-     * The norm of this quaternion. This is the
-     * dot product of this quaternion with itself
+     * The norm of this quaternion. The norm of the quaternion is the square root of the conjugate multiplied by itself
+     *
+     * n(q)=\sqrt{\overline{q}q}=\sqrt{w^2+x^2+y^2+z^2}
+     *
+     * where \overline{q} is the conjugate of the quaternion q
      */
-    val norm get() = w * w + x * x + y * y + z * z
+    val norm by lazy { sqrt(w * w + x * x + y * y * z * z) }
+
+    /**
+     * The conjugate of this quaternion
+     *
+     * \overline{q}=w-x\hat{i}-y\hat{j}-z\hat{k}
+     */
+    val conjugate by lazy { copy(w = w, x = -x, y = -y, z = -z) }
 
     /**
      * Sums another quaternion to this quaternion
      */
-    operator fun plus(q: Quaternion) = Quaternion(
-        x + q.x, y + q.y, z + q.z, w + q.w
+    operator fun plus(q: Quaternion) = copy(
+        w = w + q.w,
+        x = x + q.x,
+        y = y + q.y,
+        z = z + q.z,
     )
 
     /**
      * Subtracts another quaternion from this quaternion
      */
-    operator fun minus(q: Quaternion) = Quaternion(
-        x - q.x, y - q.y, z - q.z, w - q.w
+    operator fun minus(q: Quaternion) = copy(
+        w = w - q.w,
+        x = x - q.x,
+        y = y - q.y,
+        z = z - q.z,
+    )
+
+    /**
+     * Multiplies another quaternion to this quaternion
+     */
+    operator fun times(q: Quaternion) = run {
+        val (a1, a2, a3, a4) = this
+        val (b1, b2, b3, b4) = q
+
+        copy(
+            w = a1 * b1 - a2 * b2 - a3 * b3 - a4 * b4,
+            x = a1 * b2 + a2 * b1 + a3 * b4 - a4 * b3,
+            y = a1 * b3 - a2 * b4 + a3 * b1 + a4 * b2,
+            z = a1 * b4 + a2 * b3 - a3 * b2 + a4 * b1,
+        )
+    }
+
+    /**
+     * Gives the inverse of this quaternion
+     */
+    val inverse by lazy {
+        conjugate.scale(1 / (norm * norm))
+    }
+
+    /**
+     * Scales every value of this quaternion
+     */
+    fun scale(scalar: Float) = copy(
+        w = w * scalar,
+        x = x * scalar,
+        y = y * scalar,
+        z = z * scalar,
     )
 
     /**
      * Positives this quaternion to a new quaternion
      */
-    operator fun unaryPlus() = Quaternion(+x, +y, +z, +w)
+    operator fun unaryPlus() = copy(w = +w, x = +x, y = +y, z = +z)
 
     /**
      * Negates this quaternion to a new quaternion
      */
-    operator fun unaryMinus() = Quaternion(-x, -y, -z, -w)
+    operator fun unaryMinus() = copy(w = -w, x = -x, y = -y, z = -z)
 
-    /**
-     * Returns a copy of this quaternion
-     */
-    fun clone() = +this
+    override fun toString() = "Quaternion(w=$w, x=$x, y=$y, z=$z, euler=$euler)"
 
-    override fun toString() = "Quaternion(x=$x, y=$y, z=$z, w=$w, euler=$euler)"
-
+    companion object {
+        val identity = Quaternion(w = 1f, x = 0f, y = 0f, z = 0f)
+    }
 }
 
 /**
  * Enum for the different axes of rotation for 3D space
  */
 enum class Axis {
-    X, Y, Z
+    X, Y, Z;
+
+    companion object {
+        val I_HAT = X
+        val J_HAT = Y
+        val K_HAT = Z
+    }
 }
