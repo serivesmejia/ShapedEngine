@@ -25,4 +25,5 @@ data class EulerAngles(val pitch: Float,
         roll.toRadians().toFloat()
     )
 
+    companion object
 }

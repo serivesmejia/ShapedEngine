@@ -34,4 +34,6 @@ data class Matrix4x4(
         }
 
     override val shape: MatrixShape = 4 by 4
+
+    companion object
 }

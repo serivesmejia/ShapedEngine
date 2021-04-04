@@ -170,4 +170,6 @@ data class Vector3(
      * Negates the values of this vector
      */
     operator fun unaryMinus() = copy(x = -x, y = -y, z = -z)
+
+    companion object
 }

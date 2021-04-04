@@ -25,4 +25,6 @@ data class Matrix3x3(
         }
 
     override val shape: MatrixShape = 3 by 3
+
+    companion object
 }

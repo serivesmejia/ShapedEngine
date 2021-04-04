@@ -18,4 +18,6 @@ data class Matrix2x2(
         }
 
     override val shape: MatrixShape = 2 by 2
+
+    companion object
 }
