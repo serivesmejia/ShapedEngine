@@ -1,11 +1,17 @@
 package com.github.serivesmejia.engine
 
+import com.github.serivesmejia.engine.common.event.ShapedEvent
+import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.render.ShapedRenderer
 import com.github.serivesmejia.engine.render.ShapedWindow
 import com.github.serivesmejia.engine.render.opengl.shader.DefaultFragmentShader
 import com.github.serivesmejia.engine.render.opengl.shader.DefaultVertexShader
 import com.github.serivesmejia.engine.render.opengl.shader.ShapedShader
+import com.github.serivesmejia.engine.stage.ShapedStage
+import com.github.serivesmejia.engine.stage.ShapedStageManager
+import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 import com.github.serivesmejia.engine.util.TimeUnit
+import com.github.serivesmejia.engine.stage.`object`.ShapedGlobalObjectManager
 import kotlinx.datetime.Clock
 
 /**
@@ -14,37 +20,90 @@ import kotlinx.datetime.Clock
 object Shaped {
 
     /**
-     * Tells whether the engine has been created or not
+     * Global event bus, parent of the
+     * event bus in ShapedStageManager.
      */
-    var hasCreatedEngine = false
-        internal set
+    val globalEventBus = ShapedEventBus()
 
     /**
-     * Tells whether the user requested
-     * to close with the end() function
+     * Registers a callback to the global event bus.
+     * Shorthand for Shaped.globalEventBus.on
+     * @see ShapedEventBus.on
      */
-    internal var closeRequested = false
-        private set
+    inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = globalEventBus.on(block)
 
     /**
-     * Difference of time between the last
-     * and current frame, in seconds
+     * Fires an event to the global event bus.
+     * Shorthand for Shaped.globalEventBus.fire
+     * @see ShapedEventBus.fire
      */
-    var deltaTime = 0.0f
-        internal set
+    fun fire(event: ShapedEvent) = globalEventBus.fire(event)
 
-    /**
-     * Current FPS of the engine loop
-     */
-    var fps = 0
-        internal set
+    object Engine {
 
-    /**
-     * Request the engine to end
-     */
-    fun end() {
-        closeRequested = true
+        /**
+         * The current stage manager being used
+         */
+        lateinit var stageManager: ShapedStageManager
+            internal set
+
+        /**
+         * Tells whether the engine has been created or not
+         */
+        var hasCreatedEngine = false
+            internal set
+
+        /**
+         * Tells whether the user requested
+         * to close with the end() function
+         */
+        internal var closeRequested = false
+            private set
+
+        /**
+         * Difference of time between the last
+         * and current frame, in seconds
+         */
+        var deltaTime = 0.0f
+            internal set
+
+        /**
+         * Current FPS of the engine loop
+         */
+        var fps = 0
+            internal set
+
+        /**
+         * Changes to another stage and destroys the old one
+         * @param stage the stage to change to
+         */
+        fun changeStage(stage: ShapedStage) = stageManager.changeStage(stage)
+
+        /**
+         * Adds a global object (persists through all
+         * stages & is not disposed until the game ends or
+         * it is manually removed).
+         * @param obj the object to add and make global
+         * @see ShapedGlobalObjectManager
+         */
+        fun addGlobalObject(obj: ShapedObject) = stageManager.globalObjectManager.addGlobalObject(obj)
+
+        /**
+         * Removes a global object.
+         * @param obj the object to remove and unmake global
+         * @see ShapedGlobalObjectManager
+         */
+        fun removeGlobalObject(obj: ShapedObject) = stageManager.globalObjectManager.removeGlobalObject(obj)
+
+        /**
+         * Request the engine to end
+         */
+        fun end() {
+            closeRequested = true
+        }
+
     }
+
 
     /**
      * System module for accessing multiple multiplatform utilities
@@ -130,6 +189,16 @@ object Shaped {
         val defaultShader: ShapedShader by lazy {
             shaders.loadShader(DefaultVertexShader, DefaultFragmentShader)
         }
+
+        /**
+         * Loads a texture from a resoruce file,
+         * platform-dependent call. Short-hand for
+         * the texture loader in Shaped.Graphics.renderer
+         *
+         * @param resourcePath the absolute path to the texture resource
+         * @return the loaded texture from the resource
+         */
+        fun loadTexture(resourcePath: String) = renderer.textureLoader.loadTexture(resourcePath)
 
     }
 

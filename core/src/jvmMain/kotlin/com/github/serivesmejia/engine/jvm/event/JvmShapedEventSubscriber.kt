@@ -22,7 +22,6 @@ class JvmShapedEventSubscriber : ShapedEventSubscriber() {
     private val objectCallbacks = mutableMapOf<Any, MutableList<(ShapedEvent) -> Unit>>()
 
     override fun register(obj: Any) {
-        println("register $obj")
         //create event callbacks list for this obj
         val eventCallbacks = mutableListOf<(ShapedEvent) -> Unit>()
 
@@ -35,15 +34,17 @@ class JvmShapedEventSubscriber : ShapedEventSubscriber() {
             for(annotation in method.annotations) {
                 //if this annotation is a Subscribe annotation
                 if(annotation is Subscribe) {
-                    if(method.parameterTypes.size != 1 || method.parameterTypes[0] !is Class<*>)
-                        continue //we need exactly one method parameter of type "class"
+                    if(method.parameterTypes.size != 1)
+                        continue //we need exactly one method parameter
 
                     //get the first parameter which should be a class
                     val eventClass = method.parameterTypes[0]
 
                     //create block to call method when event is fired
                     val block: (ShapedEvent) -> Unit = {
-                        method.invoke(obj, it)
+                        try {
+                            method.invoke(obj, it)
+                        } catch(ignored: IllegalArgumentException) { } //if we fail to invoke the method by the arguments, ignore it
                     }
                     //add block to the callbacks list
                     eventCallbacks.add(block)

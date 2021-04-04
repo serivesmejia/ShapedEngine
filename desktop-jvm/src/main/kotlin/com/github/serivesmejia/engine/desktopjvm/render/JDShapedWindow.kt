@@ -2,8 +2,9 @@ package com.github.serivesmejia.engine.desktopjvm.render
 
 import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.math.geometry.Size2
-import com.github.serivesmejia.engine.common.math.geometry.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.position.Vector2
 import com.github.serivesmejia.engine.render.ShapedWindow
+import org.joml.Matrix4f
 import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
@@ -89,6 +90,21 @@ class JDShapedWindow(initialTitle: String = "ShapedEngine",
                 w.get(0).toFloat(),
                 h.get(0).toFloat()
             )
+        }
+
+    override val projectionMatrix: FloatArray
+        get() {
+            val currSize = size
+
+            val matrix = Matrix4f().ortho2D(
+                -currSize.width / 2, currSize.width / 2,
+                -currSize.height / 2, currSize.height / 2
+            )
+
+            val floatArray = FloatArray(16)
+            matrix.get(floatArray)
+
+            return floatArray
         }
 
     /**

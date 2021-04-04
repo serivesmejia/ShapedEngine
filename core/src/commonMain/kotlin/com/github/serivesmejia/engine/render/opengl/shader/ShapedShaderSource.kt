@@ -9,4 +9,6 @@ package com.github.serivesmejia.engine.render.opengl.shader
  * @see DefaultVertexShader
  * @see DefaultFragmentShader
  */
-abstract class ShapedShaderSource(val sourceCode: String)
+open class ShapedShaderSource(val sourceCode: String) {
+    open fun bindAttributes(shader: ShapedShader) { }
+}

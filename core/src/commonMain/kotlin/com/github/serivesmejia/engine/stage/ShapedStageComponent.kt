@@ -1,12 +1,16 @@
 package com.github.serivesmejia.engine.stage
 
+import com.github.serivesmejia.engine.Shaped
 import com.github.serivesmejia.engine.common.HierarchyShapedComponent
 import com.github.serivesmejia.engine.common.ShapedContainer
+import com.github.serivesmejia.engine.common.dsl.stage.builder.ShapedObjectDslBuilder
 import com.github.serivesmejia.engine.common.event.ShapedEvent
 import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.stage.`object`.ShapedObject
 import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventRegistrator
 import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventSubscriber
+import com.github.serivesmejia.engine.common.timer.ShapedTimer
+import com.github.serivesmejia.engine.common.timer.ShapedTimerManager
 
 /**
  * Common class for all stage components to implement. including the stage itself.
@@ -17,7 +21,6 @@ import com.github.serivesmejia.engine.common.event.subscriber.ShapedEventSubscri
  *
  * The "isStage" property can be used for checking, but it's more recommended to
  * use Kotlin's "is" keyword (similar to Java's instanceof) to perform smart casting.
- *
  */
 abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     : ShapedEventRegistrator, HierarchyShapedComponent<T>, ShapedContainer<ShapedObject>() {
@@ -25,6 +28,9 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     override var parent: ShapedContainer<T>? = null
 
     lateinit var eventBus: ShapedEventBus
+        internal set
+
+    lateinit var timerManager: ShapedTimerManager
         internal set
 
     private val subscribers = mutableListOf<ShapedEventSubscriber>()
@@ -37,14 +43,14 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     val isStage: Boolean
         get() = this is ShapedStage
 
-    internal fun internalUpdate(deltaTime: Float) {
+    internal open fun internalUpdate(deltaTime: Float) {
         if(!hasBeenCreated) { //call create on this component if we haven't done so
             create()
             hasBeenCreated = true
         }
 
         for(child in children) { //updates all the children first
-            child.internalUpdate(deltaTime)
+            if(child is ShapedStageComponent) child.internalUpdate(deltaTime)
         }
 
         update(deltaTime) //then call update open function
@@ -54,7 +60,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      * Called each frame after updating all children
      * @param deltaTime the difference of time in seconds between the current and last frame
      */
-    abstract fun update(deltaTime: Float)
+    open fun update(deltaTime: Float) { }
 
     /**
      * Override of addChild function to register this new children
@@ -63,7 +69,25 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      * @param child the ShapedObject child to add to this component
      */
     override fun addChild(child: ShapedObject) {
-        child.eventBus = eventBus
+        if(children.contains(child)) return
+
+        if(child.isGlobal) {
+            //if we're global, we need to use a new child of the global event bus instead
+            //since the child one passed to us from the stage manager, gets
+            //cleared every time we change to another stage
+            child.eventBus = ShapedEventBus().run {
+                Shaped.globalEventBus.addChild(this) //add as a child to the global one
+                this //return this to pass that to the child.eventBus
+            }
+
+            //same thing for the timer manager, we need an independent one.
+            child.timerManager = ShapedTimerManager()
+        } else {
+            //if we're not global, grab the ones from the stage manager
+            child.eventBus = eventBus
+            child.timerManager = timerManager
+        }
+
         for(subscriber in subscribers) {
             subscriber.register(child)
         }
@@ -81,7 +105,7 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
         for(subscriber in subscribers) {
             subscriber.unregister(child)
         }
-        child.destroy()
+        if(!child.isGlobal) child.destroy()
         super.removeChild(child)
     }
 
@@ -125,5 +149,48 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      */
     inline fun <reified T : ShapedEvent> on(noinline block: (T) -> Unit) = eventBus.on(block)
 
+    /**
+     * Adds a block to be executed ONCE after a certain timeout
+     * @param seconds the time in seconds to execute this block once it timeouts
+     * @param block the block to execute after the timeout
+     */
+    fun timeout(seconds: Double, block: (ShapedTimer) -> Unit) = timerManager.timeout(seconds, block)
+
+    /**
+     * Adds a block to be executed REPETITIVELY after a certain timeout
+     * @param seconds the time in seconds to execute this block once it timeouts
+     * @param block the block to execute REPETITIVELY after each timeout
+     */
+    fun interval(seconds: Double, block: (ShapedTimer) -> Unit) = timerManager.interval(seconds, block)
+
+    /**
+     * Adds a ShapedObject to this stage component,
+     * with the syntax...
+     * ```kotlin
+     *  +ShapedObject()
+     * ```
+     */
+    operator fun ShapedObject.unaryPlus() = this@ShapedStageComponent.addChild(this)
+
+    /**
+     * Removes a ShapedObject from this stage component,
+     * with the syntax...
+     * ```kotlin
+     *  -ShapedObject()
+     * ```
+     */
+    operator fun ShapedObject.unaryMinus() =  this@ShapedStageComponent.removeChild(this)
+
+    /**
+     * Adds a child ShapedObject to this stage component,
+     * with a DSL syntax for adding children, event listeners, etc.
+     * @param child the children ShapedObject to add
+     * @param block the DSL block of code to run and build the object
+     */
+    fun addChild(child: ShapedObject,
+                 block: ShapedObject.() -> Unit) {
+        addChild(child)
+        ShapedObjectDslBuilder(child, block).build()
+    }
 
 }

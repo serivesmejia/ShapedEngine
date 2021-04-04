@@ -8,32 +8,31 @@ import org.lwjgl.opengl.GL30.*
 class JDShapedRectangleShape2 : ShapedShape2() {
 
     private var vertices = floatArrayOf(
-        -0.25f, -0.25f, 0f,
-        -0.25f, 0.25f, 0f,
-        0.25f, 0.25f, 0f,
-        0.25f, -0.25f, 0f
+        -0.5f, -0.5f, 0f,
+        0.5f, -0.5f, 0f,
+        -0.5f, 0.5f, 0f,
+        0.5f, 0.5f, 0f
     )
 
-    private var indices = intArrayOf(0, 1, 2, 3)
+    private var uvs = floatArrayOf(
+        0f, 1f,
+        1f, 1f,
+        0f, 0f,
+        1f, 0f
+    )
 
-    val mesh = JDShapedMeshBuilder.createMesh(vertices, vertices, indices)
+    private var indices = intArrayOf(
+        0, 1, 2,
+        1, 2, 3
+    )
 
-    override fun update() {
+    val mesh = JDShapedMeshBuilder.createMesh(vertices, uvs, indices)
 
-    }
+    override fun update() { }
 
     override fun draw() {
-        if(shader is JDShapedShader) {
-            shader?.bindAttribute("position", 0)
-            shader?.bindAttribute("textureCoords", 1)
-        }
-
         shader?.begin()
-        texture?.bind()
-
-        mesh.draw(GL_QUADS)
-
-        texture?.unbind()
+        mesh.draw(GL_TRIANGLES, texture)
         shader?.end()
     }
 

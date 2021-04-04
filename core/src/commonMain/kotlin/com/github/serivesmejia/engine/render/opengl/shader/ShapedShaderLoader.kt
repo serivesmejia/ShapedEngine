@@ -12,7 +12,8 @@ abstract class ShapedShaderLoader {
      * @param fragShader the source code of the frag shader
      * @return the loaded ShapedShader from the source shaders strings
      */
-    abstract fun loadShader(vertexShader: String, fragShader: String): ShapedShader
+    fun loadShader(vertexShader: String, fragShader: String) =
+        loadShader(ShapedShaderSource(vertexShader), ShapedShaderSource(fragShader))
 
     /**
      * Loads a shader from ShapedShaderSource objects
@@ -21,7 +22,6 @@ abstract class ShapedShaderLoader {
      * @param fragShaderSource the ShapedShaderSource for fragment
      * @return the loaded ShapedShader from the source shaders strings
      */
-    fun loadShader(vertexShaderSource: ShapedShaderSource, fragShaderSource: ShapedShaderSource) =
-        loadShader(vertexShaderSource.sourceCode, fragShaderSource.sourceCode)
+    abstract fun loadShader(vertexShaderSource: ShapedShaderSource, fragShaderSource: ShapedShaderSource): ShapedShader
 
 }

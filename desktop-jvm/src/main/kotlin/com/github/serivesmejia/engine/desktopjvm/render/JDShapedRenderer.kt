@@ -1,5 +1,6 @@
 package com.github.serivesmejia.engine.desktopjvm.render
 
+import com.github.serivesmejia.engine.Shaped
 import com.github.serivesmejia.engine.ShapedEngine
 import com.github.serivesmejia.engine.common.event.standard.WindowResizeEvent
 import com.github.serivesmejia.engine.common.math.Color4
@@ -10,6 +11,7 @@ import com.github.serivesmejia.engine.desktopjvm.render.opengl.texture.JDShapedT
 import com.github.serivesmejia.engine.desktopjvm.render.shape.JDShapedShapeBuilder
 import com.github.serivesmejia.engine.jvm.event.JvmShapedEventSubscriber
 import com.github.serivesmejia.engine.render.ShapedRenderer
+import com.github.serivesmejia.engine.render.shape.ShapedShape2
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
 
@@ -33,14 +35,18 @@ class JDShapedRenderer(private val engine: ShapedEngine,
      * This function shouldn't be manually called
      */
     override fun create(): JDShapedRenderer {
-        //wrap to make @Subscribe mechanism available for use (JVM)
+        //wrap to make @Subscribe mechanism available for use in StageComponents (JVM)
         engine.stageManager.eventBus.addSubscriber(JvmShapedEventSubscriber())
-        //wrap glfw callbacks with shaped events
-        engine.stageManager.eventBus.wrap(JDGlfwEventWrapper(window))
 
-        engine.stageManager.eventBus.on<WindowResizeEvent> {
+        //wrap glfw callbacks with shaped events
+        Shaped.globalEventBus.wrap(JDGlfwEventWrapper(window))
+
+        Shaped.on<WindowResizeEvent> {
             updateViewport()
         }
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         updateViewport()
 
@@ -73,8 +79,20 @@ class JDShapedRenderer(private val engine: ShapedEngine,
         return this
     }
 
+    override fun addShape(shape: ShapedShape2) {
+        updateViewport()
+        super.addShape(shape)
+    }
+
     private fun updateViewport() {
         glViewport(0, 0, window.size.width.toInt(), window.size.height.toInt())
+
+        for(shape in shapes) {
+            shape.shader?.let {
+                println("$shape, ${it.locationProjection}")
+                //it.loadMatrix(it.locationProjection, window.projectionMatrix)
+            }
+        }
     }
 
 }

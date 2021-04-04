@@ -1,5 +1,7 @@
 package com.github.serivesmejia.engine.stage
 
+import com.github.serivesmejia.engine.stage.`object`.ShapedObject
+
 open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponent<ShapedStage>() {
 
     /**
@@ -23,14 +25,14 @@ open class ShapedStage(val name: String = "Stage-Unknown") : ShapedStageComponen
     override fun update(deltaTime: Float) { }
 
     /**
-     * Destroys this stage
+     * Destroys this stage.
      * It is not recommended to manually call this method, it will
      * be called by the current StageManager once it determines
      * that this stage is no longer necessary for any reason.
      */
     override fun destroy(): ShapedStage {
         for(child in children) {
-            child.destroy()
+            if(child is ShapedObject && !child.isGlobal) child.destroy()
         }
 
         dispose()

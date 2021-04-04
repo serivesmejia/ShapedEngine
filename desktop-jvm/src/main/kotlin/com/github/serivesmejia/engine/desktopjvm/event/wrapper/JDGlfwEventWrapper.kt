@@ -4,7 +4,7 @@ import com.github.serivesmejia.engine.common.event.ShapedEventBus
 import com.github.serivesmejia.engine.common.event.standard.*
 import com.github.serivesmejia.engine.common.event.wrapper.ShapedEventWrapper
 import com.github.serivesmejia.engine.common.math.geometry.Size2
-import com.github.serivesmejia.engine.common.math.geometry.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.position.Vector2
 import com.github.serivesmejia.engine.desktopjvm.render.JDShapedWindow
 import org.lwjgl.glfw.GLFW.*
 

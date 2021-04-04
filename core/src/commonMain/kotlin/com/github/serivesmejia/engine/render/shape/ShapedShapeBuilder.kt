@@ -5,7 +5,7 @@ import com.github.serivesmejia.engine.common.math.Color4
 import com.github.serivesmejia.engine.common.math.geometry.Rectangle2
 import com.github.serivesmejia.engine.common.math.geometry.Size2
 import com.github.serivesmejia.engine.common.math.geometry.Triangle2
-import com.github.serivesmejia.engine.common.math.geometry.Vector2
+import com.github.serivesmejia.engine.common.math.geometry.position.Vector2
 import com.github.serivesmejia.engine.render.opengl.shader.ShapedShader
 import com.github.serivesmejia.engine.render.texture.ShapedTexture
 
@@ -68,8 +68,7 @@ abstract class ShapedShapeBuilder {
      */
     fun texturedTriangle(position: Vector2,
                          size: Size2,
-                         texture:
-                         ShapedTexture,
+                         texture: ShapedTexture,
                          color: Color4 = defColor,
                          shader: ShapedShader = defShad) = texturedTriangle(Triangle2(position, size), texture, color, shader)
 
@@ -96,7 +95,6 @@ abstract class ShapedShapeBuilder {
      */
     fun rectangle(position: Vector2, size: Size2, color: Color4 = defColor, shader: ShapedShader = defShad) =
         rectangle(Rectangle2(position, size), color, shader)
-
 
     /**
      * Creates a textured rectangle shape
@@ -126,7 +124,7 @@ abstract class ShapedShapeBuilder {
                           size: Size2,
                           texture: ShapedTexture,
                           color: Color4 = defColor,
-                          shader: ShapedShader = defShad) = texturedRectangle(Rectangle2(position, size), texture, color)
+                          shader: ShapedShader = defShad) = texturedRectangle(Rectangle2(position, size), texture, color, shader)
 
     abstract fun circle(position: Vector2, radius: Float, color: Color4 = defColor): ShapedShape2
 

@@ -1,6 +1,8 @@
-package com.github.serivesmejia.engine.common.math.geometry
+package com.github.serivesmejia.engine.common.math.geometry.position
 
-import com.github.serivesmejia.engine.common.math.Math.toRadians
+import com.github.serivesmejia.engine.common.math.*
+import com.github.serivesmejia.engine.common.math.geometry.rotation.Axis
+import com.github.serivesmejia.engine.common.math.geometry.rotation.Quaternion
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
@@ -17,12 +19,6 @@ data class Vector3(
     var y: Float = 0f,
     var z: Float = 0f,
 ) {
-    /**
-     * Enum for the different axes of rotation for 3D space
-     */
-    enum class Axis {
-        X, Y, Z
-    }
 
     /**
      * Returns the magnitude of this Vector (uses Euclidean distance formula)
@@ -35,29 +31,67 @@ data class Vector3(
      * @param angle angle in degrees to rotate the vector counter clockwise
      * @param axis  the axis by which the vector is to be rotated in relation towards
      */
-    fun rotateBy(angle: Float, axis: Axis): Vector3 {
-        val angleInRadians = angle.toRadians()
-
-        val (cosA, sinA) = cos(angleInRadians).toFloat() to sin(angleInRadians).toFloat()
-
-        return when(axis) {
-            Axis.X -> Vector3(
-                x = x,
-                y = y * cosA - z * sinA,
-                z = y * sinA + z * cosA,
-            )
-            Axis.Y -> Vector3(
-                x = x * cosA + z * sinA,
-                y = y,
-                z = -x * sinA + z * cosA,
-            )
-            Axis.Z -> Vector3(
-                x = x * cosA - y * sinA,
-                y = x * sinA + y * cosA,
-                z = z
-            )
-        }
+    fun rotateBy(angle: Float, axis: Axis): Vector3 = when(axis) {
+        Axis.X -> rotateBy(angle, 0f, 0f)
+        Axis.Z -> rotateBy(0f, angle, 0f)
+        Axis.Y -> rotateBy(0f, 0f, angle)
     }
+
+    /**
+     * Rotate this Vector in R^3 by the given Axes
+     *
+     * @param angleX angle of the X axis in degrees to rotate the vector counter clockwise
+     * @param angleY angle of the Y axis in degrees to rotate the vector counter clockwise
+     * @param angleZ angle of the Z axis in degrees to rotate the vector counter clockwise
+     */
+    fun rotateBy(angleX: Float, angleY: Float, angleZ: Float): Vector3 {
+        var x = this.x
+        var y = this.y
+        var z = this.z
+
+        if(angleX != 0f) {
+            val angleInRadians = angleX.toRadians()
+            val (cosA, sinA) = cos(angleInRadians) to sin(angleInRadians)
+
+            y = y * cosA - z * sinA
+            z = y * sinA + z * cosA
+        }
+
+        if(angleY != 0f) {
+            val angleInRadians = angleY.toRadians()
+            val (cosA, sinA) = cos(angleInRadians) to sin(angleInRadians)
+
+            x = x * cosA + z * sinA
+            z = -x * sinA + z * cosA
+        }
+
+        if(angleZ != 0f) {
+            val angleInRadians = angleZ.toRadians()
+            val (cosA, sinA) = cos(angleInRadians) to sin(angleInRadians)
+
+            x = x * cosA - y * sinA
+            y = x * sinA + y * cosA
+        }
+
+        return Vector3(x, y, z)
+    }
+
+    /**
+     * Rotates this Vector3 by the euler angles of a Quaternion
+     * @param q the quaternion to rotate this Vector3 by
+     */
+    fun rotateBy(q: Quaternion) = rotateBy(q.euler.pitch, q.euler.yaw, q.euler.roll)
+
+    val normalized: Vector3
+        get() {
+            var length = x * x + y * y + z * z
+
+            if(length != 1f && length != 0f) {
+                length = 1.0f / sqrt(length)
+                return Vector3(x * length, y * length, z * length)
+            }
+            return copy()
+        }
 
     /**
      * Scalar projection of this vector onto another vector
@@ -136,14 +170,4 @@ data class Vector3(
      * Negates the values of this vector
      */
     operator fun unaryMinus() = copy(x = -x, y = -y, z = -z)
-}
-
-/**
- * Since R^2 (2D space) is a subspace of R^3 (3D space) this function returns the R^2 Vector in R^3
- * @receiver a vector in R^2
- * @return a vector in R^3
- */
-fun Vector2.to3D(): Vector3 = run {
-    val (x, y) = this
-    Vector3(x, y, 0f)
 }
