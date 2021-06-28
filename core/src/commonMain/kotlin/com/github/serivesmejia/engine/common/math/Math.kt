@@ -25,4 +25,4 @@ fun Float.toDegrees() = this.toDouble().toDegrees().toFloat()
 
 fun Float.invSqrt() = 1.0f / sqrt(this)
 
-val HALF_PI = PI * 0.5
+const val HALF_PI = PI * 0.5

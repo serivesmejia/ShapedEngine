@@ -171,5 +171,7 @@ data class Vector3(
      */
     operator fun unaryMinus() = copy(x = -x, y = -y, z = -z)
 
-    companion object
+    companion object {
+        val zero = Vector3()
+    }
 }

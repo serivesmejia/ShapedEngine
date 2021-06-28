@@ -1,11 +1,10 @@
 package com.github.serivesmejia.engine.stage.`object`
 
-import com.github.serivesmejia.engine.common.timer.ShapedTimerManager
 import com.github.serivesmejia.engine.stage.ShapedStage
 import com.github.serivesmejia.engine.stage.ShapedStageComponent
 import com.github.serivesmejia.engine.stage.behavior.ShapedBehavior
 import com.github.serivesmejia.engine.stage.behavior.ShapedBehaviorManager
-import com.github.serivesmejia.engine.stage.behavior.common.TransformBehavior
+import com.github.serivesmejia.engine.stage.behavior.common.Transform2Behavior
 import kotlin.reflect.KClass
 
 open class ShapedObject: ShapedStageComponent<ShapedObject>() {
@@ -15,7 +14,7 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
     var isGlobal = false
         internal set
 
-    val transform = TransformBehavior()
+    val transform2 = Transform2Behavior()
 
     /**
      * Initializes this object.
@@ -27,7 +26,7 @@ open class ShapedObject: ShapedStageComponent<ShapedObject>() {
         behaviorManager = ShapedBehaviorManager(this)
         behaviorManager.create()
 
-        addBehavior(transform)
+        + transform2
 
         init()
         return this

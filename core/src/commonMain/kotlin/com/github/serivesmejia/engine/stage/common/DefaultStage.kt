@@ -13,15 +13,16 @@ import com.github.serivesmejia.engine.stage.`object`.common.GlobalObject
 class DefaultStage : ShapedStage("Stage-Default") {
 
     override fun init() {
-        //val texture = Shaped.Graphics.loadTexture("/test.png")
+        val texture = Shaped.Graphics.loadTexture("/test.png")
 
         Shaped.Graphics.run {
-            val rectShape = shapes.rectangle(
+            val rectShape = shapes.texturedRectangle(
                 Vector2(200f, 200f),
-                Size2(100f, 100f)
+                Size2(100f, 100f),
+                texture
             )
 
-            renderer.addShape(rectShape)
+            //renderer.addShape(rectShape)
             renderer.backgroundColor = Color4(127f, 255f, 100f)
 
             window.center()

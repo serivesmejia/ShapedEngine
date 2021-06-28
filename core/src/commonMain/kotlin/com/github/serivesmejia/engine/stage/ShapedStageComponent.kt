@@ -33,6 +33,8 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
     lateinit var timerManager: ShapedTimerManager
         internal set
 
+    private val laters = mutableListOf<() -> Unit>()
+
     private val subscribers = mutableListOf<ShapedEventSubscriber>()
 
     private var hasBeenCreated = false
@@ -51,6 +53,11 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
 
         for(child in children) { //updates all the children first
             if(child is ShapedStageComponent) child.internalUpdate(deltaTime)
+        }
+
+        for(later in laters.toTypedArray()) {
+            later()
+            laters.remove(later)
         }
 
         update(deltaTime) //then call update open function
@@ -162,6 +169,11 @@ abstract class ShapedStageComponent<T : HierarchyShapedComponent<T>>
      * @param block the block to execute REPETITIVELY after each timeout
      */
     fun interval(seconds: Double, block: (ShapedTimer) -> Unit) = timerManager.interval(seconds, block)
+
+    /**
+     * Invokes a lambda ONLY ONCE EVER on the next call to this component's update()
+     */
+    fun later(callback: () -> Unit) = laters.add(callback)
 
     /**
      * Adds a ShapedObject to this stage component,

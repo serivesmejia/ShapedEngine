@@ -1,29 +1,26 @@
 package com.github.serivesmejia.engine.common.math.geometry.position
 
-import com.github.serivesmejia.engine.common.math.*
-import com.github.serivesmejia.engine.common.math.geometry.rotation.Quaternion
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.hypot
-import kotlin.math.pow
+import com.github.serivesmejia.engine.common.math.geometry.rotation.Rotation2
+import com.github.serivesmejia.engine.common.math.toRadians
+import kotlin.math.*
 
 /**
  * Represents a vector in R^2
  * @property x the x component of this vector i_hat
  * @property y the y component of this vector j_hat
  */
-data class Vector2(var x: Float = 0f,
-                   var y: Float = 0f) {
+data class Vector2(val x: Float = 0f,
+                   val y: Float = 0f) {
 
     /**
      * Returns the magnitude/hypot of this vector
      */
-    val mag get() = hypot(x, y)
+    val mag = hypot(x, y).toFloat()
 
     /**
-     * The angle of this vector
+     * The angle of this vector in radians
      */
-    val angle get() = atan2(y.toDouble(), x.toDouble())
+    val angle = atan2(y.toDouble(), x.toDouble()).toFloat()
 
     /**
      * Rotate the vector in Cartesian space
@@ -34,7 +31,7 @@ data class Vector2(var x: Float = 0f,
         val angleRad = angle.toRadians()
 
         val cosA = cos(angleRad)
-        val sinA = cos(angleRad)
+        val sinA = sin(angleRad)
 
         return Vector2(
             x * cosA - y * sinA,
@@ -43,10 +40,12 @@ data class Vector2(var x: Float = 0f,
     }
 
     /**
-     * Rotates this Vector3 by the Euler angle pitch (X) of a quaternion
-     * @param q the quaternion to rotate this vector by
+     * Rotates this vector by a Rotation2 and returns the result
+     *
+     * @param angle the angle to rotate by from a Rotation2 object
+     * @return the resultant rotated vector
      */
-    fun rotateBy(q: Quaternion) = rotateBy(q.euler.pitch)
+    fun rotateBy(angle: Rotation2) = rotateBy(angle.radians)
 
     /**
      * Returns the dot product of this vector with argument
@@ -128,17 +127,18 @@ data class Vector2(var x: Float = 0f,
      */
     infix fun pow(other: Vector2) = copy(x = x.pow(other.x), y = y.pow(other.y))
 
-
     /**
      * Since R^2 (2D space) is a subspace of R^3 (3D space) this function returns the R^2 Vector in R^3
      * @receiver a vector in R^2
      * @return a vector in R^3
      */
-    fun to3D(): Vector3 = run {
+    fun to3D() = run {
         val (x, y) = this
         Vector3(x, y, 0f)
     }
 
-    companion object
+    companion object {
+        val zero = Vector2()
+    }
 
 }

@@ -32,7 +32,9 @@ class JDShapedRectangleShape2 : ShapedShape2() {
 
     override fun draw() {
         shader?.begin()
-        mesh.draw(GL_TRIANGLES, texture)
+        texture?.bind()
+        mesh.draw(GL_TRIANGLES)
+        texture?.unbind()
         shader?.end()
     }
 
